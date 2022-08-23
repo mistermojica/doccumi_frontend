@@ -1,0 +1,30 @@
+{
+  "name": "ckeditor5om",
+  "version": "1.0.0",
+  "description": "CKEditor5 with placeholder OM",
+  "scripts": {
+    "build": "webpack --config webpack/webpack.config.js  --color",
+    "start": "webpack-dev-server --open --config webpack/webpack.config.dev.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wbkd/webpack-starter.git"
+  },
+  "keywords": [
+    "webpack",
+    "startkit",
+    "frontend",
+    "es6",
+    "javascript",
+    "webdev"
+  ],
+  "author": "webkid.io",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wbkd/webpack-starter/issues"
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
+  }
+}

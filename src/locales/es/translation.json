@@ -1,0 +1,165 @@
+{
+  "login": {
+    "label": {
+      "signIn": "Accede para iniciar tu sesión",
+      "rememberMe": "Recordarme",
+      "forgotPass": "Olvidé mi contraseña",
+      "registerNew": "Registra una nueva membresía"
+    },
+    "button": {
+      "signIn": {
+        "label": "Inicia Sesión",
+        "social": "Inicia sesión usando {{what}}"
+      },
+      "signUp": {
+        "label": "Regístrate",
+        "social": "Regístrate usando {{what}}"
+      },
+      "signOut": "Cerrar Sesión"
+    }
+  },
+  "register": {
+    "alreadyHave": "Ya tengo una membresía",
+    "registerNew": "Registrar una nueva membresía",
+    "label": "Registro"
+  },
+  "recover": {
+    "forgotYourPassword": "¿Olvidaste tu contraseña? Aquí puedes recuperar fácilmente una nueva contraseña.",
+    "oneStepAway": "Estás a un paso de tu nueva contraseña, recupera tu contraseña ahora.",
+    "changePassword": "Cambia la Contraseña",
+    "requestNewPassword": "Solicita una nueva contraseña"
+  },
+  "main": {
+    "label": {
+      "moreInfo": "Más Info",
+      "verVehiculos": "Ver Vehículos",
+      "follow": "Seguir",
+      "aboutMe": "Sobre Mi",
+      "education": "Educación",
+      "location": "Ubicación",
+      "skills": "Habilidades",
+      "notes": "Notas",
+      "activity": "Actividad",
+      "timeline": "Linea de tiempo",
+      "settings": "Ajustes",
+      "profile": "Perfil",
+      "credentials": "Credenciales"
+    }
+  },
+  "header": {
+    "label": {
+      "home": "Inicio",
+      "contact": "Contacto",
+      "support": "Soporte"
+    },
+    "language": {
+      "turkish": "Turkish",
+      "english": "English",
+      "german": "German",
+      "french": "French",
+      "spanish": "Spanish"
+    },
+    "messages": {
+      "ago": "{{quantity}} {{unit}} Ago",
+      "seeAll": "Ver Todos los Mensajes"
+    },
+    "notifications": {
+      "count": "{{quantity}} Notifications",
+      "newMessagesCount": "{{quantity}} mensajes nuevos",
+      "friendRequestsCount": "{{quantity}} solicitudes de amistad",
+      "reportsCount": "{{quantity}} reportes nuevos",
+      "seeAll": "Ver Todas las Notificaciones"
+    },
+    "user": {
+      "profile": "Perfil",
+      "followers": "Seguidores",
+      "sales": "Ventas",
+      "friends": "Amigos"
+    }
+  },
+  "menusidebar": {
+    "label": {
+      "dashboard": "Panel de Control",
+      "profile": "Perfil",
+      "blank": "Blank",
+      "mainMenu": "Menú Principal",
+      "vehiculos": {
+        "gestionVehiculos": "Gestión Vehículos",
+        "agregarVehiculo": "Agregar Vehículo +",
+        "mostrarVehiculos": "Mostrar Vehículos",
+        "gestionarVehiculos": "Gestionar Vehículos",
+        "configuracion": "Configuración",
+        "mostrarGaleria": "Mostrar Galería",
+        "enVenta": "En Venta",
+        "pendientes": "Pendientes",
+        "vendidos": "Vendidos",
+        "enTaller": "En Taller",
+        "inventarioVehiculos": "Inventario de Vehículos",
+        "pieChart": "Inventario de Vehículos"
+      },
+      "clientes": {
+        "gestionClientes": "Gestión Clientes",
+        "mostrarClientes": "Mostrar Clientes",
+        "gestionarClientes": "Gestionar Clientes",
+        "agregarCliente": "Agregar Cliente +",
+        "configuracion": "Configuración"
+      },
+      "documentos": {
+        "gestionDocumentos": "Gestión Documentos",
+        "expedienteVenta": "Expediente de Venta",
+        "asignarPlantillas": "Asignar Plantillas",
+        "imprimirDocumentos": "Imprimir Documentos",
+        "contratos": "Contratos",
+        "actosVentas": "Actos de Ventas",
+        "pagares": "Pagarés",
+        "matriculas": "Matriculas",
+        "hojaDatosCondiciones": "Hoja Datos y Condiciones",
+        "cedulas": "Cédulas",
+        "conduceSalidaEntrada": "Conduce Salida o Entrada",
+        "carfax": "CARFAX",
+        "configuracion": "Configuración",
+        "agregarPlantilla": "Agregar Plantilla +",
+        "mostrarPlantillas": "Mostrar Plantillas",
+        "gestionarPlantillas": "Gestionar Plantillas"
+      },
+      "configuraciones": {
+        "label": "Configuraciones",
+        "campos": {
+          "gestionCampos": "Gestión Campos",
+          "mostrarCampos": "Mostrar Campos",
+          "gestionarCampos": "Gestionar Campos",
+          "agregarCampo": "Agregar Campo +",
+          "configuracion": "Configuraciones"
+        },
+        "tipos": {
+          "gestionarTipos": "Gestionar Tipos",
+          "configuracion": "Configuraciones"
+        },
+        "perfil": {
+          "credenciales": "Credenciales Redes Sociales",
+          "configuracion": "Configuraciones"
+        }
+      },
+      "utilitarios": {
+        "label": "Utilitarios",
+        "calculadoraprestamo": {
+          "calculadoraPrestamo": "Calculadora Préstamo"
+        }
+      },
+      "subMenu": "Sub Menú"
+    }
+  },
+  "footer": {
+    "version": "Versión",
+    "copyright": "Todos los derechos reservados."
+  },
+  "views": {
+    "user": {
+      "profile": "Perfil de usuario",
+      "following": "Siguiendo"
+    }
+  },
+  "measurement": {
+    "quantityUnit": "{{quantity}} {{unit}}"
+  }
+}

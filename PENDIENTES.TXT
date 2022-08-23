@@ -1,0 +1,29 @@
+PENDIENTES DOCCUMI
+
+----------------------------------------------------------
+
+◦	P- Diseñar sitio web de promoción
+◦	P- Crear videos de promoción
+◦	P- Implementar sistema de pago en línea
+
+----------------------------------------------------------
+
+◦	H- Implementar configuraciones de credenciales (publicaciones)
+◦	H- Crear CRUD de configuraciones (credenciales publicaciones)
+◦	H- Crear CRUD configuraciones (tipos)
+◦	H- Crear CRUD configuraciones (datos empresa, campos, etc.)
+◦	H- Implementar datos de configuraciones (perfil empresa, etc.)
+◦	H- Buscar nombre comercial
+◦	H- Limpiar página de perfil
+◦	H- Subir múltiples fotos a Marketplace e Instagram
+◦	H- Corregir carga de fotos de vehículos y clientes
+◦	H- Agregar campo vehFotos para las fotos de los vehiculos
+◦	H- Categorizar fotos de vehículos y clientes
+◦	H- Filtrar tablas correspondientes por dueño (profileId)
+
+==========================================================
+
+I: Imprescindible
+P: Prescindible
+H: Hecho
+

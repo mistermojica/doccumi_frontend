@@ -1,0 +1,40 @@
+{
+  "name": "ckeditor5-placeholder",
+  "version": "1.2.1",
+  "description": "Widget that allows using of placeholders like \"First Name\", \"Date\" etc. in ckeditor5",
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "prettify": "prettier --write 'src/**/*' 'examples/placeholder-demo/src/**/*' 'examples/placeholder-demo/webpack/**/*' "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiruh/ckeditor5-placeholder.git"
+  },
+  "keywords": [
+    "ckeditor",
+    "ckeditor5",
+    "ckeditor5-placeholder",
+    "ckeditor5-plugin",
+    "ckeditor5-widget"
+  ],
+  "author": "kiruh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kiruh/ckeditor5-placeholder/issues"
+  },
+  "homepage": "https://github.com/kiruh/ckeditor5-placeholder#readme",
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-clipboard": "^33.0.0",
+    "@ckeditor/ckeditor5-core": "^33.0.0",
+    "@ckeditor/ckeditor5-ui": "^33.0.0",
+    "@ckeditor/ckeditor5-utils": "^33.0.0",
+    "@ckeditor/ckeditor5-widget": "^33.0.0",
+    "underscore": "^1.13.2"
+  }
+}
