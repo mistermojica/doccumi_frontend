@@ -228,7 +228,7 @@ const Dashboard = () => {
           ))}
         </div>
       ) : (
-        <Loading />
+        <Loading show />
       )}
       {/* =========================================================== */}
       {/* =========================================================== */}
@@ -245,7 +245,7 @@ const Dashboard = () => {
                   ref={summaryRef}
                 />
               ) : (
-                <Loading />
+                <Loading show />
               )}
               {/* <Button variant="primary">Go somewhere</Button> */}
             </Card.Body>
@@ -264,7 +264,7 @@ const Dashboard = () => {
                   ref={summaryRef}
                 />
               ) : (
-                <Loading />
+                <Loading show />
               )}
               {/* <Button variant="primary">Go somewhere</Button> */}
             </Card.Body>

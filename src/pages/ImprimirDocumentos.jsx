@@ -11,6 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import axios from 'axios';
 import {mlCL, removeDiacritics} from '@app/utils/helpers';
 // import {useNavigate} from 'react-router-dom';
+import Loading from '@app/components/loadings/Loading';
 import * as AuthService from '@app/services/auth';
 import * as Config from '@app/utils/config';
 import AsyncSelect from 'react-select/async';
@@ -42,6 +43,7 @@ const ImprimirDocumentos = () => {
   const [disableSubmit, SetDisableSubmit] = useState(true);
   const [btnSubmitClassName, SetBtnSubmitClassName] =
     useState('btn btn-secondary');
+  const [LoadingShow, SetLoadingShow] = useState(false);
 
   const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 
@@ -57,6 +59,13 @@ const ImprimirDocumentos = () => {
   };
   const handlePrintMessageClose = () => {
     SetPrintMessageShow(false);
+  };
+
+  const handleLoadingShow = () => {
+    SetLoadingShow(true);
+  };
+  const handleLoadingClose = () => {
+    SetLoadingShow(false);
   };
 
   const [chkTipoPDFChecked, setChkTipoPDFChecked] = useState(false);
@@ -170,6 +179,7 @@ const ImprimirDocumentos = () => {
   };
 
   const sendPrintDocuments = () => {
+    handleLoadingShow();
     const url = Config.gatDomainName().concat('/impresiones/create');
 
     const body = {
@@ -187,9 +197,11 @@ const ImprimirDocumentos = () => {
         const {status, message, data} = result;
         if (status !== 'SUCCESS') {
           mlCL('message:', message);
+          handleLoadingClose();
           handleMessageShow(SetResMessage(message));
         } else {
           mlCL('data:', data);
+          handleLoadingClose();
           handlePrintMessageShow(SetResPrintMessage(data));
           // navegar('/mostrar-clientes');
         }
@@ -308,7 +320,7 @@ const ImprimirDocumentos = () => {
   const onChangeLocal = (target) => {
     const {name, value, checked} = target;
 
-    mlCL('onChangeLocal(target):', {name, value, checked});
+    // mlCL('onChangeLocal(target):', {name, value, checked});
 
     switch (name) {
       case 'impVehiculo':
@@ -620,16 +632,22 @@ const ImprimirDocumentos = () => {
                         <label htmlFor="btnImprimir">&nbsp;</label>
                       </div>
                       <div className="col-sm-6">
-                        <br />
-                        <Button
-                          id="btnImprimir"
-                          type="submit"
-                          disabled={disableSubmit}
-                          className={btnSubmitClassName}
-                          onClick={handlePrintDocuments}
-                        >
-                          Generar Documentos
-                        </Button>
+                        <div className="row">
+                          <div className="col-sm-6">
+                            <Button
+                              id="btnImprimir"
+                              type="submit"
+                              disabled={disableSubmit}
+                              className={btnSubmitClassName}
+                              onClick={handlePrintDocuments}
+                            >
+                              Generar Documentos
+                            </Button>
+                          </div>
+                          <div className="col-sm-6">
+                            <Loading show={LoadingShow} />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -748,6 +766,28 @@ const ImprimirDocumentos = () => {
               {/* )} */}
               {/* FINAL BODY */}
             </div>
+            {/* <div className="model-box-view"> */}
+            {/* <Modal
+                show={LoadingShow}
+                onHide={handleLoadingClose}
+                backdrop="static"
+                keyboard={false}
+              > */}
+            {/* <Modal.Header closeButton>
+                  <Modal.Title>Mensaje</Modal.Title>
+                </Modal.Header> */}
+            {/* <Modal.Body> */}
+            {/* <div>
+                
+              </div> */}
+            {/* </Modal.Body> */}
+            {/* <Modal.Footer>
+                  <Button variant="secondary" onClick={handleLoadingClose}>
+                    Cerrar
+                  </Button>
+                </Modal.Footer> */}
+            {/* </Modal> */}
+            {/* </div> */}
             {/* <div className="card-footer">&nbsp;</div> */}
           </div>
         </div>
