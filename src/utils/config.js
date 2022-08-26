@@ -3,7 +3,7 @@
 export const gatDomainName = () => {
   let result = '';
   if (window.location.hostname.includes('localhost')) {
-    result = 'http://localhost:8002';
+    result = 'http://localhost:8000';
   } else {
     result = 'https://api.doccumi.com';
   }
