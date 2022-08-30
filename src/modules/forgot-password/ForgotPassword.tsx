@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
@@ -6,9 +8,11 @@ import {Button} from '@components';
 import {faEnvelope} from '@fortawesome/free-solid-svg-icons';
 import {setWindowClass} from '@app/utils/helpers';
 import * as Yup from 'yup';
+import axios from 'axios';
 import {useFormik} from 'formik';
 import {Form, InputGroup} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import * as Config from '@app/utils/config';
 
 const ForgotPassword = () => {
   const [t] = useTranslation();
@@ -20,12 +24,30 @@ const ForgotPassword = () => {
     validationSchema: Yup.object({
       email: Yup.string().email('Invalid email address').required('Required')
     }),
-    onSubmit: (values) => {
-      // eslint-disable-next-line no-console
-      console.log(values);
-      toast.warn('Not yet functional');
+    onSubmit: (values: any) => {
+      recoverPassword(values);
     }
   });
+
+  const recoverPassword = (ctx: any) => {
+    const url = Config.gatDomainName().concat('/usuarios/recoverpassword');
+
+    axios
+      .post(url, ctx)
+      .then((response) => {
+        const result = response.data;
+        const {status, message, data} = result;
+        if (status !== 'SUCCESS') {
+          toast.warn(message);
+        } else {
+          toast.success(message);
+          console.log(data);
+        }
+      })
+      .catch((err) => {
+        console.log('recoverPassword() => err:', err);
+      });
+  };
 
   setWindowClass('hold-transition login-page');
 
@@ -34,12 +56,18 @@ const ForgotPassword = () => {
       <div className="card card-outline card-primary">
         <div className="card-header text-center">
           <Link to="/" className="h1">
-            <b>Admin</b>
-            <span>LTE</span>
+            <img
+              // className="animation__shake"
+              src="/img/logo-black-transp.png"
+              alt="DOCCUMI"
+              style={{marginTop: 5, marginBottom: 5}}
+              width="250"
+            />
           </Link>
         </div>
         <div className="card-body">
           <p className="login-box-msg">{t('recover.forgotYourPassword')}</p>
+          {/* Ingresa la dirección de correo electrónico asociada a tu cuenta y te enviaremos un enlace para restablecer tu contraseña. */}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <InputGroup className="mb-3">

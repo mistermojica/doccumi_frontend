@@ -22,6 +22,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
   const [t] = useTranslation();
 
   const login = async (email: string, password: string) => {
@@ -96,8 +97,7 @@ const Login = () => {
               src="/img/logo-black-transp.png"
               alt="DOCCUMI"
               style={{marginTop: 5, marginBottom: 5}}
-              height="50"
-              // width="60"
+              width="250"
             />
           </Link>
         </div>
@@ -154,7 +154,6 @@ const Login = () => {
                 )}
               </InputGroup>
             </div>
-
             <div className="row">
               <div className="col-8">
                 <Checkbox type="icheck" checked={false}>

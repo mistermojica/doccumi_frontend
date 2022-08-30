@@ -139,7 +139,13 @@ const Register = () => {
       <div className="card card-outline card-primary">
         <div className="card-header text-center">
           <Link to="/" className="h1">
-            <b>DOCCUMI</b>
+            <img
+              // className="animation__shake"
+              src="/img/logo-black-transp.png"
+              alt="DOCCUMI"
+              style={{marginTop: 5, marginBottom: 5}}
+              width="250"
+            />
           </Link>
         </div>
         <div className="card-body">
