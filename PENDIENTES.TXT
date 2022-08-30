@@ -2,12 +2,14 @@ PENDIENTES DOCCUMI
 
 ----------------------------------------------------------
 
-◦	P- Diseñar sitio web de promoción
-◦	P- Crear videos de promoción
-◦	P- Implementar sistema de pago en línea
+◦	I- Crear videos de promoción
+◦	I- Implementar sistema de pago en línea
+◦	I- Redactar Términos y Condiciones y Politica de Privacidad
+◦	I- Importar plantilla desde archivo DOCX
 
 ----------------------------------------------------------
 
+◦	H- Diseñar sitio web de promoción
 ◦	H- Implementar sistema email
 ◦	H- Generar archivos en formato PDF y DOCX
 ◦	H- Implementar configuraciones de credenciales (publicaciones)
@@ -28,4 +30,3 @@ PENDIENTES DOCCUMI
 I: Imprescindible
 P: Prescindible
 H: Hecho
-
