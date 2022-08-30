@@ -1,17 +1,26 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
+
+import React, {useEffect} from 'react';
 import {toast} from 'react-toastify';
-import {Link} from 'react-router-dom';
+import {Link, useSearchParams, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {Button} from '@components';
 import {faLock} from '@fortawesome/free-solid-svg-icons';
 import {setWindowClass} from '@app/utils/helpers';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 import {Form, InputGroup} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import * as Config from '@app/utils/config';
 
 const RecoverPassword = () => {
+  const navigate = useNavigate();
+
   const [t] = useTranslation();
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const {handleChange, values, handleSubmit, touched, errors} = useFormik({
     initialValues: {
@@ -36,20 +45,51 @@ const RecoverPassword = () => {
         })
     }),
     onSubmit: (values) => {
-      toast.warn('Not yet functional');
-      // eslint-disable-next-line no-console
-      console.log(values);
+      // toast.warn('Not yet functional');
+      // console.log({...values, id: searchParams.get('id')});
+      resetPassword({...values, id: searchParams.get('id')});
     }
   });
 
+  const resetPassword = (ctx: any) => {
+    const url = Config.gatDomainName().concat('/usuarios/resetpassword');
+
+    axios
+      .post(url, ctx)
+      .then((response) => {
+        const result = response.data;
+        const {status, message, data} = result;
+        if (status !== 'SUCCESS') {
+          toast.warn(message);
+        } else {
+          toast.success(message);
+          // console.log(data);
+          navigate('/login');
+        }
+      })
+      .catch((err) => {
+        console.log('resetPassword() => err:', err);
+      });
+  };
+
+  useEffect(() => {
+    console.log('ID:', searchParams.get('id'));
+  }, []);
+
   setWindowClass('hold-transition login-page');
+
   return (
     <div className="login-box">
       <div className="card card-outline card-primary">
         <div className="card-header text-center">
           <Link to="/" className="h1">
-            <b>Admin</b>
-            <span>LTE</span>
+            <img
+              // className="animation__shake"
+              src="/img/logo-black-transp.png"
+              alt="DOCCUMI"
+              style={{marginTop: 5, marginBottom: 5}}
+              width="250"
+            />
           </Link>
         </div>
         <div className="card-body">

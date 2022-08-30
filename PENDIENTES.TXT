@@ -8,6 +8,8 @@ PENDIENTES DOCCUMI
 
 ----------------------------------------------------------
 
+◦	H- Implementar sistema email
+◦	H- Generar archivos en formato PDF y DOCX
 ◦	H- Implementar configuraciones de credenciales (publicaciones)
 ◦	H- Crear CRUD de configuraciones (credenciales publicaciones)
 ◦	H- Crear CRUD configuraciones (tipos)
