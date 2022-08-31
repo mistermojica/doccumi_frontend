@@ -50,6 +50,14 @@ const ProfileTab = (props: any) => {
     });
   };
 
+  const [PaymentShow, SetPaymentShow] = useState(false);
+  const showPaymentDialog = () => {
+    SetPaymentShow(true);
+  };
+  const hidePaymentDialog = () => {
+    SetPaymentShow(false);
+  };
+
   const submitData = () => {
     const url = Config.gatDomainName().concat('/usuarios/update');
     axios
@@ -208,6 +216,22 @@ const ProfileTab = (props: any) => {
           </div>
         </div>
         <div className="form-group row">
+          <label htmlFor="apikey" className="col-sm-2 col-form-label">
+            API Key:
+          </label>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control profile-form-control"
+              id="apikey"
+              name="apikey"
+              placeholder="API Key"
+              defaultValue={user.profile.apikey}
+              onChange={onChangeCB}
+            />
+          </div>
+        </div>
+        <div className="form-group row">
           {/* <label htmlFor="logo" className="col-sm-2 col-form-label">
             Logo
           </label> */}
@@ -239,7 +263,6 @@ const ProfileTab = (props: any) => {
             />
           </div>
         </div>
-
         {/* <div className="form-group row">
           <div className="offset-sm-2 col-sm-10">
             <div className="icheck-primary">
@@ -257,9 +280,14 @@ const ProfileTab = (props: any) => {
           </div>
         </div> */}
         <div className="form-group row">
-          <div className="offset-sm-2 col-sm-10">
-            <Button type="button" theme="danger" onClick={submitData}>
+          <div className="offset-sm-2 col-sm-2">
+            <Button type="button" theme="primary" onClick={submitData}>
               Guardar
+            </Button>
+          </div>
+          <div className="col-sm-8">
+            <Button type="button" theme="success" onClick={showPaymentDialog}>
+              Realizar Subscripción
             </Button>
           </div>
         </div>
@@ -280,6 +308,28 @@ const ProfileTab = (props: any) => {
             </Modal.Body>
             <Modal.Footer>
               <ButtonN variant="secondary" onClick={handleMessageClose}>
+                Cerrar
+              </ButtonN>
+            </Modal.Footer>
+          </Modal>
+        </div>
+        <div className="model-box-view">
+          <Modal
+            show={PaymentShow}
+            onHide={hidePaymentDialog}
+            backdrop="static"
+            keyboard={false}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Respuesta</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>
+                <div className="">Stripe</div>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <ButtonN variant="secondary" onClick={hidePaymentDialog}>
                 Cerrar
               </ButtonN>
             </Modal.Footer>
