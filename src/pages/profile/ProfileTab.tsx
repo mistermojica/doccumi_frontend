@@ -9,6 +9,9 @@ import {Elements} from '@stripe/react-stripe-js';
 import _ from 'underscore';
 import {Button} from '@components';
 import {Button as ButtonN, Modal} from 'react-bootstrap';
+import {Modal as MUIModal, Button as ButtonMUI} from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import {mlCL} from '@app/utils/helpers';
 import * as Config from '@app/utils/config';
@@ -98,7 +101,7 @@ const ProfileTab = (props: any) => {
         'Content-Type': 'application/json'
       }
     };
-    const url = 'http://localhost:8003/createpaymentintent';
+    const url = 'http://localhost:8004/create-payment-intent';
     const body = {items: [{id: 'xl-tshirt'}]};
     console.log({body});
     axios
@@ -140,6 +143,18 @@ const ProfileTab = (props: any) => {
   const options = {
     clientSecret,
     theme: 'stripe'
+  };
+
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 630,
+    bgcolor: 'background.paper',
+    border: '2px solid #007bff',
+    boxShadow: 24,
+    p: 4
   };
 
   return (
@@ -363,29 +378,43 @@ const ProfileTab = (props: any) => {
         </Modal>
       </div>
       <div className="model-box-view">
-        <Modal
-          show={PaymentShow}
-          onHide={hidePaymentDialog}
-          backdrop="static"
-          keyboard={false}
-          // style={{width: '600px !important;'}}
+        <MUIModal
+          open={PaymentShow}
+          onClose={hidePaymentDialog}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
         >
-          <Modal.Header closeButton>
-            {/* <Modal.Title>Respuesta</Modal.Title> */}
-          </Modal.Header>
-          <Modal.Body>
+          <Box sx={style}>
             {clientSecret && (
               <Elements options={options} stripe={stripePromise}>
                 <CheckoutForm />
               </Elements>
             )}
-          </Modal.Body>
-          {/* <Modal.Footer>
+          </Box>
+        </MUIModal>
+        {/* <Modal
+          show={PaymentShow}
+          onHide={hidePaymentDialog}
+          backdrop="static"
+          keyboard={false}
+          // style={{width: '600px !important;'}}
+        > */}
+        {/* <Modal.Header closeButton>
+            <Modal.Title>Respuesta</Modal.Title>
+          </Modal.Header> */}
+        {/* <Modal.Body>
+          {clientSecret && (
+            <Elements options={options} stripe={stripePromise}>
+              <CheckoutForm />
+            </Elements>
+          )}
+        </Modal.Body> */}
+        {/* <Modal.Footer>
             <ButtonN variant="secondary" onClick={hidePaymentDialog}>
               Cerrar
             </ButtonN>
           </Modal.Footer> */}
-        </Modal>
+        {/* </Modal> */}
       </div>
       {/* </form> */}
     </div>

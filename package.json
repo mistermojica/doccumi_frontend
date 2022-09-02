@@ -95,6 +95,10 @@
     "@types/styled-components": "5.1.23",
     "@types/underscore": "^1.11.4",
     "@types/uuid": "8.3.4",
+    "@types/react-modal": "^3.13.1",
+    "@types/react": "17.0.11",
+    "@types/react-dom": "17.0.11",
+    "craco-esbuild": "^0.5.1",
     "admin-lte": "^3.2.0",
     "axios": "0.26.0",
     "bootstrap": "^3.4.1",
@@ -136,6 +140,7 @@
     "react-dom": "17.0.2",
     "react-error-overlay": "^6.0.9",
     "react-i18next": "11.15.4",
+    "react-modal": "^3.15.1",
     "react-multiple-image-uploader": "^1.0.3",
     "react-redux": "7.2.6",
     "react-refresh": "^0.13.0",
@@ -169,8 +174,5 @@
     }
   },
   "devDependencies": {
-    "@types/react": "17.0.11",
-    "@types/react-dom": "17.0.11",
-    "craco-esbuild": "^0.5.1"
   }
 }
