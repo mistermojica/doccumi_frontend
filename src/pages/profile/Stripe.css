@@ -1,6 +1,13 @@
-#root {
+  /* #root {
     display: flex;
     align-items: center;
+  } */
+
+  .strModal {
+    width: 700px !important;
+    border: 3px solid red;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   
   body {
@@ -38,7 +45,7 @@
   }
   
   /* Buttons and links */
-  button {
+  .strButton {
     background: #5469d4;
     font-family: Arial, sans-serif;
     color: #ffffff;
@@ -54,11 +61,11 @@
     width: 100%;
   }
   
-  button:hover {
+  .strButton:hover {
     filter: contrast(115%);
   }
   
-  button:disabled {
+  .strButton:disabled {
     opacity: 0.5;
     cursor: default;
   }
