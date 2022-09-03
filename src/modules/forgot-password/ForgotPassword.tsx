@@ -12,6 +12,7 @@ import axios from 'axios';
 import {useFormik} from 'formik';
 import {Form, InputGroup} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+// @ts-ignore
 import * as Config from '@app/utils/config';
 
 const ForgotPassword = () => {

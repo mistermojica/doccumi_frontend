@@ -1,6 +1,7 @@
 import {removeWindowClass} from '@app/utils/helpers';
 // import {Gatekeeper} from 'gatekeeper-client-sdk';
 // import {Gatekeeper} from '@app/modules/gatekeeper-client';
+// @ts-ignore
 import Gatekeeper from '@app/services/gatekeeper';
 // const Gatekeeper = require('./gatekeeper').default;
 // import * as Gatekeeper from './indexx';

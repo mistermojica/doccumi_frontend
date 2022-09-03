@@ -1,9 +1,11 @@
 import React from 'react';
+// import ReactDOM from 'react-dom';
 import ReactDOM from 'react-dom';
+
 import {Provider} from 'react-redux';
 import {toast} from 'react-toastify';
 // import {Gatekeeper} from 'gatekeeper-client-sdk';
-import App from '@app/App';
+import App from './App';
 import store from '@store/store';
 
 import './i18n';
@@ -26,7 +28,9 @@ toast.configure({
 
 ReactDOM.render(
   <Provider store={store}>
+  <React.StrictMode>
     <App />
+  </React.StrictMode>
   </Provider>,
   document.getElementById('root')
 );

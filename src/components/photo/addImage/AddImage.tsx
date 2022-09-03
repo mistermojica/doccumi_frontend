@@ -4,7 +4,9 @@
 
 import React, {ChangeEvent, useEffect, useContext, useState} from 'react';
 import {Box, FormControlLabel, FormGroup, Toolbar} from '@mui/material';
+// @ts-ignore
 import AppContext from '@app/contexts/AppContext';
+// @ts-ignore
 import camera from './camera.png';
 
 const AddImage = (props: any) => {

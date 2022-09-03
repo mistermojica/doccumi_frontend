@@ -10,6 +10,7 @@ import {Button} from '@components';
 import {Button as ButtonN, Modal} from 'react-bootstrap';
 import axios from 'axios';
 import {mlCL} from '@app/utils/helpers';
+// @ts-ignore
 import * as Config from '@app/utils/config';
 
 const SettingsTab = (props: any) => {

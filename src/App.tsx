@@ -12,6 +12,7 @@ import {calculateWindowSize} from '@app/utils/helpers';
 import {useDispatch, useSelector} from 'react-redux';
 import {setWindowSize} from '@app/store/reducers/ui';
 
+// @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 
 import Introduccion from '@pages/Introduccion';
@@ -21,19 +22,27 @@ import Profile from '@pages/profile/Profile';
 import AgregarVehiculo from '@pages/AgregarVehiculo';
 import AgregarCliente from '@pages/AgregarCliente';
 import EditarCliente from '@pages/EditarCliente';
+// @ts-ignore
 import MostrarClientes from '@pages/MostrarClientes';
+// @ts-ignore
 import MostrarVehiculos from '@pages/MostrarVehiculos';
+// @ts-ignore
 import ImprimirDocumentos from '@app/pages/ImprimirDocumentos';
 import AgregarPlantilla from '@app/pages/AgregarPlantilla';
+// @ts-ignore
 import MostrarPlantillas from '@app/pages/MostrarPlantillas';
+// @ts-ignore
 import AsignarPlantillas from '@app/pages/AsignarPlantillas';
 import AgregarCampos from '@pages/AgregarCampos';
+// @ts-ignore
 import MostrarCampos from '@pages/MostrarCampos';
 import AgregarTipos from '@pages/AgregarTipos';
+// @ts-ignore
 import MostrarTipos from '@pages/MostrarTipos';
 import Blank from '@pages/Blank';
 import CalculadoraPrestamo from '@pages/CalculadoraPrestamo';
-import InventarioVehiculos from './pages/InventarioVehiculos';
+// @ts-ignore
+import InventarioVehiculos from '@pages/InventarioVehiculos';
 
 import PublicRoute from './routes/PublicRoute';
 import PrivateRoute from './routes/PrivateRoute';

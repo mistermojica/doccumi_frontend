@@ -14,9 +14,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import {mlCL} from '@app/utils/helpers';
+// @ts-ignore
 import * as Config from '@app/utils/config';
 
-import CheckoutForm from './CheckoutForm';
+// @ts-ignore
+import CheckoutForm from '@pages/profile/CheckoutForm';
 import './Stripe.css';
 
 const stripePromise = loadStripe(
@@ -150,7 +152,7 @@ const ProfileTab = (props: any) => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 630,
+    width: 570,
     bgcolor: 'background.paper',
     border: '2px solid #007bff',
     boxShadow: 24,

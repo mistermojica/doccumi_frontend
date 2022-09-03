@@ -6,7 +6,7 @@
 import React, {useEffect} from 'react';
 import _ from 'underscore';
 import namor from 'namor';
-import MultipleImageUploadFunction from '@app/components/files/MultipleImageUploadFunction';
+import MultipleImageUploadFunction from '@components/files/MultipleImageUploadFunction';
 
 const ClientesFormBody = (props) => {
   const {RowData, onChangeCB, cxcReadOnly, cxcAction} = props;

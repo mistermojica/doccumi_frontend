@@ -9,8 +9,11 @@ import {mlCL} from '@app/utils/helpers';
 import * as Config from '@app/utils/config';
 
 // Object.defineProperty(exports, '__esModule', {value: true});
-const tslib_1 = require('tslib');
-const js_base64_1 = require('js-base64');
+// const tslib_1 = require('tslib');
+// import tslib_1 from 'tslib';
+import * as tslib_1 from "tslib";
+// const js_base64_1 = require('js-base64');
+import * as js_base64_1 from 'js-base64';
 // const fingerprintjs_1 = require('@fingerprintjs/fingerprintjs');
 // const axios = require('axios');
 // const tab_1 = require('./core/tab');

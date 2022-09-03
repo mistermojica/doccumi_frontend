@@ -9,11 +9,15 @@ import {Button} from 'react-bootstrap';
 import axios from 'axios';
 import {ContentHeader} from '@components';
 import {useNavigate} from 'react-router-dom';
+// @ts-ignore
 import VehiculosFormBody from '@app/components/forms/VehiculosFormBody';
 import {mlCL} from '@app/utils/helpers';
+// @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 import AlertDialog from '@app/components/dialogs/AlertDialog';
+// @ts-ignore
 import * as AuthService from '@app/services/auth';
+// @ts-ignore
 import * as Config from '@app/utils/config';
 
 const AgregarVehiculo = () => {

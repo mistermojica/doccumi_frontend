@@ -3,7 +3,8 @@ module.exports = {
   extends: '@react-native-community',
   rules: {
     'prettier/prettier': 0,
-    "no-debugger":"off"
+    "no-debugger":"off",
+    "@typescript-eslint/ban-ts-ignore": "off"
   },
   env: {
     browser: true,

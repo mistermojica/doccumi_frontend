@@ -30,7 +30,7 @@ module.exports = merge.merge(common, {
   },
   plugins: [
     new Webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify("development"),
+      "import.meta.env.NODE_ENV": JSON.stringify("development"),
     }),
     new ESLintWebPackPlugin(myEslintOptions),
   ],

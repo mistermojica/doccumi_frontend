@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import {Form, InputGroup} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+// @ts-ignore
 import * as Config from '@app/utils/config';
 
 const RecoverPassword = () => {
