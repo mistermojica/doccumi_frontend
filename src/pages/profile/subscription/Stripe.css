@@ -10,7 +10,7 @@
     padding: 0 !important;
   }
   
-  body {
+  .strBody {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
@@ -21,7 +21,7 @@
     width: 100vw;
   }
   
-  form {
+  .strForm {
     width: 30vw;
     min-width: 500px;
     align-self: center;
@@ -30,7 +30,6 @@
     border-radius: 7px;
     padding: 40px;
   }
-  
   
   #payment-message {
     color: rgb(105, 115, 134);

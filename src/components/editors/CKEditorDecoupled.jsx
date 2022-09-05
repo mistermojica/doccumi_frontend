@@ -23,7 +23,8 @@ const CKEditorOM = (props) => {
         <div className="document-editor">
           <div className="document-editor__toolbar">&nbsp;</div>
           <div className="document-editor__editable-container">
-            <div className="document-editor__editable" align="center">
+            <div className="document-editor__editable">
+              {/* align="center" */}
               {PlaceHolderFields?.length > 0 ? (
                 <CKEditor
                   id={EditorConfig.id}

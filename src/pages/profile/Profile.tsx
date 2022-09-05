@@ -3,6 +3,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useSearchParams, useNavigate} from 'react-router-dom';
 import {ContentHeader, Button} from '@components';
 import {useDispatch, useSelector} from 'react-redux';
 import UploadImage from '@app/components/photo/addImage/UploadImage';
@@ -10,10 +11,13 @@ import ActivityTab from '@app/pages/profile/ActivityTab';
 import TimelineTab from '@app/pages/profile/TimelineTab';
 import ProfileTab from '@app/pages/profile/ProfileTab';
 import SettingsTab from '@app/pages/profile/SettingsTab';
+import SubscriptionTab from '@app/pages/profile/SubscriptionTab';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth.currentUser);
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [userClone, setUserClone] = useState({...user});
   const [foto, setFoto] = useState(user.profile.foto);
@@ -28,7 +32,7 @@ const Profile = () => {
 
   const onChange = (img: any) => {
     const uc = {...user};
-    console.log({img});
+    // console.log({img});
     if (img.id === 'addImageFoto') {
       uc.foto = img.url;
       setFoto(img.url);
@@ -40,9 +44,10 @@ const Profile = () => {
     setUserClone(uc);
   };
 
-  // useEffect(() => {
-  //   console.log('userClone:', userClone);
-  // }, [userClone]);
+  useEffect(() => {
+    console.log('activetab:', searchParams.get('activetab'));
+    toggle(searchParams.get('activetab') || '');
+  }, []);
 
   return (
     <>
@@ -216,6 +221,17 @@ const Profile = () => {
                         {t('main.label.credentials')}
                       </button>
                     </li>
+                    <li className="nav-item">
+                      <button
+                        type="button"
+                        className={`nav-link ${
+                          activeTab === 'SUBSCRIPTION' ? 'active' : ''
+                        }`}
+                        onClick={() => toggle('SUBSCRIPTION')}
+                      >
+                        {t('main.label.subscription')}
+                      </button>
+                    </li>
                   </ul>
                 </div>
                 <div className="card-body">
@@ -224,7 +240,10 @@ const Profile = () => {
                       user={userClone}
                       isActive={activeTab === 'PROFILE'}
                     />
-                    {/* <TimelineTab isActive={activeTab === 'TIMELINE'} /> */}
+                    <SubscriptionTab
+                      user={userClone}
+                      isActive={activeTab === 'SUBSCRIPTION'}
+                    />
                     <SettingsTab
                       user={userClone}
                       isActive={activeTab === 'SETTINGS'}

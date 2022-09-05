@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint no-unused-vars: off */
 /* eslint no-console: off */
 /* eslint no-underscore-dangle: off */

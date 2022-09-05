@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import reactRefresh from '@vitejs/plugin-react-refresh';
+import eslint from 'vite-plugin-eslint'
 import svgrPlugin from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react'
 import path from 'path';
@@ -13,7 +13,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    // reactRefresh(),
+    eslint(),
     svgrPlugin({
       svgrOptions: {
         icon: true,

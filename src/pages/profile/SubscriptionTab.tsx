@@ -1,8 +1,9 @@
 /* eslint no-underscore-dangle: 0 */
 /* eslint no-console: 0 */
 /* eslint-disable no-unused-vars */
+/* eslint-disable no-unreachable */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {loadStripe} from '@stripe/stripe-js';
 import {Elements} from '@stripe/react-stripe-js';
 // import {Link} from 'react-router-dom';
@@ -15,18 +16,31 @@ import axios from 'axios';
 import {mlCL} from '@app/utils/helpers';
 // @ts-ignore
 import * as Config from '@app/utils/config';
-
 // @ts-ignore
 import CheckoutForm from '@app/pages/profile/subscription/CheckoutForm';
 import './subscription/Stripe.css';
+// @ts-ignore
+import Register from './subscription/Register';
+// @ts-ignore
+import Prices from './subscription/Prices';
+// @ts-ignore
+import Subscribe from './subscription/Subscribe';
+// @ts-ignore
+import Account from './subscription/Account';
+// import Cancel from './Cancel';
+// @ts-ignore
+import AppContext from '@app/contexts/AppContext';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-const ProfileTab = (props: any) => {
+const SubscriptionTab = (props: any) => {
+  const AppCtx: any = useContext(AppContext);
+
   const {user, foto, logo, isActive} = props;
   const [clientSecret, setClientSecret] = useState('');
 
   const [resMessage, SetResMessage] = useState('');
+  const [SubscriptionPage, SetSubscriptionPage] = useState(<></>);
 
   const tempBody: any = {};
   _.each(user.profile, (value, key) => {
@@ -135,6 +149,11 @@ const ProfileTab = (props: any) => {
     //   .then((data) => setClientSecret(data.clientSecret));
   }, []);
 
+  useEffect(() => {
+    console.log('Navigate:', AppCtx.Navigate);
+    SetSubscriptionPage(showSubscriptionPage(AppCtx.Navigate.to));
+  }, [AppCtx]);
+
   const appearance = {
     theme: 'stripe'
   };
@@ -156,192 +175,35 @@ const ProfileTab = (props: any) => {
     p: 4
   };
 
+  const showSubscriptionPage = (page: string) => {
+    switch (page) {
+      case 'prices':
+        return <Prices />;
+        break;
+      case 'subscribe':
+        return <Subscribe />;
+        break;
+      case 'account':
+        return <Account />;
+        break;
+      case 'cancel':
+        return <>Cancel</>;
+        break;
+      default:
+        return <Register />;
+        break;
+    }
+  };
+
   return (
     <div className={`tab-pane ${isActive ? 'active' : ''}`}>
-      {/* <form className="form-horizontal"> */}
-      <div className="form-group row">
-        <label htmlFor="nombre" className="col-sm-2 col-form-label">
-          Nombre
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="text"
-            className="form-control profile-form-control"
-            id="nombre"
-            name="nombre"
-            placeholder="Nombre"
-            defaultValue={user.profile.nombre}
-            onChange={onChangeCB}
-          />
-        </div>
+      <div>
+        {clientSecret && (
+          <Elements options={options} stripe={stripePromise}>
+            {SubscriptionPage}
+          </Elements>
+        )}
       </div>
-      <div className="form-group row">
-        <label htmlFor="usuario" className="col-sm-2 col-form-label">
-          Usuario
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="input"
-            className="form-control profile-form-control"
-            id="usuario"
-            name="usuario"
-            placeholder="Usuario"
-            defaultValue={user.profile.usuario}
-            onChange={onChangeCB}
-          />
-        </div>
-      </div>
-      <div className="form-group row">
-        <label htmlFor="contrasena" className="col-sm-2 col-form-label">
-          Contraseña
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="text"
-            className="form-control profile-form-control"
-            id="contrasena"
-            name="contrasena"
-            placeholder="Contraseña"
-            defaultValue={user.profile.contrasena}
-            // onChange={(e) => setContrasena(e.target.value)}
-            onChange={onChangeCB}
-          />
-        </div>
-      </div>
-      <div className="form-group row">
-        <label htmlFor="email" className="col-sm-2 col-form-label">
-          Email
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="email"
-            className="form-control profile-form-control"
-            id="email"
-            name="email"
-            placeholder="Correo Electrónico"
-            defaultValue={user.profile.email}
-            onChange={onChangeCB}
-          />
-        </div>
-      </div>
-      <div className="form-group row">
-        <label htmlFor="nombre_empresa" className="col-sm-2 col-form-label">
-          Nombre Empresa
-        </label>
-        <div className="col-sm-10">
-          {/* <textarea
-              className="form-control profile-form-control"
-              id="inputExperience"
-              placeholder="Experience"
-              defaultValue={user.profile.nombre_empresa}
-            /> */}
-          <input
-            type="text"
-            className="form-control profile-form-control"
-            id="nombre_empresa"
-            name="nombre_empresa"
-            placeholder="Nombre Empresa"
-            defaultValue={user.profile.nombre_empresa}
-            onChange={onChangeCB}
-          />
-        </div>
-      </div>
-      <div className="form-group row">
-        <label htmlFor="telefono" className="col-sm-2 col-form-label">
-          Teléfono
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="text"
-            className="form-control profile-form-control"
-            id="telefono"
-            name="telefono"
-            placeholder="Teléfono"
-            defaultValue={user.profile.telefono}
-            onChange={onChangeCB}
-          />
-        </div>
-      </div>
-      <div className="form-group row">
-        <label htmlFor="whatsapp" className="col-sm-2 col-form-label">
-          WhatsApp
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="text"
-            className="form-control profile-form-control"
-            id="whatsapp"
-            name="whatsapp"
-            placeholder="WhatsApp"
-            defaultValue={user.profile.whatsapp}
-            onChange={onChangeCB}
-          />
-        </div>
-      </div>
-      <div className="form-group row">
-        <label htmlFor="apikey" className="col-sm-2 col-form-label">
-          API Key:
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="text"
-            className="form-control profile-form-control"
-            id="apikey"
-            name="apikey"
-            placeholder="API Key"
-            defaultValue={user.profile.apikey}
-            onChange={onChangeCB}
-          />
-        </div>
-      </div>
-      <div className="form-group row">
-        {/* <label htmlFor="logo" className="col-sm-2 col-form-label">
-            Logo
-          </label> */}
-        <div className="col-sm-10">
-          <input
-            type="hidden"
-            className="form-control profile-form-control"
-            id="logo"
-            name="logo"
-            placeholder="Logo"
-            defaultValue={logo || user.profile.logo}
-            onChange={onChangeCB}
-          />
-        </div>
-      </div>
-      <div className="form-group row">
-        {/* <label htmlFor="foto" className="col-sm-2 col-form-label">
-            Foto
-          </label> */}
-        <div className="col-sm-10">
-          <input
-            type="hidden"
-            className="form-control profile-form-control"
-            id="foto"
-            name="foto"
-            placeholder="Foto"
-            defaultValue={foto || user.profile.foto}
-            onChange={onChangeCB}
-          />
-        </div>
-      </div>
-      {/* <div className="form-group row">
-          <div className="offset-sm-2 col-sm-10">
-            <div className="icheck-primary">
-              <input
-                type="checkbox"
-                id="agreeTerms"
-                name="terms"
-                defaultValue="agree"
-              />
-              <label htmlFor="agreeTerms">
-                <span>I agree to the </span>
-                <Link to="/">terms and condition</Link>
-              </label>
-            </div>
-          </div>
-        </div> */}
       <div className="form-group row">
         <div className="offset-sm-2 col-sm-2">
           <Button type="button" theme="primary" onClick={submitData}>
@@ -382,7 +244,6 @@ const ProfileTab = (props: any) => {
           onClose={hidePaymentDialog}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-          className="strBody"
         >
           <Box sx={style}>
             {clientSecret && (
@@ -421,4 +282,4 @@ const ProfileTab = (props: any) => {
   );
 };
 
-export default ProfileTab;
+export default SubscriptionTab;

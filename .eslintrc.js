@@ -4,16 +4,15 @@ module.exports = {
   rules: {
     'prettier/prettier': 0,
     "no-debugger":"off",
-    "@typescript-eslint/ban-ts-ignore": "off"
+    // "@typescript-eslint/ban-ts-ignore": "off"
   },
   env: {
     browser: true,
     es2021: true
   },
   extends: [
-    'plugin:react/recommended',
-    'airbnb',
-    'plugin:prettier/recommended'
+    "eslint:recommended",
+    "plugin:react/recommended"
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -41,7 +40,7 @@ module.exports = {
       {extensions: ['.js', '.jsx', '.ts', '.tsx']}
     ],
     'react/jsx-props-no-spreading': ['off'],
-    'jsx-a11y/label-has-associated-control': ['error', {assert: 'either'}],
+    // 'jsx-a11y/label-has-associated-control': ['error', {assert: 'either'}],
     'react/jsx-indent': 'off',
     'react/jsx-indent-props': 'off',
     'react/jsx-curly-newline': 'off',
@@ -61,13 +60,13 @@ module.exports = {
     'import/extensions': 'off',
     'no-shadow': 'off',
     'no-use-before-define': 'off',
-    'react/require-default-props': 'off',
-    'import/no-extraneous-dependencies': [
-      'error',
-      {
-        'devDependencies': true,
-        'peerDependencies': true
-      }
-    ]
+    'react/require-default-props': 'off'
+    // 'import/no-extraneous-dependencies': [
+    //   'error',
+    //   {
+    //     'devDependencies': true,
+    //     'peerDependencies': true
+    //   }
+    // ]
   }
 };

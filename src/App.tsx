@@ -51,6 +51,7 @@ const App = () => {
   const [FileUploadData, setFileUploadData] = useState<any>(new Map());
   const [SubmitedUploadFilesData, setSubmitedUploadFilesData] = useState(false);
   const [SubmitedFormData, setSubmitedFormData] = useState<any>({});
+  const [Navigate, setNavigate] = useState<any>({});
   // const [searchParams, setSearchParams] = useSearchParams();
 
   const windowSize = useWindowSize();
@@ -61,10 +62,12 @@ const App = () => {
     FileUploadData,
     SubmitedUploadFilesData,
     SubmitedFormData,
+    Navigate,
     // searchParams,
     setFileUploadData,
     setSubmitedUploadFilesData,
-    setSubmitedFormData
+    setSubmitedFormData,
+    setNavigate
     // setSearchParams
   };
 
