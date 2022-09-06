@@ -2,6 +2,7 @@
 
 import React, {useState, useEffect, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {Button} from '@components';
 import axios from 'axios';
 // @ts-ignore
 import AppContext from '@app/contexts/AppContext';
@@ -80,9 +81,20 @@ const Prices = () => {
 
               <p>${price.unit_amount / 100} / month</p>
 
-              <button onClick={() => createSubscription(price.id)}>
+              {/* <button onClick={() => createSubscription(price.id)}>
                 Select
-              </button>
+              </button> */}
+              <div className="form-group row">
+                <div className="">
+                  <Button
+                    type="button"
+                    theme="primary"
+                    onClick={() => createSubscription(price.id)}
+                  >
+                    Seleccionar
+                  </Button>
+                </div>
+              </div>
             </div>
           );
         })}

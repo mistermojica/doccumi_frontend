@@ -27,7 +27,8 @@ import Prices from './subscription/Prices';
 import Subscribe from './subscription/Subscribe';
 // @ts-ignore
 import Account from './subscription/Account';
-// import Cancel from './Cancel';
+// @ts-ignore
+import Cancel from './subscription/Cancel';
 // @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 
@@ -37,6 +38,9 @@ const SubscriptionTab = (props: any) => {
   const AppCtx: any = useContext(AppContext);
 
   const {user, foto, logo, isActive} = props;
+
+  const [userClone, setUserClone] = useState({...user});
+
   const [clientSecret, setClientSecret] = useState('');
 
   const [resMessage, SetResMessage] = useState('');
@@ -181,16 +185,16 @@ const SubscriptionTab = (props: any) => {
         return <Prices />;
         break;
       case 'subscribe':
-        return <Subscribe />;
+        return <Subscribe user={userClone} />;
         break;
       case 'account':
         return <Account />;
         break;
       case 'cancel':
-        return <>Cancel</>;
+        return <Cancel />;
         break;
       default:
-        return <Register />;
+        return <Register user={userClone} />;
         break;
     }
   };
@@ -204,7 +208,7 @@ const SubscriptionTab = (props: any) => {
           </Elements>
         )}
       </div>
-      <div className="form-group row">
+      {/* <div className="form-group row">
         <div className="offset-sm-2 col-sm-2">
           <Button type="button" theme="primary" onClick={submitData}>
             Guardar
@@ -215,7 +219,7 @@ const SubscriptionTab = (props: any) => {
             Realizar Subscripción
           </Button>
         </div>
-      </div>
+      </div> */}
       <div className="model-box-view">
         <Modal
           show={MessageShow}

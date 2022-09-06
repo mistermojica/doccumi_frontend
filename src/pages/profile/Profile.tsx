@@ -23,7 +23,7 @@ const Profile = () => {
   const [foto, setFoto] = useState(user.profile.foto);
   const [logo, setLogo] = useState(user.profile.logo);
 
-  const [activeTab, setActiveTab] = useState('PROFILE');
+  const [activeTab, setActiveTab] = useState('');
   const [t] = useTranslation();
 
   const toggle = (tab: string) => {
@@ -46,7 +46,7 @@ const Profile = () => {
 
   useEffect(() => {
     console.log('activetab:', searchParams.get('activetab'));
-    toggle(searchParams.get('activetab') || '');
+    toggle(searchParams.get('activetab') || 'SUBSCRIPTION');
   }, []);
 
   return (

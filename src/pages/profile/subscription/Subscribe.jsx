@@ -1,16 +1,21 @@
+/* eslint-disable no-unused-vars */
+
 import React, {useState, useContext} from 'react';
+// import {PaymentElement} from '@stripe/react-stripe-js';
+import {Button} from '@components';
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import AppContext from '@app/contexts/AppContext';
 
-const Subscribe = () => {
+const Subscribe = (props) => {
   const AppCtx = useContext(AppContext);
+  const {user} = props;
 
   console.log('AppCtx.Navigate.data', AppCtx.Navigate.data);
 
   // Get the lookup key for the price from the previous page redirect.
   const [clientSecret] = useState(AppCtx.Navigate.data.clientSecret);
   // const [subscriptionId] = useState(AppCtx.Navigate.data.subscriptionId);
-  const [name, setName] = useState('Jenny Rosen');
+  const [name, setName] = useState(user.profile.nombre);
   const [messages, _setMessages] = useState('');
   // const [paymentIntent, setPaymentIntent] = useState();
 
@@ -56,7 +61,6 @@ const Subscribe = () => {
         }
       })
       .then((result) => {
-        console.log('result:', result);
         let {paymentIntent} = result;
         if (paymentIntent && paymentIntent.status === 'succeeded') {
           // return <Redirect to={{pathname: '/account'}} />
@@ -82,6 +86,10 @@ const Subscribe = () => {
   //   return <Redirect to={{pathname: '/account'}} />
   // }
 
+  const options = {
+    theme: 'stripe'
+  };
+
   return (
     <>
       <h1>Subscribe</h1>
@@ -97,7 +105,7 @@ const Subscribe = () => {
       <hr />
       <form onSubmit={handleSubmit}>
         <label>
-          Full name
+          Nombre Completo
           <input
             type="text"
             id="name"
@@ -105,8 +113,19 @@ const Subscribe = () => {
             onChange={(e) => setName(e.target.value)}
           />
         </label>
+        <hr />
         <CardElement />
-        <button type="submit">Subscribe</button>
+        <hr />
+        {/* <PaymentElement /> */}
+        <br />
+        {/* <button type="submit">Subscribe</button> */}
+        <div className="form-group row">
+          <div className="">
+            <Button type="submit" theme="primary">
+              Subscribir
+            </Button>
+          </div>
+        </div>
         <div>{messages}</div>
       </form>
       <br />

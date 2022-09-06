@@ -37,13 +37,19 @@ const AccountSubscription = ({subscription}) => {
 };
 
 const Account = () => {
+  const AppCtx = useContext(AppContext);
+
   const [subscriptions, setSubscriptions] = useState([]);
+
+  const handleAddNew = () => {
+    AppCtx.setNavigate({to: 'prices', data: {}});
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const {subscriptions} = await fetch('/subscriptions').then((r) =>
-        r.json()
-      );
+      const {subscriptions} = await fetch(
+        'http://localhost:8004/subscriptions'
+      ).then((r) => r.json());
 
       setSubscriptions(subscriptions.data);
     };
@@ -58,12 +64,12 @@ const Account = () => {
   return (
     <div>
       <h1>Account</h1>
-
-      <a href="/prices">Add a subscription</a>
-      <a href="/">Restart demo</a>
-
+      <button type="button" onClick={handleAddNew}>
+        Add a subscription
+      </button>
+      &nbsp;
+      <a href="/profile">Restart demo</a>
       <h2>Subscriptions</h2>
-
       <div id="subscriptions">
         {subscriptions.map((s) => {
           return <AccountSubscription key={s.id} subscription={s} />;

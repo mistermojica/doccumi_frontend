@@ -1,4 +1,5 @@
 import React, {useState, useContext} from 'react';
+import {Button} from '@components';
 // import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 // import {Redirect} from 'react-router-dom';
@@ -6,10 +7,14 @@ import axios from 'axios';
 import AppContext from '@app/contexts/AppContext';
 import './Subscription.css';
 
-const Register = () => {
+const Register = (props) => {
   const AppCtx = useContext(AppContext);
+  const {user} = props;
 
-  const [email, setEmail] = useState('jenny.rosen@example.com');
+  console.log({user});
+
+  const [name, setName] = useState(user.profile.nombre);
+  const [email, setEmail] = useState(user.profile.email);
   // const [customer, setCustomer] = useState(null);
 
   // const navigate = useNavigate();
@@ -21,7 +26,8 @@ const Register = () => {
       .post(
         'http://localhost:8004/create-customer',
         {
-          email: email
+          email: email,
+          name: user.profile.nombre
         }
         // {
         //   withCredentials: true
@@ -75,16 +81,42 @@ const Register = () => {
       <p>Unlimited photo hosting, and more. Cancel anytime.</p>
       <form onSubmit={handleSubmit}>
         <label>
-          Email
+          Nombre:&nbsp;
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            style={{width: '250px'}}
+          />
+        </label>
+        <br />
+        <label>
+          Email:&nbsp;
           <input
             type="text"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            style={{width: '250px'}}
           />
         </label>
-        <button type="submit">Register</button>
+        {/* <button type="submit">Register</button> */}
+        <hr />
+        <div className="form-group row">
+          <div className="">
+            <Button type="submit" theme="primary">
+              Registrarme
+            </Button>
+          </div>
+          {/* <div className="col-sm-8">
+            <Button type="button" theme="success" onClick={showPaymentDialog}>
+              Realizar Subscripción
+            </Button>
+          </div> */}
+        </div>
       </form>
     </main>
   );
