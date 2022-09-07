@@ -24,6 +24,7 @@ const Prices = (props) => {
       .then((response) => {
         const {prices} = response.data;
         console.log('prices:', prices);
+        prices.sort((a, b) => a.unit_amount - b.unit_amount);
         setPrices(prices);
       })
       .catch((err) => {
@@ -71,23 +72,41 @@ const Prices = (props) => {
     // }} />
   }
 
+  function createMarkup(texto, busqueda, reemplazo) {
+    return {__html: texto?.replaceAll(busqueda, reemplazo)};
+  }
+
   return (
     <div>
-      <h1>Select a plan</h1>
-
+      <h5>
+        <strong>Selecciona un plan:</strong>
+      </h5>
+      <br />
       <div className="price-list">
         {prices.map((price) => {
           return (
             <div key={price.id}>
-              <h3>{price.product.name}</h3>
-
-              <p>${price.unit_amount / 100} / month</p>
-
-              {/* <button onClick={() => createSubscription(price.id)}>
-                Select
-              </button> */}
+              <h4 className="col-md-12 text-center">
+                <strong>{price.product.name}</strong>
+              </h4>
+              <div
+                dangerouslySetInnerHTML={createMarkup(
+                  price.product.description,
+                  '- ',
+                  '<br/>⦿ '
+                )}
+              />
+              <br />
+              <div>
+                <center>
+                  <strong>
+                    ${price.unit_amount / 100} / {price.product.name}
+                  </strong>
+                </center>
+              </div>
+              <br />
               <div className="form-group row">
-                <div className="">
+                <div className="col-md-12 text-center">
                   <Button
                     type="button"
                     theme="primary"

@@ -33,8 +33,10 @@
 .price-list > div {
   flex-grow: 3;
   margin: 0 10px;
-  border: black solid 1px;
+  border: #ccc solid 1px;
   padding: 20px;
+  border-radius: 10px;
+  background-color: rgb(250, 250, 250);
 }
 
 .strButton {
