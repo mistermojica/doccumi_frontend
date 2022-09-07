@@ -180,9 +180,11 @@ const SubscriptionTab = (props: any) => {
   };
 
   const showSubscriptionPage = (page: string) => {
+    console.log('showSubscriptionPage:', {userClone});
+
     switch (page) {
       case 'prices':
-        return <Prices />;
+        return <Prices user={userClone} />;
         break;
       case 'subscribe':
         return <Subscribe user={userClone} />;
@@ -194,7 +196,8 @@ const SubscriptionTab = (props: any) => {
         return <Cancel />;
         break;
       default:
-        return <Register user={userClone} />;
+        return <Prices user={userClone} />;
+        // return <Register user={userClone} />;
         break;
     }
   };

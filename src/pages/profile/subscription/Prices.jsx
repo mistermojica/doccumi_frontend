@@ -8,8 +8,9 @@ import axios from 'axios';
 import AppContext from '@app/contexts/AppContext';
 // import {Redirect} from 'react-router-dom';
 
-const Prices = () => {
+const Prices = (props) => {
   const AppCtx = useContext(AppContext);
+  const {user} = props;
 
   const [prices, setPrices] = useState([]);
   const [subscriptionData, setSubscriptionData] = useState(null);
@@ -17,7 +18,7 @@ const Prices = () => {
   // const navigate = useNavigate();
 
   const getPrices = () => {
-    const url = 'http://localhost:8000/configuraciones/config';
+    const url = 'http://localhost:8004/prices';
     axios
       .get(url)
       .then((response) => {
@@ -50,7 +51,8 @@ const Prices = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          priceId
+          priceId,
+          customerId: user.profile.usuario_stripe
         })
       }
     ).then((r) => r.json());

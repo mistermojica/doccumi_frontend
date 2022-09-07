@@ -1,4 +1,6 @@
-import React, {useState, useContext} from 'react';
+/* eslint-disable no-unused-vars */
+
+import React, {useState, useContext, useEffect} from 'react';
 import {Button} from '@components';
 // import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
@@ -11,28 +13,21 @@ const Register = (props) => {
   const AppCtx = useContext(AppContext);
   const {user} = props;
 
-  console.log({user});
-
   const [name, setName] = useState(user.profile.nombre);
   const [email, setEmail] = useState(user.profile.email);
   // const [customer, setCustomer] = useState(null);
 
   // const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // e.preventDefault();
 
     axios
-      .post(
-        'http://localhost:8004/create-customer',
-        {
-          email: email,
-          name: user.profile.nombre
-        }
-        // {
-        //   withCredentials: true
-        // }
-      )
+      .post('http://localhost:8004/create-customer', {
+        email: user.profile.email,
+        name: user.profile.nombre,
+        phone: user.profile.telefono
+      })
       .then((response) => {
         const {customer} = response.data;
         if (customer) {
@@ -69,56 +64,65 @@ const Register = (props) => {
   //   AppCtx.setNavigate({to: 'prices', data: {}});
   // }
 
+  // useEffect(() => {
+  //   if (user.profile.usuario_stripe !== '') {
+  //     AppCtx.setNavigate({to: 'prices', data: {}});
+  //   } else {
+  //     handleSubmit();
+  //   }
+  // }, []);
+
   return (
-    <main>
-      <h1>Sample Photo Service</h1>
-      <img
-        src="https://picsum.photos/280/320?random=4"
-        alt="picsum generated"
-        width="140"
-        height="160"
-      />
-      <p>Unlimited photo hosting, and more. Cancel anytime.</p>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Nombre:&nbsp;
-          <input
-            type="text"
-            name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            style={{width: '250px'}}
-          />
-        </label>
-        <br />
-        <label>
-          Email:&nbsp;
-          <input
-            type="text"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{width: '250px'}}
-          />
-        </label>
-        {/* <button type="submit">Register</button> */}
-        <hr />
-        <div className="form-group row">
-          <div className="">
-            <Button type="submit" theme="primary">
-              Registrarme
-            </Button>
-          </div>
-          {/* <div className="col-sm-8">
-            <Button type="button" theme="success" onClick={showPaymentDialog}>
-              Realizar Subscripción
-            </Button>
-          </div> */}
-        </div>
-      </form>
-    </main>
+    <></>
+    // <main>
+    //   <h1>Sample Photo Service</h1>
+    //   <img
+    //     src="https://picsum.photos/280/320?random=4"
+    //     alt="picsum generated"
+    //     width="140"
+    //     height="160"
+    //   />
+    //   <p>Unlimited photo hosting, and more. Cancel anytime.</p>
+    //   <form onSubmit={handleSubmit}>
+    //     <label>
+    //       Nombre:&nbsp;
+    //       <input
+    //         type="text"
+    //         name="name"
+    //         value={name}
+    //         onChange={(e) => setName(e.target.value)}
+    //         required
+    //         style={{width: '250px'}}
+    //       />
+    //     </label>
+    //     <br />
+    //     <label>
+    //       Email:&nbsp;
+    //       <input
+    //         type="text"
+    //         name="email"
+    //         value={email}
+    //         onChange={(e) => setEmail(e.target.value)}
+    //         required
+    //         style={{width: '250px'}}
+    //       />
+    //     </label>
+    // {/* <button type="submit">Register</button> */}
+    // <hr />
+    // <div className="form-group row">
+    //   <div className="">
+    //     <Button type="submit" theme="primary">
+    //       Registrarme
+    //     </Button>
+    //   </div>
+    // {/* <div className="col-sm-8">
+    //   <Button type="button" theme="success" onClick={showPaymentDialog}>
+    //     Realizar Subscripción
+    //   </Button>
+    // </div> */}
+    //     </div>
+    //   </form>
+    // </main>
   );
 };
 
