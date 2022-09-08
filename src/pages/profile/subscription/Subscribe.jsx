@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 import React, {useState, useContext, useEffect} from 'react';
-import {PaymentElement} from '@stripe/react-stripe-js';
-// import {CardElement} from '@stripe/react-stripe-js';
+// import {PaymentElement} from '@stripe/react-stripe-js';
+import {CardElement} from '@stripe/react-stripe-js';
 import {Button} from '@components';
 import axios from 'axios';
 import {mlCL} from '@app/utils/helpers';
@@ -17,14 +17,14 @@ const Subscribe = (props) => {
 
   // Get the lookup key for the price from the previous page redirect.
   const [clientSecret] = useState(AppCtx.Navigate.data.clientSecret);
-  // const [subscriptionId] = useState(AppCtx.Navigate.data.subscriptionId);
+  const [subscriptionId] = useState(AppCtx.Navigate.data.subscriptionId);
   const [name, setName] = useState(user.profile.nombre);
   const [email, setEmail] = useState(user.profile.email);
   const [messages, _setMessages] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [clientSecret2, setClientSecret2] = useState('');
 
-  // const [paymentIntent, setPaymentIntent] = useState();
+  const [paymentIntent, setPaymentIntent] = useState();
 
   // helper for displaying status messages.
   const setMessage = (message) => {
@@ -46,23 +46,25 @@ const Subscribe = (props) => {
     }
 
     stripe.retrievePaymentIntent(clientSecret2).then(({paymentIntent}) => {
-      switch (paymentIntent.status) {
-        case 'succeeded':
-          setMessage('Pago exitoso!');
-          AppCtx.setNavigate({to: 'account', data: {}});
-          break;
-        case 'processing':
-          setMessage('Tu pago se está procesando...');
-          break;
-        case 'requires_payment_method':
-          setMessage(
-            'Tu pago no pudo ser procesado, por favor trata de nuevo.'
-          );
-          break;
-        default:
-          setMessage('Ocurrió un error inesperado.');
-          break;
-      }
+      console.log('paymentIntent 1:', paymentIntent);
+
+      // switch (paymentIntent.status) {
+      //   case 'succeeded':
+      //     setMessage('Pago exitoso!');
+      //     AppCtx.setNavigate({to: 'account', data: {}});
+      //     break;
+      //   case 'processing':
+      //     setMessage('Tu pago se está procesando...');
+      //     break;
+      //   case 'requires_payment_method':
+      //     setMessage(
+      //       'Tu pago no pudo ser procesado, por favor trata de nuevo.'
+      //     );
+      //     break;
+      //   default:
+      //     setMessage('Ocurrió un error inesperado.');
+      //     break;
+      // }
     });
   }, [stripe]);
 
@@ -106,62 +108,89 @@ const Subscribe = (props) => {
     // Get a reference to a mounted CardElement. Elements knows how
     // to find your CardElement because there can only ever be one of
     // each type of element.
-    // const cardElement = elements.getElement(CardElement);
-    const paymentElement = elements.getElement(PaymentElement);
+    const cardElement = elements.getElement(CardElement);
+    // const paymentElement = elements.getElement(PaymentElement);
 
     // Use card Element to tokenize payment details
 
-    const {error} = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: '',
-        payment_method_data: {
-          billing_details: {
-            name: name,
-            email: email
-          }
-        }
-      },
-      redirect: 'if_required'
-    });
-
-    if (
-      error &&
-      (error?.type === 'card_error' || error?.type === 'validation_error')
-    ) {
-      setMessage(error.message);
-    } else {
-      setMessage('Ocurrió un error inesperado al procesar el pago.');
-    }
-
-    // stripe
-    //   .confirmCardPayment(clientSecret, {
-    //     payment_method: {
-    //       // card: cardElement,
-    //       card: paymentElement,
+    // const {error} = await stripe.confirmPayment({
+    //   elements,
+    //   confirmParams: {
+    //     // Make sure to change this to your payment completion page
+    //     return_url: '',
+    //     payment_method_data: {
     //       billing_details: {
-    //         name: name
-    //       },
-    //       receipt_email: email
+    //         name: name,
+    //         email: email
+    //       }
     //     }
-    //   })
-    //   .then((result) => {
-    //     setIsLoading(false);
+    //   },
+    //   redirect: 'if_required'
+    // });
 
-    //     let {paymentIntent} = result;
-    //     if (paymentIntent && paymentIntent.status === 'succeeded') {
+    // if (
+    //   error &&
+    //   (error?.type === 'card_error' || error?.type === 'validation_error')
+    // ) {
+    //   setMessage(error.message);
+    // } else {
+    //   console.log('paymentIntent 2:', paymentIntent);
+    //   switch (paymentIntent?.status) {
+    //     case 'succeeded':
     //       setMessage('Pago exitoso!');
-    //       // return <Redirect to={{pathname: '/account'}} />
-    //       AppCtx.setNavigate({to: 'account', data: {}});
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log('error:', error);
-    //     setMessage(error.message);
-    //     // setPaymentIntent(paymentIntent);
-    //     return;
-    //   });
+    //       AppCtx.setNavigate({
+    //         to: 'account',
+    //         data: {price: AppCtx.Navigate.data.price}
+    //       });
+    //       break;
+    //     case 'processing':
+    //       setMessage('Tu pago se está procesando...');
+    //       break;
+    //     case 'requires_payment_method':
+    //       setMessage(
+    //         'Tu pago no pudo ser procesado, por favor trata de nuevo.'
+    //       );
+    //       break;
+    //     default:
+    //       setMessage('Ocurrió un error inesperado al procesar el pago.');
+    //       break;
+    //   }
+    // }
+
+    stripe
+      .confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: name
+          }
+          // receipt_email: email
+        }
+      })
+      .then((result) => {
+        setIsLoading(false);
+
+        let {paymentIntent} = result;
+
+        console.log('paymentIntent 3:', paymentIntent);
+
+        if (paymentIntent && paymentIntent.status === 'succeeded') {
+          setMessage('Pago exitoso!');
+          // return <Redirect to={{pathname: '/account'}} />
+          AppCtx.setNavigate({
+            to: 'account',
+            data: {price: AppCtx.Navigate.data.price}
+          });
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          console.log('error:', error);
+          setMessage(error.message);
+          return;
+        }
+        setPaymentIntent(paymentIntent);
+      });
 
     // if(error) {
     //   // show error and collect new card details.
@@ -210,8 +239,16 @@ const Subscribe = (props) => {
         <div>{messages}</div>
       </form> */}
       <form id="payment-form" onSubmit={handleSubmit}>
-        <PaymentElement id="payment-element" />
-        <button disabled={isLoading || !stripe || !elements} id="submit">
+        {/* <PaymentElement id="payment-element" /> */}
+        <CardElement />
+        <hr />
+        <Button
+          id="submit"
+          type="submit"
+          theme="primary"
+          disabled={isLoading || !stripe || !elements}
+          style={{width: '200px', height: '50px'}}
+        >
           <span id="button-text">
             {isLoading ? (
               <div className="spinner" id="spinner"></div>
@@ -219,7 +256,16 @@ const Subscribe = (props) => {
               'Realizar pago'
             )}
           </span>
-        </button>
+        </Button>
+        {/* <button disabled={isLoading || !stripe || !elements} id="submit">
+          <span id="button-text">
+            {isLoading ? (
+              <div className="spinner" id="spinner"></div>
+            ) : (
+              'Realizar pago'
+            )}
+          </span>
+        </button> */}
         {/* Show any error or success messages */}
         {messages && <div id="payment-message">{messages}</div>}
       </form>

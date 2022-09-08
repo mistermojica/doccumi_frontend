@@ -43,7 +43,7 @@ const Prices = (props) => {
     // fetchPrices();
   }, []);
 
-  const createSubscription = async (priceId) => {
+  const createSubscription = async (price) => {
     const {subscriptionId, clientSecret} = await fetch(
       'http://localhost:8004/create-subscription',
       {
@@ -52,13 +52,16 @@ const Prices = (props) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          priceId,
+          priceId: price.id,
           customerId: user.profile.usuario_stripe
         })
       }
     ).then((r) => r.json());
 
-    AppCtx.setNavigate({to: 'subscribe', data: {subscriptionId, clientSecret}});
+    AppCtx.setNavigate({
+      to: 'subscribe',
+      data: {subscriptionId, clientSecret, price}
+    });
 
     // setSubscriptionData({subscriptionId, clientSecret});
   };
@@ -110,7 +113,7 @@ const Prices = (props) => {
                   <Button
                     type="button"
                     theme="primary"
-                    onClick={() => createSubscription(price.id)}
+                    onClick={() => createSubscription(price)}
                   >
                     Seleccionar
                   </Button>
