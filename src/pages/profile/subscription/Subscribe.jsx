@@ -238,7 +238,7 @@ const Subscribe = (props) => {
         </div>
         <div>{messages}</div>
       </form> */}
-      <form id="payment-form" onSubmit={handleSubmit}>
+      <form id="payment-form" onSubmit={handleSubmit} style={{width: '50%'}}>
         {/* <PaymentElement id="payment-element" /> */}
         <CardElement />
         <hr />

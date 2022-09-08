@@ -2,6 +2,7 @@
 
 import React, {useState, useEffect, useContext} from 'react';
 import {Button} from '@components';
+import * as moment from 'moment';
 import AppContext from '@app/contexts/AppContext';
 import './Subscription.css';
 
@@ -43,6 +44,13 @@ const Account = () => {
     AppCtx.setNavigate({to: 'prices', data: {}});
   };
 
+  const handleCancel = () => {
+    AppCtx.setNavigate({
+      to: 'cancel',
+      data: {subscription: subscriptions[0].id}
+    });
+  };
+
   useEffect(() => {
     console.log('price:', AppCtx?.Navigate?.data?.price);
     console.log('price:', price);
@@ -79,12 +87,44 @@ const Account = () => {
         <div className="form-group row">
           <div className="col-md-7">
             <h5>
-              <strong>{price?.product?.name}</strong>
+              <strong>{subscriptions[0]?.plan?.product?.name}</strong>
             </h5>
             <br />
-            {price?.currency}${price?.unit_amount / 100} por mes
+            Monto:{' '}
+            <strong>
+              {subscriptions[0]?.items?.data[0]?.price?.currency.toUpperCase()}$
+              {subscriptions[0]?.items?.data[0]?.price?.unit_amount / 100}
+            </strong>{' '}
+            por mes.
             <br />
-            Tu plan se renueva el 8 de octubre de 2022.
+            <br />
+            Tu plan se renueva el:{' '}
+            <strong>
+              {subscriptions[0] &&
+                moment(
+                  new Date(
+                    subscriptions[0]?.current_period_end * 1000
+                  ).toString()
+                ).format('DD-MMM-YYYY')}
+            </strong>
+            .
+            <br />
+            <br />
+            Estado subscripción:{' '}
+            <strong>
+              {subscriptions[0] && subscriptions[0]?.status === 'active'
+                ? 'Activo'
+                : 'Inactivo'}
+            </strong>
+            .
+            <br />
+            <br />
+            Método de pago:{' '}
+            <strong>
+              {subscriptions[0] &&
+                subscriptions[0]?.default_payment_method?.card?.last4}
+            </strong>
+            .
           </div>
           <div className="col-md-3 text-center">
             <Button
@@ -100,7 +140,7 @@ const Account = () => {
             <Button
               type="button"
               theme="secondary"
-              onClick={handleAddNew}
+              onClick={handleCancel}
               style={{width: '200px', height: '50px'}}
               // onClick={() => createSubscription(price.id)}
             >
@@ -109,14 +149,14 @@ const Account = () => {
           </div>
         </div>
       )}
-      &nbsp;
+      {/* &nbsp; */}
       {/* <a href="/profile">Restart demo</a> */}
       {/* <h2>Subscriptions</h2> */}
-      <div id="subscriptions">
+      {/* <div id="subscriptions">
         {subscriptions.map((s) => {
           return <AccountSubscription key={s.id} subscription={s} />;
         })}
-      </div>
+      </div> */}
     </div>
   );
 };
