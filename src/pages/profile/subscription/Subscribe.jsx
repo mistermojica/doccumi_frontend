@@ -13,8 +13,6 @@ const Subscribe = (props) => {
   const AppCtx = useContext(AppContext);
   const {user} = props;
 
-  console.log('AppCtx.Navigate.data', AppCtx.Navigate.data);
-
   // Get the lookup key for the price from the previous page redirect.
   const [clientSecret] = useState(AppCtx.Navigate.data.clientSecret);
   const [subscriptionId] = useState(AppCtx.Navigate.data.subscriptionId);
@@ -35,9 +33,6 @@ const Subscribe = (props) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  // console.log('stripe:', stripe);
-  // console.log('elements:', elements);
-
   useEffect(() => {
     stripeCreatePaymentIntent();
 
@@ -46,8 +41,6 @@ const Subscribe = (props) => {
     }
 
     stripe.retrievePaymentIntent(clientSecret2).then(({paymentIntent}) => {
-      console.log('paymentIntent 1:', paymentIntent);
-
       // switch (paymentIntent.status) {
       //   case 'succeeded':
       //     setMessage('Pago exitoso!');
@@ -76,7 +69,6 @@ const Subscribe = (props) => {
     };
     const url = 'http://localhost:8004/create-payment-intent';
     const body = {items: [{id: 'xl-tshirt'}]};
-    console.log({body});
     axios
       .post(url, body, customConfig)
       .then((response) => {
@@ -171,8 +163,6 @@ const Subscribe = (props) => {
         setIsLoading(false);
 
         let {paymentIntent} = result;
-
-        console.log('paymentIntent 3:', paymentIntent);
 
         if (paymentIntent && paymentIntent.status === 'succeeded') {
           setMessage('Pago exitoso!');

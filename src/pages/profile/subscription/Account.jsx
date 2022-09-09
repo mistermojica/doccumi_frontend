@@ -7,11 +7,11 @@ import AppContext from '@app/contexts/AppContext';
 import './Subscription.css';
 
 const AccountSubscription = ({subscription}) => {
-  const AppCtx = useContext(AppContext);
+  // const AppCtx = useContext(AppContext);
 
-  const handleCancel = () => {
-    AppCtx.setNavigate({to: 'cancel', data: {subscription: subscription.id}});
-  };
+  // const handleCancel = () => {
+  //   AppCtx.setNavigate({to: 'cancel', data: {subscription: subscription.id}});
+  // };
 
   return (
     <section>
@@ -19,17 +19,31 @@ const AccountSubscription = ({subscription}) => {
       {/* <a
         href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
       ></a> */}
-      <p>Status: {subscription.status}</p>
-      <p>Card last4: {subscription.default_payment_method?.card?.last4}</p>
-      <p>
-        Current period end:
-        {new Date(subscription.current_period_end * 1000).toString()}
-      </p>
+      <div className="row">
+        <div className="col-md-3">
+          {moment(new Date(subscription?.start_date * 1000).toString()).format(
+            'LL'
+          )}
+        </div>
+        <div className="col-md-3">
+          {subscription?.items?.data[0]?.plan?.currency.toUpperCase()}$
+          {subscription?.items?.data[0]?.plan?.amount / 100}
+        </div>
+        <div className="col-md-3">
+          {subscription.status === 'active'
+            ? 'Pagada'
+            : subscription.status === 'canceled'
+            ? 'Cancelada'
+            : 'Inactiva'}
+        </div>
+        <div className="col-md-3">{subscription?.plan?.product?.name}</div>
+      </div>
+      {/* <p>Card last4: {subscription.default_payment_method?.card?.last4}</p> */}
       {/* <Link to={{pathname: '/change-plan', state: {subscription: subscription.id }}}>Change plan</Link><br /> */}
       {/* <Link to={{pathname: '/cancel', state: {subscription: subscription.id }}}>Cancel</Link> */}
-      <button type="button" onClick={handleCancel}>
+      {/* <button type="button" onClick={handleCancel}>
         Cancel
-      </button>
+      </button> */}
     </section>
   );
 };
@@ -38,7 +52,7 @@ const Account = () => {
   const AppCtx = useContext(AppContext);
 
   const [subscriptions, setSubscriptions] = useState([]);
-  const [price, setPrice] = useState(AppCtx?.Navigate?.data?.price);
+  const [interval, setInterval] = useState('');
 
   const handleAddNew = () => {
     AppCtx.setNavigate({to: 'prices', data: {}});
@@ -47,20 +61,37 @@ const Account = () => {
   const handleCancel = () => {
     AppCtx.setNavigate({
       to: 'cancel',
-      data: {subscription: subscriptions[0].id}
+      data: {subscription: subscriptions[0]}
     });
   };
 
   useEffect(() => {
-    console.log('price:', AppCtx?.Navigate?.data?.price);
-    console.log('price:', price);
-
     const fetchData = async () => {
       const {subscriptions} = await fetch(
         'http://localhost:8004/subscriptions'
       ).then((r) => r.json());
 
       setSubscriptions(subscriptions.data);
+
+      let inter = '';
+
+      if (subscriptions.data[0]?.items?.data[0]?.plan?.interval === 'month') {
+        if (subscriptions.data[0]?.items?.data[0]?.plan?.interval_count === 1) {
+          inter = 'mes';
+        } else {
+          inter = 'meses';
+        }
+      } else if (
+        subscriptions.data[0]?.items?.data[0]?.plan?.interval === 'year'
+      ) {
+        if (subscriptions.data[0]?.items?.data[0]?.plan?.interval_count === 1) {
+          inter = 'año';
+        } else {
+          inter = 'años';
+        }
+      }
+
+      setInterval(inter);
     };
 
     fetchData();
@@ -70,11 +101,16 @@ const Account = () => {
     return '';
   }
 
+  moment.locale('es');
+
   return (
     <div>
       <h5>PLAN ACTUAL</h5>
       <hr />
-      {subscriptions.length === 0 ? (
+      {subscriptions.length === 0 ||
+      subscriptions.filter((doc) => {
+        return doc.status == 'active';
+      })[0] === undefined ? (
         <Button
           type="button"
           theme="primary"
@@ -84,70 +120,90 @@ const Account = () => {
           Obtener plan
         </Button>
       ) : (
-        <div className="form-group row">
-          <div className="col-md-7">
-            <h5>
-              <strong>{subscriptions[0]?.plan?.product?.name}</strong>
-            </h5>
-            <br />
-            Monto:{' '}
-            <strong>
-              {subscriptions[0]?.items?.data[0]?.price?.currency.toUpperCase()}$
-              {subscriptions[0]?.items?.data[0]?.price?.unit_amount / 100}
-            </strong>{' '}
-            por mes.
-            <br />
-            <br />
-            Tu plan se renueva el:{' '}
-            <strong>
-              {subscriptions[0] &&
-                moment(
-                  new Date(
-                    subscriptions[0]?.current_period_end * 1000
-                  ).toString()
-                ).format('DD-MMM-YYYY')}
-            </strong>
-            .
-            <br />
-            <br />
-            Estado subscripción:{' '}
-            <strong>
-              {subscriptions[0] && subscriptions[0]?.status === 'active'
-                ? 'Activo'
-                : 'Inactivo'}
-            </strong>
-            .
-            <br />
+        <>
+          <div className="form-group row">
+            <div className="col-md-7">
+              <h5>
+                <strong>{subscriptions[0]?.plan?.product?.name}</strong>
+              </h5>
+              <br />
+              Monto:{' '}
+              <strong>
+                {subscriptions[0]?.items?.data[0]?.plan?.currency.toUpperCase()}
+                ${subscriptions[0]?.items?.data[0]?.plan?.amount / 100}
+              </strong>{' '}
+              por{' '}
+              <strong>
+                {subscriptions[0]?.items?.data[0]?.plan?.interval_count}{' '}
+              </strong>
+              {interval}
+              .
+              <br />
+              <br />
+              Fecha de renovación:{' '}
+              <strong>
+                {subscriptions[0] &&
+                  moment(
+                    new Date(
+                      subscriptions[0]?.current_period_end * 1000
+                    ).toString()
+                  )
+                    .add(1, 'd')
+                    .format('LL')}
+              </strong>
+              .
+              <br />
+              <br />
+              Estado subscripción:{' '}
+              <strong>
+                {subscriptions[0] && subscriptions[0]?.status === 'active'
+                  ? 'Activo'
+                  : 'Inactivo'}
+              </strong>
+              .
+              {/* <br />
             <br />
             Método de pago:{' '}
             <strong>
               {subscriptions[0] &&
                 subscriptions[0]?.default_payment_method?.card?.last4}
             </strong>
-            .
+            . */}
+            </div>
+            <div className="col-md-3 text-center">
+              <Button
+                type="button"
+                theme="primary"
+                onClick={handleAddNew}
+                style={{width: '200px', height: '50px'}}
+              >
+                Cambiar plan
+              </Button>
+              <br />
+              <br />
+              <Button
+                type="button"
+                theme="secondary"
+                onClick={handleCancel}
+                style={{width: '200px', height: '50px'}}
+                // onClick={() => createSubscription(price.id)}
+              >
+                Cancelar plan
+              </Button>
+            </div>
           </div>
-          <div className="col-md-3 text-center">
-            <Button
-              type="button"
-              theme="primary"
-              onClick={handleAddNew}
-              style={{width: '200px', height: '50px'}}
-            >
-              Cambiar plan
-            </Button>
-            <br />
-            <br />
-            <Button
-              type="button"
-              theme="secondary"
-              onClick={handleCancel}
-              style={{width: '200px', height: '50px'}}
-              // onClick={() => createSubscription(price.id)}
-            >
-              Cancelar plan
-            </Button>
+          <div className="row">
+            <div className="col-md-12">
+              <hr />
+              HISTORIAL DE FACTURAS
+              <div id="subscriptions">
+                {subscriptions.map((s) => {
+                  return <AccountSubscription key={s.id} subscription={s} />;
+                })}
+              </div>
+            </div>
           </div>
-        </div>
+        </>
       )}
       {/* &nbsp; */}
       {/* <a href="/profile">Restart demo</a> */}

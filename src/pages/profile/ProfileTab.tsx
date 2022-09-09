@@ -288,8 +288,9 @@ const ProfileTab = (props: any) => {
             className="form-control profile-form-control"
             id="apikey"
             name="apikey"
+            disabled
             placeholder="API Key"
-            defaultValue={user.profile.apikey}
+            defaultValue={user.profile.usuario_stripe}
             onChange={onChangeCB}
           />
         </div>
@@ -348,11 +349,11 @@ const ProfileTab = (props: any) => {
             Guardar
           </Button>
         </div>
-        <div className="col-sm-8">
+        {/* <div className="col-sm-8">
           <Button type="button" theme="success" onClick={showPaymentDialog}>
             Realizar Subscripción
           </Button>
-        </div>
+        </div> */}
       </div>
       <div className="model-box-view">
         <Modal
