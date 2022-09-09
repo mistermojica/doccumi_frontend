@@ -16,6 +16,7 @@ const Subscribe = (props) => {
   // Get the lookup key for the price from the previous page redirect.
   const [clientSecret] = useState(AppCtx.Navigate.data.clientSecret);
   const [subscriptionId] = useState(AppCtx.Navigate.data.subscriptionId);
+  const [items] = useState(AppCtx.Navigate.data.items);
   const [name, setName] = useState(user.profile.nombre);
   const [email, setEmail] = useState(user.profile.email);
   const [messages, _setMessages] = useState('');
@@ -39,6 +40,8 @@ const Subscribe = (props) => {
     if (!stripe || !clientSecret2) {
       return;
     }
+
+    console.log({items});
 
     stripe.retrievePaymentIntent(clientSecret2).then(({paymentIntent}) => {
       // switch (paymentIntent.status) {
@@ -68,7 +71,15 @@ const Subscribe = (props) => {
       }
     };
     const url = 'http://localhost:8004/create-payment-intent';
-    const body = {items: [{id: 'xl-tshirt'}]};
+    const body = {
+      items: [
+        {
+          // id: items[0].id,
+          price: AppCtx.Navigate.data.price.id
+        }
+      ]
+    };
+
     axios
       .post(url, body, customConfig)
       .then((response) => {
@@ -228,7 +239,7 @@ const Subscribe = (props) => {
         </div>
         <div>{messages}</div>
       </form> */}
-      <form id="payment-form" onSubmit={handleSubmit} style={{width: '50%'}}>
+      <form id="payment-form" onSubmit={handleSubmit} style={{width: '70%'}}>
         {/* <PaymentElement id="payment-element" /> */}
         <CardElement />
         <hr />

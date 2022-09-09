@@ -2,9 +2,14 @@
 
 import React, {useState, useEffect, useContext} from 'react';
 import {Button} from '@components';
-import * as moment from 'moment';
+import moment from 'moment';
+import 'moment/locale/es-do';
+// import Moment from 'react-moment';
+// import 'moment-timezone';
 import AppContext from '@app/contexts/AppContext';
 import './Subscription.css';
+
+// Moment.globalLocale = 'es-do';
 
 const AccountSubscription = ({subscription}) => {
   // const AppCtx = useContext(AppContext);
@@ -21,9 +26,9 @@ const AccountSubscription = ({subscription}) => {
       ></a> */}
       <div className="row">
         <div className="col-md-3">
-          {moment(new Date(subscription?.start_date * 1000).toString()).format(
-            'LL'
-          )}
+          {moment(new Date(subscription?.start_date * 1000).toString())
+            .locale('es-do')
+            .format('LL')}
         </div>
         <div className="col-md-3">
           {subscription?.items?.data[0]?.plan?.currency.toUpperCase()}$
@@ -101,8 +106,6 @@ const Account = () => {
     return '';
   }
 
-  moment.locale('es');
-
   return (
     <div>
       <h5>PLAN ACTUAL</h5>
@@ -147,9 +150,7 @@ const Account = () => {
                     new Date(
                       subscriptions[0]?.current_period_end * 1000
                     ).toString()
-                  )
-                    .add(1, 'd')
-                    .format('LL')}
+                  ).format('LL')}
               </strong>
               .
               <br />
@@ -183,7 +184,7 @@ const Account = () => {
               <br />
               <Button
                 type="button"
-                theme="secondary"
+                theme="danger"
                 onClick={handleCancel}
                 style={{width: '200px', height: '50px'}}
                 // onClick={() => createSubscription(price.id)}

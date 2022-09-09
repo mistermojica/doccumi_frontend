@@ -44,7 +44,7 @@ const Prices = (props) => {
   }, []);
 
   const createSubscription = async (price) => {
-    const {subscriptionId, clientSecret} = await fetch(
+    const {subscriptionId, clientSecret, items} = await fetch(
       'http://localhost:8004/create-subscription',
       {
         method: 'POST',
@@ -60,7 +60,7 @@ const Prices = (props) => {
 
     AppCtx.setNavigate({
       to: 'subscribe',
-      data: {subscriptionId, clientSecret, price}
+      data: {subscriptionId, clientSecret, price, items}
     });
 
     // setSubscriptionData({subscriptionId, clientSecret});

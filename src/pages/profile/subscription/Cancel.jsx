@@ -3,6 +3,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Button} from '@components';
 import * as moment from 'moment';
+import 'moment-timezone';
 import AppContext from '@app/contexts/AppContext';
 import './Subscription.css';
 
