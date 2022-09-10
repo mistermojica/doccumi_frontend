@@ -22,13 +22,14 @@ export default defineConfig({
     }),
   ],
   resolve: {
-    alias: {
-      '@app': path.resolve(__dirname, './src'),
-      '@store': path.resolve(__dirname, './src/store'),
-      '@modules': path.resolve(__dirname, './src/modules'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '~': path.resolve(__dirname, './node_modules'),
-    },
+    alias: 
+      {
+        '@app': path.resolve(__dirname, './src'),
+        '@store': path.resolve(__dirname, './src/store'),
+        '@modules': path.resolve(__dirname, './src/modules'),
+        '@pages': path.resolve(__dirname, './src/pages'),
+        '@components': path.resolve(__dirname, './src/components'),
+        '~': path.resolve(__dirname, './node_modules')
+      }
   },
 })
