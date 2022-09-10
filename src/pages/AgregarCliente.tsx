@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 
@@ -8,11 +7,15 @@ import {Button} from 'react-bootstrap';
 import axios from 'axios';
 import {ContentHeader} from '@components';
 import {useNavigate} from 'react-router-dom';
+// @ts-ignore
 import ClientesFormBody from '@app/components/forms/ClientesFormBody';
 import {mlCL} from '@app/utils/helpers';
+// @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 import AlertDialog from '@app/components/dialogs/AlertDialog';
+// @ts-ignore
 import * as AuthService from '@app/services/auth';
+// @ts-ignore
 import * as Config from '@app/utils/config';
 
 const AgregarCliente = () => {
@@ -217,13 +220,13 @@ const AgregarCliente = () => {
               >
                 &nbsp;
               </ClientesFormBody>
-              <input
+              {/* <input
                 type="hidden"
                 className="form-control"
                 id="cliFotoCedula"
                 name="cliFotoCedula"
                 defaultValue={AppCtx.FileUploadData}
-              />
+              /> */}
               <Button
                 type="submit"
                 className="btn tn-success mt-4"

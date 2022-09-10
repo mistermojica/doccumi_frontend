@@ -5,7 +5,9 @@
 import React, {ChangeEvent, useState} from 'react';
 import axios from 'axios';
 import {Box, FormControlLabel, FormGroup, Toolbar} from '@mui/material';
+// @ts-ignore
 import camera from './camera.png';
+// @ts-ignore
 import profile from './profile.png';
 
 const UploadImage = (props: any) => {

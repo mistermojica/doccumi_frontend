@@ -24,7 +24,7 @@ module.exports = merge.merge(common, {
 	// },
   plugins: [
     new Webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify("production"),
+      "import.meta.env.NODE_ENV": JSON.stringify("production"),
     }),
     // new Webpack.optimize.ModuleConcatenationPlugin(),
     new MiniCssExtractPlugin({

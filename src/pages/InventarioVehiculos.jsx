@@ -333,12 +333,14 @@ function Table({columns, data}) {
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr key="1" {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>
+                <th key="2" {...column.getHeaderProps()}>
                   {column.render('Header')}
                   {/* Render the columns filter UI */}
-                  <div>{column.canFilter ? column.render('Filter') : null}</div>
+                  <div key="3">
+                    {column.canFilter ? column.render('Filter') : null}
+                  </div>
                 </th>
               ))}
             </tr>
@@ -362,10 +364,12 @@ function Table({columns, data}) {
           {firstPageRows.map((row) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr key="4" {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    <td key="5" {...cell.getCellProps()}>
+                      {cell.render('Cell')}
+                    </td>
                   );
                 })}
               </tr>

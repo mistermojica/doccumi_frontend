@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 
@@ -8,11 +7,14 @@ import {Button} from 'react-bootstrap';
 import axios from 'axios';
 import {ContentHeader} from '@components';
 import {useNavigate} from 'react-router-dom';
+// @ts-ignore
 import GenericoFormBody from '@app/components/forms/GenericoFormBody';
 import {mlCL} from '@app/utils/helpers';
+// @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 import AlertDialog from '@app/components/dialogs/AlertDialog';
 import * as AuthService from '@app/services/auth';
+// @ts-ignore
 import * as Config from '@app/utils/config';
 
 const AgregarCampo = () => {

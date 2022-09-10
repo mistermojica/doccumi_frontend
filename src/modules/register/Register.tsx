@@ -7,6 +7,7 @@ import {toast} from 'react-toastify';
 import {useFormik} from 'formik';
 import {useTranslation} from 'react-i18next';
 import * as Yup from 'yup';
+import axios from 'axios';
 import {loginUser} from '@store/reducers/auth';
 import {Button, Checkbox} from '@components';
 import {
@@ -38,7 +39,8 @@ const Register = () => {
     whatsapp: string,
     nombre_empresa: string,
     email: string,
-    password: string
+    password: string,
+    usuario_stripe: string
   ) => {
     try {
       setAuthLoading(true);
@@ -48,7 +50,8 @@ const Register = () => {
         whatsapp,
         nombre_empresa,
         email,
-        password
+        password,
+        usuario_stripe
       });
       setAuthLoading(false);
       dispatch(loginUser(token));
@@ -58,6 +61,28 @@ const Register = () => {
       toast.error(error.message || 'Failed');
       setAuthLoading(false);
     }
+  };
+
+  const stripeCreateCustomer = (ctx: any) => {
+    const promise = new Promise(function (resolve, reject) {
+      axios
+        .post('http://localhost:8004/create-customer', {
+          email: ctx.email,
+          name: ctx.name,
+          phone: ctx.phone
+        })
+        .then((response: any) => {
+          console.log('handleSubmit() => data:', response.data);
+          const {customer} = response.data;
+          resolve(customer);
+        })
+        .catch((err: any) => {
+          console.log('handleSubmit() => err:', err);
+          reject(err);
+        });
+    });
+
+    return promise;
   };
 
   // const registerByGoogle = async () => {
@@ -121,14 +146,26 @@ const Register = () => {
         })
     }),
     onSubmit: (values) => {
-      register(
-        values.nombre,
-        values.telefono,
-        values.whatsapp,
-        values.nombre_empresa,
-        values.email,
-        values.password
-      );
+      stripeCreateCustomer({
+        email: values.email,
+        name: values.nombre,
+        phone: values.telefono
+      })
+        .then((resSCC: any) => {
+          console.log('resiter:', {resSCC});
+          register(
+            values.nombre,
+            values.telefono,
+            values.whatsapp,
+            values.nombre_empresa,
+            values.email,
+            values.password,
+            resSCC?.id
+          );
+        })
+        .catch((errSCC: any) => {
+          console.log('resiter:', {errSCC});
+        });
     }
   });
 

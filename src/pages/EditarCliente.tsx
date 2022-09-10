@@ -1,10 +1,10 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState} from 'react';
 import {Button} from 'react-bootstrap';
 import axios from 'axios';
 import {ContentHeader} from '@components';
 import {useNavigate} from 'react-router-dom';
 import {mlCL} from '@app/utils/helpers';
+// @ts-ignore
 import * as Config from '../utils/config';
 
 const EditarCliente = () => {

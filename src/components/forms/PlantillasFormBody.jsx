@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint no-underscore-dangle: 0 */
 /* eslint-disable no-console */
 
@@ -80,6 +79,7 @@ const PlantillasFormBody = (props) => {
                   </option>
                   {(TiposData || []).map((item) => (
                     <option
+                      key={item._id}
                       value={item._id}
                       data-platipodocumento={item.tipCodigo}
                     >

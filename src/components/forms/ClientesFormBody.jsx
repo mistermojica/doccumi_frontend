@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint no-underscore-dangle: 0 */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
@@ -6,7 +5,7 @@
 import React, {useEffect} from 'react';
 import _ from 'underscore';
 import namor from 'namor';
-import MultipleImageUploadFunction from '@app/components/files/MultipleImageUploadFunction';
+import MultipleImageUploadFunction from '@components/files/MultipleImageUploadFunction';
 
 const ClientesFormBody = (props) => {
   const {RowData, onChangeCB, cxcReadOnly, cxcAction} = props;

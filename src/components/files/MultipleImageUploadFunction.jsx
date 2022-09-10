@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unused-state */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react/no-unknown-property */
 
 import React, {useState, useContext, useEffect} from 'react';
 import axios from 'axios';

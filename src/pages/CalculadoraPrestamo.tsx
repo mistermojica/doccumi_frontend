@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 
@@ -6,6 +5,7 @@ import React, {useState} from 'react';
 import {ContentHeader} from '@components';
 import AlertDialog from '@app/components/dialogs/AlertDialog';
 import {Button} from 'react-bootstrap';
+// @ts-ignore
 import LoanCalculator from '@app/components/loan-calculator/LoanCalculator';
 
 const CalculadoraPrestamo = () => {

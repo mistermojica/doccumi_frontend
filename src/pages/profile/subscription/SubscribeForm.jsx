@@ -1,0 +1,163 @@
+/* eslint-disable no-console */
+
+import React, {useEffect, useState, useContext} from 'react';
+import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
+import AppContext from '@app/contexts/AppContext';
+import {Button} from '@components';
+import '../subscription/Stripe.css';
+
+const SubscribeForm = (props) => {
+  const AppCtx = useContext(AppContext);
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const [clientSecret] = useState(props.clientSecret);
+  const [message, setMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [paymentIntent, setPaymentIntent] = useState();
+
+  useEffect(() => {
+    if (!stripe) {
+      return;
+    }
+
+    // const clientSecret = new URLSearchParams(window.location.search).get(
+    //   'payment_intent_client_secret'
+    // );
+
+    // console.log({clientSecret});
+
+    if (!clientSecret) {
+      return;
+    }
+
+    stripe.retrievePaymentIntent(clientSecret).then(({paymentIntent}) => {
+      switch (paymentIntent.status) {
+        case 'succeeded':
+          setMessage('Payment succeeded!');
+          break;
+        case 'processing':
+          setMessage('Your payment is processing.');
+          break;
+        case 'requires_payment_method':
+          setMessage('Your payment was not successful, please try again.');
+          break;
+        default:
+          setMessage('Something went wrong.');
+          break;
+      }
+    });
+  }, [stripe]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log({stripe});
+    console.log({elements});
+
+    if (!stripe || !elements) {
+      // Stripe.js has not yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
+      return;
+    }
+
+    setIsLoading(true);
+
+    const cardElement = elements.getElement(CardElement);
+
+    stripe
+      .confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: name
+          }
+          // receipt_email: email
+        }
+      })
+      .then((result) => {
+        setIsLoading(false);
+
+        let {paymentIntent} = result;
+
+        if (paymentIntent && paymentIntent.status === 'succeeded') {
+          setMessage('Pago exitoso!');
+          // return <Redirect to={{pathname: '/account'}} />
+          AppCtx.setNavigate({
+            to: 'account',
+            data: {price: AppCtx.Navigate.data.price}
+          });
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          console.log('error:', error);
+          setMessage(error.message);
+          return;
+        }
+        setPaymentIntent(paymentIntent);
+      });
+
+    // const {error} = await stripe.confirmPayment({
+    //   elements,
+    //   confirmParams: {
+    //     // Make sure to change this to your payment completion page
+    //     return_url: 'http://localhost:8004/doccumi-payment-response'
+    //   }
+    // });
+
+    // This point will only be reached if there is an immediate error when
+    // confirming the payment. Otherwise, your customer will be redirected to
+    // your `return_url`. For some payment methods like iDEAL, your customer will
+    // be redirected to an intermediate site first to authorize the payment, then
+    // redirected to the `return_url`.
+    // if (error.type === 'card_error' || error.type === 'validation_error') {
+    //   setMessage(error.message);
+    // } else {
+    //   setMessage('An unexpected error occurred.');
+    // }
+
+    setIsLoading(false);
+  };
+
+  return (
+    <form
+      id="payment-form"
+      onSubmit={handleSubmit}
+      style={{width: '70%'}}
+      className="strForm"
+    >
+      <CardElement />
+      <Button
+        id="submit"
+        type="submit"
+        theme="primary"
+        disabled={isLoading || !stripe || !elements}
+        style={{width: '200px', height: '50px'}}
+      >
+        <span id="button-text">
+          {isLoading ? (
+            <div className="spinner" id="spinner"></div>
+          ) : (
+            'Realizar pago'
+          )}
+        </span>
+      </Button>
+      {/* <button
+        type="submit"
+        disabled={isLoading || !stripe || !elements}
+        id="submit"
+        className="strButton"
+      >
+        <span id="button-text">
+          {isLoading ? <div className="spinner" id="spinner" /> : 'Pagar ahora'}
+        </span>
+      </button> */}
+      {/* Show any error or success messages */}
+      {message && <div id="payment-message">{message}</div>}
+    </form>
+  );
+};
+
+export default SubscribeForm;
