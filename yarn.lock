@@ -9680,7 +9680,7 @@ vite-plugin-svgr@^2.2.1:
     "@rollup/pluginutils" "^4.2.1"
     "@svgr/core" "^6.3.1"
 
-vite@^3.0.9:
+vite@3.0.9:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/vite/-/vite-3.0.9.tgz#45fac22c2a5290a970f23d66c1aef56a04be8a30"
   integrity sha512-waYABTM+G6DBTCpYAxvevpG50UOlZuynR0ckTK5PawNVt7ebX6X7wNXHaGIO6wYYFXSM7/WcuFuO2QzhBB6aMw==
