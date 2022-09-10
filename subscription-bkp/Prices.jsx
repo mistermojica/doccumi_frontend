@@ -43,41 +43,37 @@ const Prices = (props) => {
     // fetchPrices();
   }, []);
 
-  // const createSubscription = async (price) => {
-  //   const {subscriptionId, clientSecret, items} = await fetch(
-  //     'http://localhost:8004/create-subscription',
-  //     {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({
-  //         priceId: price.id,
-  //         customerId: user.profile.usuario_stripe
-  //       })
-  //     }
-  //   ).then((r) => r.json());
+  const createSubscription = async (price) => {
+    const {subscriptionId, clientSecret} = await fetch(
+      'http://localhost:8004/create-subscription',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          priceId: price.id,
+          customerId: user.profile.usuario_stripe
+        })
+      }
+    ).then((r) => r.json());
 
-  //   AppCtx.setNavigate({
-  //     to: 'subscribe',
-  //     data: {subscriptionId, clientSecret, price, items}
-  //   });
+    AppCtx.setNavigate({
+      to: 'subscribe',
+      data: {subscriptionId, clientSecret, price}
+    });
 
-  //   // setSubscriptionData({subscriptionId, clientSecret});
-  // };
-
-  const setNavigateTo = (price) => {
-    AppCtx.setNavigate({to: 'subscribe', data: {price}});
+    // setSubscriptionData({subscriptionId, clientSecret});
   };
 
-  // if (subscriptionData) {
-  //   // navigate('/subscribe', subscriptionData);
-  //   AppCtx.setNavigate({to: 'subscribe', data: subscriptionData});
-  //   // return <Redirect to={{
-  //   //   pathname: '/subscribe',
-  //   //   state: subscriptionData
-  //   // }} />
-  // }
+  if (subscriptionData) {
+    // navigate('/subscribe', subscriptionData);
+    AppCtx.setNavigate({to: 'subscribe', data: subscriptionData});
+    // return <Redirect to={{
+    //   pathname: '/subscribe',
+    //   state: subscriptionData
+    // }} />
+  }
 
   function createMarkup(texto, busqueda, reemplazo) {
     return {__html: texto?.replaceAll(busqueda, reemplazo)};
@@ -117,7 +113,7 @@ const Prices = (props) => {
                   <Button
                     type="button"
                     theme="primary"
-                    onClick={() => setNavigateTo(price)}
+                    onClick={() => createSubscription(price)}
                   >
                     Seleccionar
                   </Button>
