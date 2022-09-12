@@ -77,20 +77,22 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit} className="strForm">
-      <PaymentElement id="payment-element" />
-      <button
-        type="submit"
-        disabled={isLoading || !stripe || !elements}
-        id="submit"
-        className="strButton"
-      >
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner" /> : 'Pay now'}
-        </span>
-      </button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
-    </form>
+    <>
+      <form id="payment-form" onSubmit={handleSubmit} className="strForm">
+        <PaymentElement id="payment-element" />
+        <button
+          type="submit"
+          disabled={isLoading || !stripe || !elements}
+          id="submit"
+          className="strButton"
+        >
+          <span id="button-text">
+            {isLoading ? <div className="spinner" id="spinner" /> : 'Pay now'}
+          </span>
+        </button>
+        {/* Show any error or success messages */}
+        {message && <div id="payment-message">{message}</div>}
+      </form>
+    </>
   );
 }

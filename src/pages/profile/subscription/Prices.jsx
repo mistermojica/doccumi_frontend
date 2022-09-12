@@ -80,50 +80,52 @@ const Prices = (props) => {
   }
 
   return (
-    <div>
-      <h5>
-        <strong>Selecciona un plan:</strong>
-      </h5>
-      <br />
-      <div className="price-list">
-        {prices.map((price) => {
-          return (
-            <div key={price.id}>
-              <h4 className="col-md-12 text-center">
-                <strong>{price.product.name}</strong>
-              </h4>
-              <div
-                dangerouslySetInnerHTML={createMarkup(
-                  price.product.description,
-                  '- ',
-                  '<br/>⦿ '
-                )}
-              />
-              <br />
-              <div>
-                <center>
-                  <strong>
-                    ${price.unit_amount / 100} / {price.product.name}
-                  </strong>
-                </center>
-              </div>
-              <br />
-              <div className="form-group row">
-                <div className="col-md-12 text-center">
-                  <Button
-                    type="button"
-                    theme="primary"
-                    onClick={() => createSubscription(price)}
-                  >
-                    Seleccionar
-                  </Button>
+    <>
+      <div>
+        <h5>
+          <strong>Selecciona un plan:</strong>
+        </h5>
+        <br />
+        <div className="price-list">
+          {prices.map((price) => {
+            return (
+              <div key={price.id}>
+                <h4 className="col-md-12 text-center">
+                  <strong>{price.product.name}</strong>
+                </h4>
+                <div
+                  dangerouslySetInnerHTML={createMarkup(
+                    price.product.description,
+                    '- ',
+                    '<br/>⦿ '
+                  )}
+                />
+                <br />
+                <div>
+                  <center>
+                    <strong>
+                      ${price.unit_amount / 100} / {price.product.name}
+                    </strong>
+                  </center>
+                </div>
+                <br />
+                <div className="form-group row">
+                  <div className="col-md-12 text-center">
+                    <Button
+                      type="button"
+                      theme="primary"
+                      onClick={() => createSubscription(price)}
+                    >
+                      Seleccionar
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
