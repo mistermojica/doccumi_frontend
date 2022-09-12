@@ -34,5 +34,15 @@ export default defineConfig({
       'chart.js': path.resolve(__dirname, './node_modules/chart.js'),
     },
   },
-})
+});
 
+// alias: [
+//   { find: '@', replacement: path.resolve(__dirname, './src') },
+//   { find: '@config', replacement: path.resolve(__dirname, './src/config') },
+//   { find: '@plugins', replacement: path.resolve(__dirname, './src/plugins') },
+//   { find: '@views', replacement: path.resolve(__dirname, './src/views') },
+//   { find: '@mixins', replacement: path.resolve(__dirname, './src/mixins') },
+//   { find: '@svg', replacement: path.resolve(__dirname, './src/svg') },
+//   { find: '@models', replacement: path.resolve(__dirname, './src/models') },
+//   { find: '@components', replacement: path.resolve(__dirname, './src/components') },
+// ]
