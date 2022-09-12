@@ -9,7 +9,10 @@
       "@components": ["./src/components/index"],
       "@modules/*": ["./src/modules/*"],
       "@pages/*": ["./src/pages/*"],
-      "~": ["./node_modules"]
+      "~": ["./node_modules"],
+      "@mui/icons-material/*": ["./node_modules/@mui/icons-material/esm/*"],
+      "@types/scheduler/*": ["./node_modules/scheduler/cjs/*"],
+      "chart.js": ["./node_modules/chart.js"]
     }
   }
 }
