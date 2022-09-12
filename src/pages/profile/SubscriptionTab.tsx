@@ -19,15 +19,15 @@ import * as Config from '@app/utils/config';
 import CheckoutForm from '@app/pages/profile/subscription/CheckoutForm';
 import './subscription/Stripe.css';
 // @ts-ignore
-import Register from './subscription/Register';
+import Register from '@app/pages/profile/subscription/Register';
 // @ts-ignore
-import Prices from './subscription/Prices';
+import Prices from '@app/pages/profile/subscription/Prices';
 // @ts-ignore
-import Subscribe from './subscription/Subscribe';
+import Subscribe from '@app/pages/profile/subscription/Subscribe';
 // @ts-ignore
-import Account from './subscription/Account';
+import Account from '@app/pages/profile/subscription/Account';
 // @ts-ignore
-import Cancel from './subscription/Cancel';
+import Cancel from '@app/pages/profile/subscription/Cancel';
 // @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 
