@@ -62,77 +62,79 @@ const Cancel = () => {
   }
 
   return (
-    <div>
+    <>
       <div>
-        <h4>Cancela tu Plan</h4>
-        <hr />
-        <h5>PLAN ACTUAL</h5>
-        <hr />
-        <div className="form-group row">
-          <div className="col-md-12">
-            <h5>
-              <strong>{subscription?.plan?.product?.name}</strong>
-            </h5>
-            <br />
-            <strong>
-              {subscription?.items?.data[0]?.plan?.currency.toUpperCase()}$
-              {subscription?.items?.data[0]?.plan?.amount / 100}
-            </strong>{' '}
-            por{' '}
-            <strong>
-              {subscription?.items?.data[0]?.plan?.interval_count}{' '}
-            </strong>
-            {interval}
-            .
-            <br />
-            <br />
-            Se cancelará tu plan, pero seguirá disponible hasta el cierre del
-            período de facturación en:{' '}
-            <strong>
-              {moment(
-                new Date(subscription?.current_period_end * 1000).toString()
-              )
-                .add(1, 'd')
-                .format('LL')}
-            </strong>
-            .
-            <br />
-            <br />
-            Si cambias de idea, puedes renovar la suscripción.
-            <br />
-            <br />
-            Estado subscripción:{' '}
-            <strong>
-              {subscription && subscription?.status === 'active'
-                ? 'Activo'
-                : 'Inactivo'}
-            </strong>
-            .
-            <br />
-            <br />
-            <Button
-              type="button"
-              theme="danger"
-              onClick={handleCancel}
-              style={{width: '300px', height: '50px'}}
-              // onClick={() => createSubscription(price.id)}
-            >
-              Cancelar plan
-            </Button>
-            <br />
-            <br />
-            <Button
-              type="button"
-              theme="secondary"
-              onClick={handleBack}
-              style={{width: '300px', height: '50px'}}
-            >
-              Volver
-            </Button>
+        <div>
+          <h4>Cancela tu Plan</h4>
+          <hr />
+          <h5>PLAN ACTUAL</h5>
+          <hr />
+          <div className="form-group row">
+            <div className="col-md-12">
+              <h5>
+                <strong>{subscription?.plan?.product?.name}</strong>
+              </h5>
+              <br />
+              <strong>
+                {subscription?.items?.data[0]?.plan?.currency.toUpperCase()}$
+                {subscription?.items?.data[0]?.plan?.amount / 100}
+              </strong>{' '}
+              por{' '}
+              <strong>
+                {subscription?.items?.data[0]?.plan?.interval_count}{' '}
+              </strong>
+              {interval}
+              .
+              <br />
+              <br />
+              Se cancelará tu plan, pero seguirá disponible hasta el cierre del
+              período de facturación en:{' '}
+              <strong>
+                {moment(
+                  new Date(subscription?.current_period_end * 1000).toString()
+                )
+                  .add(1, 'd')
+                  .format('LL')}
+              </strong>
+              .
+              <br />
+              <br />
+              Si cambias de idea, puedes renovar la suscripción.
+              <br />
+              <br />
+              Estado subscripción:{' '}
+              <strong>
+                {subscription && subscription?.status === 'active'
+                  ? 'Activo'
+                  : 'Inactivo'}
+              </strong>
+              .
+              <br />
+              <br />
+              <Button
+                type="button"
+                theme="danger"
+                onClick={handleCancel}
+                style={{width: '300px', height: '50px'}}
+                // onClick={() => createSubscription(price.id)}
+              >
+                Cancelar plan
+              </Button>
+              <br />
+              <br />
+              <Button
+                type="button"
+                theme="secondary"
+                onClick={handleBack}
+                style={{width: '300px', height: '50px'}}
+              >
+                Volver
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
