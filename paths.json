@@ -9,8 +9,8 @@
       "@modules/*": ["./src/modules/*"],
       "@pages/*": ["./src/pages/*"],
       "~": ["./node_modules"],
-      "@mui/icons-material/*": ["./node_modules/@mui/icons-material/esm/*"],
       "@types/scheduler/*": ["./node_modules/scheduler/cjs/*"],
+      "@mui/icons-material/*": ["./node_modules/@mui/icons-material/esm/*"],
       "chart.js": ["./node_modules/chart.js"]
     }
   }
