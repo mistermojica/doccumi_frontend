@@ -11,7 +11,7 @@ import {mlCL} from '@app/utils/helpers';
 // import {useStripe, useElements} from '@stripe/react-stripe-js';
 import AppContext from '@app/contexts/AppContext';
 import SubscribeForm from './SubscribeForm';
-// import '../subscription/Stripe.css';
+// import './subscription/Stripe.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 

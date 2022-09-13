@@ -4,7 +4,7 @@ import React, {useEffect, useState, useContext} from 'react';
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import AppContext from '@app/contexts/AppContext';
 import {Button} from '@components';
-import '../subscription/Stripe.css';
+import './Stripe.css';
 
 const SubscribeForm = (props) => {
   const AppCtx = useContext(AppContext);

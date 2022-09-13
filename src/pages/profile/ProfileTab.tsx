@@ -4,23 +4,23 @@
 
 import React, {useState, useEffect} from 'react';
 import {loadStripe} from '@stripe/stripe-js';
-import {Elements} from '@stripe/react-stripe-js';
+// import {Elements} from '@stripe/react-stripe-js';
 // import {Link} from 'react-router-dom';
 import _ from 'underscore';
 import {Button} from '@components';
 import {Button as ButtonN, Modal} from 'react-bootstrap';
-import {Modal as MUIModal} from '@mui/material';
-import Box from '@mui/material/Box';
+// import {Modal as MUIModal} from '@mui/material';
+// import Box from '@mui/material/Box';
 import axios from 'axios';
 import {mlCL} from '@app/utils/helpers';
 // @ts-ignore
 import * as Config from '@app/utils/config';
 
 // @ts-ignore
-import CheckoutForm from '@app/pages/profile/subscription/CheckoutForm';
-import './subscription/Stripe.css';
+// import CheckoutForm from '@app/pages/profile/subscription/CheckoutForm';
+// import './subscription/Stripe.css';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+// const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const ProfileTab = (props: any) => {
   const {user, foto, logo, isActive} = props;

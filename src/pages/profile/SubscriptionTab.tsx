@@ -7,19 +7,19 @@ import React, {useState, useEffect, useContext} from 'react';
 import {loadStripe} from '@stripe/stripe-js';
 // import {Link} from 'react-router-dom';
 import _ from 'underscore';
-import {Button} from '@components';
-import {Button as ButtonN, Modal} from 'react-bootstrap';
-import {Modal as MUIModal} from '@mui/material';
-import Box from '@mui/material/Box';
-import axios from 'axios';
-import {mlCL} from '@app/utils/helpers';
+// import {Button} from '@components';
+// import {Button as ButtonN, Modal} from 'react-bootstrap';
+// import {Modal as MUIModal} from '@mui/material';
+// import Box from '@mui/material/Box';
+// import axios from 'axios';
+// import {mlCL} from '@app/utils/helpers';
 // @ts-ignore
-import * as Config from '@app/utils/config';
+// import * as Config from '@app/utils/config';
 // @ts-ignore
-import CheckoutForm from '@app/pages/profile/subscription/CheckoutForm';
-import './subscription/Stripe.css';
+// import CheckoutForm from '@app/pages/profile/subscription/CheckoutForm';
+// import './subscription/Stripe.css';
 // @ts-ignore
-import Register from '@app/pages/profile/subscription/Register';
+// import Register from '@app/pages/profile/subscription/Register';
 // @ts-ignore
 import Prices from '@app/pages/profile/subscription/Prices';
 // @ts-ignore
@@ -31,7 +31,7 @@ import Cancel from '@app/pages/profile/subscription/Cancel';
 // @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+// const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const SubscriptionTab = (props: any) => {
   const AppCtx: any = useContext(AppContext);
