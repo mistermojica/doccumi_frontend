@@ -9,7 +9,7 @@
       "@modules/*": ["./src/modules/*"],
       "@pages/*": ["./src/pages/*"],
       "~": ["./node_modules"],
-      "@mui/icons-material": ["./node_modules/@mui/icons-material/esm"],
+      "@mui/icons-material": ["./node_modules/@mui/icons-material/index"],
       "@types/scheduler": ["./node_modules/scheduler/cjs"],
       "chart.js": ["./node_modules/chart.js"],
       "underscore": ["./node_modules/@types/underscore"],
