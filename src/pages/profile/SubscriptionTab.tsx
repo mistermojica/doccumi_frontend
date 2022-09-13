@@ -192,7 +192,7 @@ const SubscriptionTab = (props: any) => {
       case 'cancel':
         return <Cancel />;
       default:
-        return <Account user={userClone} />;
+        return <Account />;
       // return <Prices user={userClone} />;
       // return <Register user={userClone} />;
     }

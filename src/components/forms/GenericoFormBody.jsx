@@ -6,8 +6,8 @@
 
 import React, {useEffect} from 'react';
 import _ from 'underscore';
-import namor from 'namor';
-import {v4 as uuidv4} from 'uuid';
+// import namor from 'namor';
+// import {v4 as uuidv4} from 'uuid';
 
 const GenericoFormBody = (props) => {
   const {RowData, BodyLabels, onChangeCB, cxcReadOnly, cxcAction} = props;

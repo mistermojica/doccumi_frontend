@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint'
 import svgrPlugin from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react'
-import path from 'path';
+import tsconfigPaths from 'vite-tsconfig-paths'
+// import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,6 +14,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    tsconfigPaths(),
     eslint(),
     svgrPlugin({
       svgrOptions: {
@@ -21,20 +23,30 @@ export default defineConfig({
       },
     }),
   ],
-  resolve: {
-    alias: {
-      '@app': path.resolve(__dirname, './src'),
-      '@store': path.resolve(__dirname, './src/store'),
-      '@modules': path.resolve(__dirname, './src/modules'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '~': path.resolve(__dirname, './node_modules'),
-      '@mui/icons-material': path.resolve(__dirname, './node_modules/@mui/icons-material/esm'),
-      '@types/scheduler': path.resolve(__dirname, './node_modules/scheduler/cjs'),
-      'chart.js': path.resolve(__dirname, './node_modules/chart.js'),
-    },
-  },
+  // resolve: {
+  //   alias: {
+  //     '@store': path.resolve(__dirname, './src/store'),
+  //     '@modules': path.resolve(__dirname, './src/modules'),
+  //     '@pages': path.resolve(__dirname, './src/pages'),
+  //     '@components': path.resolve(__dirname, './src/components'),
+  //     '~': path.resolve(__dirname, './node_modules'),
+  //     '@mui/icons-material': path.resolve(__dirname, './node_modules/@mui/icons-material/esm'),
+  //     '@types/scheduler': path.resolve(__dirname, './node_modules/scheduler/cjs'),
+  //     'chart.js': path.resolve(__dirname, './node_modules/chart.js'),
+  //   },
+  // },
 });
+
+// {
+//   '@store': path.resolve(__dirname, './src/store'),
+//   '@modules': path.resolve(__dirname, './src/modules'),
+//   '@pages': path.resolve(__dirname, './src/pages'),
+//   '@components': path.resolve(__dirname, './src/components'),
+//   '~': path.resolve(__dirname, './node_modules'),
+//   '@mui/icons-material': path.resolve(__dirname, './node_modules/@mui/icons-material/esm'),
+//   '@types/scheduler': path.resolve(__dirname, './node_modules/scheduler/cjs'),
+//   'chart.js': path.resolve(__dirname, './node_modules/chart.js'),
+// }
 
 // alias: [
 //   { find: '@', replacement: path.resolve(__dirname, './src') },
