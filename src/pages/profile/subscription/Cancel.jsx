@@ -58,11 +58,11 @@ const Cancel = () => {
   }, []);
 
   if (cancelled) {
-    return '';
+    return <></>;
   }
 
   return (
-    <div>
+    <>
       <div>
         <h4>Cancela tu Plan</h4>
         <hr />
@@ -132,7 +132,7 @@ const Cancel = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

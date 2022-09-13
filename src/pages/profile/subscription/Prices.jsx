@@ -84,7 +84,7 @@ const Prices = (props) => {
   }
 
   return (
-    <div>
+    <>
       <h5>
         <strong>Selecciona un plan:</strong>
       </h5>
@@ -127,7 +127,7 @@ const Prices = (props) => {
           );
         })}
       </div>
-    </div>
+    </>
   );
 };
 
