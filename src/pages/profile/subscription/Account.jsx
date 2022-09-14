@@ -67,30 +67,24 @@ const PaymentMethods = ({paymentMethod}) => {
         href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
       ></a> */}
       <div className="row">
-        <div className="col-md-3">
-          {moment(new Date(paymentMethod?.start_date * 1000).toString())
-            .locale('es-do')
-            .format('LL')}
+        <div className="col-md-1">
+          {paymentMethod?.card?.brand.toUpperCase()}
         </div>
-        <div className="col-md-3">
-          {paymentMethod?.items?.data[0]?.plan?.currency.toUpperCase()}$
-          {paymentMethod?.items?.data[0]?.plan?.amount / 100}
+        <div className="col-md-1">
+          ....
+          {paymentMethod?.card?.last4}
         </div>
-        <div className="col-md-3">
-          {paymentMethod.status === 'active'
-            ? 'Pagada'
-            : paymentMethod.status === 'canceled'
-            ? 'Cancelada'
-            : 'Inactiva'}
+        <div className="col-md-2">{' Default'}</div>
+        <div className="col-md-1">{' Expira '}</div>
+        <div className="col-md-1.5">
+          {paymentMethod?.card?.exp_month +
+            ' / ' +
+            paymentMethod?.card?.exp_year}
         </div>
-        <div className="col-md-3">{paymentMethod?.plan?.product?.name}</div>
+        <div className="col-md-1">
+          <a href="#">X</a>
+        </div>
       </div>
-      {/* <p>Card last4: {subscription.default_payment_method?.card?.last4}</p> */}
-      {/* <Link to={{pathname: '/change-plan', state: {subscription: subscription.id }}}>Change plan</Link><br /> */}
-      {/* <Link to={{pathname: '/cancel', state: {subscription: subscription.id }}}>Cancel</Link> */}
-      {/* <button type="button" onClick={handleCancel}>
-        Cancel
-      </button> */}
     </section>
   );
 };
@@ -98,8 +92,10 @@ const PaymentMethods = ({paymentMethod}) => {
 const Account = () => {
   const AppCtx = useContext(AppContext);
 
+  const [customer, setCustomer] = useState({});
   const [subscriptions, setSubscriptions] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
+
   const [interval, setInterval] = useState('');
 
   const handleAddNew = () => {
@@ -114,9 +110,22 @@ const Account = () => {
   };
 
   useEffect(() => {
+    getCustomer();
     getSubscriptions();
     getPaymentMethods();
   }, []);
+
+  const getCustomer = () => {
+    const fetchData = async () => {
+      const {customer} = await fetch(
+        'http://localhost:8004/load-customer'
+      ).then((r) => r.json());
+
+      setCustomer(customer);
+    };
+
+    fetchData();
+  };
 
   const getSubscriptions = () => {
     const fetchData = async () => {
@@ -152,11 +161,11 @@ const Account = () => {
 
   const getPaymentMethods = () => {
     const fetchData = async () => {
-      const {paymentMethods} = await fetch(
+      const {payment_methods} = await fetch(
         'http://localhost:8004/list-payment-methods'
       ).then((r) => r.json());
 
-      setPaymentMethods(paymentMethods.data);
+      setPaymentMethods(payment_methods.data);
     };
 
     fetchData();
@@ -259,7 +268,11 @@ const Account = () => {
             <div className="row">
               <div className="col-md-12">
                 <hr />
-                <strong>MÉTODO DE PAGO</strong>
+                <strong>
+                  {paymentMethods.length > 1
+                    ? 'MÉTODOS DE PAGO'
+                    : 'MÉTODO DE PAGO'}
+                </strong>
                 <div id="paymentMethods">
                   {paymentMethods.map((s) => {
                     return <PaymentMethods key={s.id} paymentMethod={s} />;
