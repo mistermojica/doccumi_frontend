@@ -1,68 +1,86 @@
 /* eslint-disable no-unused-vars */
 
 import React, {useState, useContext, useEffect} from 'react';
+import {loadStripe} from '@stripe/stripe-js';
+import {Elements} from '@stripe/react-stripe-js';
 // import {PaymentElement} from '@stripe/react-stripe-js';
-import {CardElement} from '@stripe/react-stripe-js';
-import {Button} from '@components';
+// import {CardElement} from '@stripe/react-stripe-js';
+// import {Button} from '@components';
 import axios from 'axios';
 import {mlCL} from '@app/utils/helpers';
-import {useStripe, useElements} from '@stripe/react-stripe-js';
+// import {useStripe, useElements} from '@stripe/react-stripe-js';
 import AppContext from '@app/contexts/AppContext';
+import SubscribeForm from './SubscribeForm';
+// import '../subscription/Stripe.css';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const Subscribe = (props) => {
   const AppCtx = useContext(AppContext);
   const {user} = props;
 
+  console.log('AppCtx.price', AppCtx.Navigate.data.price);
+  console.log('AppCtx.data', AppCtx.Navigate.data);
+  console.log('props', props);
+
   // Get the lookup key for the price from the previous page redirect.
   const [clientSecret] = useState(AppCtx.Navigate.data.clientSecret);
-  const [subscriptionId] = useState(AppCtx.Navigate.data.subscriptionId);
-  const [items] = useState(AppCtx.Navigate.data.items);
-  const [name, setName] = useState(user.profile.nombre);
-  const [email, setEmail] = useState(user.profile.email);
-  const [messages, _setMessages] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [clientSecret2, setClientSecret2] = useState('');
+  const [price] = useState(AppCtx.Navigate.data.price);
+  // const [subscriptionId] = useState(AppCtx.Navigate.data.subscriptionId);
+  // const [items] = useState(AppCtx.Navigate.data.items);
+  // const [name, setName] = useState(user.profile.nombre);
+  // const [email, setEmail] = useState(user.profile.email);
+  // const [messages, _setMessages] = useState('');
+  // const [isLoading, setIsLoading] = useState(false);
+  const [clientSecretNew, setClientSecretNew] = useState('');
 
-  const [paymentIntent, setPaymentIntent] = useState();
+  // const [paymentIntent, setPaymentIntent] = useState();
 
   // helper for displaying status messages.
-  const setMessage = (message) => {
-    _setMessages(`${messages}\n\n${message}`);
-  };
+  // const setMessage = (message) => {
+  //   _setMessages(`${messages}\n\n${message}`);
+  // };
 
   // Initialize an instance of stripe.
-  const stripe = useStripe();
-  const elements = useElements();
+  // const stripe = useStripe();
+  // const elements = useElements();
+
+  useEffect(() => {
+    console.log({clientSecretNew});
+    if (price) {
+      createSubscription(price);
+    }
+  }, [clientSecretNew]);
 
   useEffect(() => {
     stripeCreatePaymentIntent();
 
-    if (!stripe || !clientSecret2) {
+    if (!clientSecretNew) {
       return;
     }
 
-    console.log({items});
+    // console.log({items});
 
-    stripe.retrievePaymentIntent(clientSecret2).then(({paymentIntent}) => {
-      // switch (paymentIntent.status) {
-      //   case 'succeeded':
-      //     setMessage('Pago exitoso!');
-      //     AppCtx.setNavigate({to: 'account', data: {}});
-      //     break;
-      //   case 'processing':
-      //     setMessage('Tu pago se está procesando...');
-      //     break;
-      //   case 'requires_payment_method':
-      //     setMessage(
-      //       'Tu pago no pudo ser procesado, por favor trata de nuevo.'
-      //     );
-      //     break;
-      //   default:
-      //     setMessage('Ocurrió un error inesperado.');
-      //     break;
-      // }
-    });
-  }, [stripe]);
+    // stripe.retrievePaymentIntent(clientSecret2).then(({paymentIntent}) => {
+    // switch (paymentIntent.status) {
+    //   case 'succeeded':
+    //     setMessage('Pago exitoso!');
+    //     AppCtx.setNavigate({to: 'account', data: {}});
+    //     break;
+    //   case 'processing':
+    //     setMessage('Tu pago se está procesando...');
+    //     break;
+    //   case 'requires_payment_method':
+    //     setMessage(
+    //       'Tu pago no pudo ser procesado, por favor trata de nuevo.'
+    //     );
+    //     break;
+    //   default:
+    //     setMessage('Ocurrió un error inesperado.');
+    //     break;
+    // }
+    // });
+  }, []);
 
   const stripeCreatePaymentIntent = () => {
     const customConfig = {
@@ -75,7 +93,8 @@ const Subscribe = (props) => {
       items: [
         {
           // id: items[0].id,
-          price: AppCtx.Navigate.data.price.id
+          // price: AppCtx.Navigate.data.price.id
+          amount: 10000
         }
       ]
     };
@@ -85,11 +104,34 @@ const Subscribe = (props) => {
       .then((response) => {
         const result = response.data;
         mlCL('result:', result);
-        setClientSecret2(result.clientSecret);
+        setClientSecretNew(result.clientSecret);
       })
       .catch((err) => {
         mlCL('err:', err);
       });
+  };
+
+  const createSubscription = async (price) => {
+    const {subscriptionId, items} = await fetch(
+      'http://localhost:8004/create-subscription',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          priceId: price.id,
+          customerId: user.profile.usuario_stripe
+        })
+      }
+    ).then((r) => r.json());
+
+    // AppCtx.setNavigate({
+    //   to: 'subscribe',
+    //   data: {subscriptionId, clientSecret, price, items}
+    // });
+
+    // setSubscriptionData({subscriptionId, clientSecret});
   };
 
   // When the subscribe-form is submitted we do a few things:
@@ -97,117 +139,120 @@ const Subscribe = (props) => {
   //   1. Tokenize the payment method
   //   2. Create the subscription
   //   3. Handle any next actions like 3D Secure that are required for SCA.
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  // e.preventDefault();
 
-    if (!stripe || !elements) {
-      // Stripe.js has not loaded yet. Make sure to disable
-      // form submission until Stripe.js has loaded.
-      return '';
-    }
+  // if (!stripe || !elements) {
+  //   // Stripe.js has not loaded yet. Make sure to disable
+  //   // form submission until Stripe.js has loaded.
+  //   return '';
+  // }
 
-    setIsLoading(true);
+  // setIsLoading(true);
 
-    // Get a reference to a mounted CardElement. Elements knows how
-    // to find your CardElement because there can only ever be one of
-    // each type of element.
-    const cardElement = elements.getElement(CardElement);
-    // const paymentElement = elements.getElement(PaymentElement);
+  // Get a reference to a mounted CardElement. Elements knows how
+  // to find your CardElement because there can only ever be one of
+  // each type of element.
+  // const cardElement = elements.getElement(CardElement);
+  // const paymentElement = elements.getElement(PaymentElement);
 
-    // Use card Element to tokenize payment details
+  // Use card Element to tokenize payment details
 
-    // const {error} = await stripe.confirmPayment({
-    //   elements,
-    //   confirmParams: {
-    //     // Make sure to change this to your payment completion page
-    //     return_url: '',
-    //     payment_method_data: {
-    //       billing_details: {
-    //         name: name,
-    //         email: email
-    //       }
-    //     }
-    //   },
-    //   redirect: 'if_required'
-    // });
+  // const {error} = await stripe.confirmPayment({
+  //   elements,
+  //   confirmParams: {
+  //     // Make sure to change this to your payment completion page
+  //     return_url: '',
+  //     payment_method_data: {
+  //       billing_details: {
+  //         name: name,
+  //         email: email
+  //       }
+  //     }
+  //   },
+  //   redirect: 'if_required'
+  // });
 
-    // if (
-    //   error &&
-    //   (error?.type === 'card_error' || error?.type === 'validation_error')
-    // ) {
-    //   setMessage(error.message);
-    // } else {
-    //   console.log('paymentIntent 2:', paymentIntent);
-    //   switch (paymentIntent?.status) {
-    //     case 'succeeded':
-    //       setMessage('Pago exitoso!');
-    //       AppCtx.setNavigate({
-    //         to: 'account',
-    //         data: {price: AppCtx.Navigate.data.price}
-    //       });
-    //       break;
-    //     case 'processing':
-    //       setMessage('Tu pago se está procesando...');
-    //       break;
-    //     case 'requires_payment_method':
-    //       setMessage(
-    //         'Tu pago no pudo ser procesado, por favor trata de nuevo.'
-    //       );
-    //       break;
-    //     default:
-    //       setMessage('Ocurrió un error inesperado al procesar el pago.');
-    //       break;
-    //   }
-    // }
+  // if (
+  //   error &&
+  //   (error?.type === 'card_error' || error?.type === 'validation_error')
+  // ) {
+  //   setMessage(error.message);
+  // } else {
+  //   console.log('paymentIntent 2:', paymentIntent);
+  //   switch (paymentIntent?.status) {
+  //     case 'succeeded':
+  //       setMessage('Pago exitoso!');
+  //       AppCtx.setNavigate({
+  //         to: 'account',
+  //         data: {price: AppCtx.Navigate.data.price}
+  //       });
+  //       break;
+  //     case 'processing':
+  //       setMessage('Tu pago se está procesando...');
+  //       break;
+  //     case 'requires_payment_method':
+  //       setMessage(
+  //         'Tu pago no pudo ser procesado, por favor trata de nuevo.'
+  //       );
+  //       break;
+  //     default:
+  //       setMessage('Ocurrió un error inesperado al procesar el pago.');
+  //       break;
+  //   }
+  // }
 
-    stripe
-      .confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            name: name
-          }
-          // receipt_email: email
-        }
-      })
-      .then((result) => {
-        setIsLoading(false);
+  // stripe
+  //   .confirmCardPayment(clientSecret, {
+  //     payment_method: {
+  //       card: cardElement,
+  //       billing_details: {
+  //         name: name
+  //       }
+  //       // receipt_email: email
+  //     }
+  //   })
+  //   .then((result) => {
+  //     setIsLoading(false);
 
-        let {paymentIntent} = result;
+  //     let {paymentIntent} = result;
 
-        if (paymentIntent && paymentIntent.status === 'succeeded') {
-          setMessage('Pago exitoso!');
-          // return <Redirect to={{pathname: '/account'}} />
-          AppCtx.setNavigate({
-            to: 'account',
-            data: {price: AppCtx.Navigate.data.price}
-          });
-        }
-      })
-      .catch((error) => {
-        if (error) {
-          console.log('error:', error);
-          setMessage(error.message);
-          return;
-        }
-        setPaymentIntent(paymentIntent);
-      });
+  //     if (paymentIntent && paymentIntent.status === 'succeeded') {
+  //       setMessage('Pago exitoso!');
+  //       // return <Redirect to={{pathname: '/account'}} />
+  //       AppCtx.setNavigate({
+  //         to: 'account',
+  //         data: {price: AppCtx.Navigate.data.price}
+  //       });
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     if (error) {
+  //       console.log('error:', error);
+  //       setMessage(error.message);
+  //       return;
+  //     }
+  //     setPaymentIntent(paymentIntent);
+  //   });
 
-    // if(error) {
-    //   // show error and collect new card details.
-    //   setMessage(error.message);
-    //   return;
-    // }
-    // setPaymentIntent(paymentIntent);
-  };
+  // if(error) {
+  //   // show error and collect new card details.
+  //   setMessage(error.message);
+  //   return;
+  // }
+  // setPaymentIntent(paymentIntent);
+  // };
 
   // if(paymentIntent && paymentIntent.status === 'succeeded') {
   //   return <Redirect to={{pathname: '/account'}} />
   // }
 
   const options = {
+    clientSecret: clientSecretNew,
     theme: 'stripe'
   };
+
+  console.log({options});
 
   return (
     <>
@@ -239,11 +284,15 @@ const Subscribe = (props) => {
         </div>
         <div>{messages}</div>
       </form> */}
-      <form id="payment-form" onSubmit={handleSubmit} style={{width: '70%'}}>
-        {/* <PaymentElement id="payment-element" /> */}
-        <CardElement />
-        <hr />
-        <Button
+      {/* <form id="payment-form" onSubmit={handleSubmit} style={{width: '70%'}}> */}
+      {/* <PaymentElement id="payment-element" /> */}
+      {clientSecretNew && (
+        <Elements options={options} stripe={stripePromise}>
+          <SubscribeForm clientSecret={clientSecretNew} />
+        </Elements>
+      )}
+      {/* <hr /> */}
+      {/* <Button
           id="submit"
           type="submit"
           theme="primary"
@@ -257,8 +306,8 @@ const Subscribe = (props) => {
               'Realizar pago'
             )}
           </span>
-        </Button>
-        {/* <button disabled={isLoading || !stripe || !elements} id="submit">
+        </Button> */}
+      {/* <button disabled={isLoading || !stripe || !elements} id="submit">
           <span id="button-text">
             {isLoading ? (
               <div className="spinner" id="spinner"></div>
@@ -267,9 +316,9 @@ const Subscribe = (props) => {
             )}
           </span>
         </button> */}
-        {/* Show any error or success messages */}
-        {messages && <div id="payment-message">{messages}</div>}
-      </form>
+      {/* Show any error or success messages */}
+      {/* {messages && <div id="payment-message">{messages}</div>} */}
+      {/* </form> */}
       <br />
       <br />
       <p>

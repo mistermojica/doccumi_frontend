@@ -32,6 +32,9 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@components': path.resolve(__dirname, './src/components'),
       '~': path.resolve(__dirname, './node_modules'),
+      '@mui/icons-material': path.resolve(__dirname, './node_modules/@mui/icons-material/esm'),
+      '@types/scheduler': path.resolve(__dirname, './node_modules/scheduler/cjs'),
+      'chart.js': path.resolve(__dirname, './node_modules/chart.js'),
     },
   },
 });

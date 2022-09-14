@@ -53,10 +53,53 @@ const AccountSubscription = ({subscription}) => {
   );
 };
 
+const PaymentMethods = ({paymentMethod}) => {
+  // const AppCtx = useContext(AppContext);
+
+  // const handleCancel = () => {
+  //   AppCtx.setNavigate({to: 'cancel', data: {subscription: subscription.id}});
+  // };
+
+  return (
+    <section>
+      <hr />
+      {/* <a
+        href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
+      ></a> */}
+      <div className="row">
+        <div className="col-md-3">
+          {moment(new Date(paymentMethod?.start_date * 1000).toString())
+            .locale('es-do')
+            .format('LL')}
+        </div>
+        <div className="col-md-3">
+          {paymentMethod?.items?.data[0]?.plan?.currency.toUpperCase()}$
+          {paymentMethod?.items?.data[0]?.plan?.amount / 100}
+        </div>
+        <div className="col-md-3">
+          {paymentMethod.status === 'active'
+            ? 'Pagada'
+            : paymentMethod.status === 'canceled'
+            ? 'Cancelada'
+            : 'Inactiva'}
+        </div>
+        <div className="col-md-3">{paymentMethod?.plan?.product?.name}</div>
+      </div>
+      {/* <p>Card last4: {subscription.default_payment_method?.card?.last4}</p> */}
+      {/* <Link to={{pathname: '/change-plan', state: {subscription: subscription.id }}}>Change plan</Link><br /> */}
+      {/* <Link to={{pathname: '/cancel', state: {subscription: subscription.id }}}>Cancel</Link> */}
+      {/* <button type="button" onClick={handleCancel}>
+        Cancel
+      </button> */}
+    </section>
+  );
+};
+
 const Account = () => {
   const AppCtx = useContext(AppContext);
 
   const [subscriptions, setSubscriptions] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState([]);
   const [interval, setInterval] = useState('');
 
   const handleAddNew = () => {
@@ -71,6 +114,11 @@ const Account = () => {
   };
 
   useEffect(() => {
+    getSubscriptions();
+    getPaymentMethods();
+  }, []);
+
+  const getSubscriptions = () => {
     const fetchData = async () => {
       const {subscriptions} = await fetch(
         'http://localhost:8004/subscriptions'
@@ -100,16 +148,30 @@ const Account = () => {
     };
 
     fetchData();
-  }, []);
+  };
 
-  if (!subscriptions) {
+  const getPaymentMethods = () => {
+    const fetchData = async () => {
+      const {paymentMethods} = await fetch(
+        'http://localhost:8004/list-payment-methods'
+      ).then((r) => r.json());
+
+      setPaymentMethods(paymentMethods.data);
+    };
+
+    fetchData();
+  };
+
+  if (!subscriptions && !paymentMethods) {
     return '';
   }
 
   return (
     <>
       <div>
-        <h5>PLAN ACTUAL</h5>
+        <h5>
+          <strong>PLAN ACTUAL</strong>
+        </h5>
         <hr />
         {subscriptions.length === 0 ||
         subscriptions.filter((doc) => {
@@ -197,7 +259,18 @@ const Account = () => {
             <div className="row">
               <div className="col-md-12">
                 <hr />
-                HISTORIAL DE FACTURAS
+                <strong>MÉTODO DE PAGO</strong>
+                <div id="paymentMethods">
+                  {paymentMethods.map((s) => {
+                    return <PaymentMethods key={s.id} paymentMethod={s} />;
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12">
+                <hr />
+                <strong>HISTORIAL DE FACTURAS</strong>
                 <div id="subscriptions">
                   {subscriptions.map((s) => {
                     return <AccountSubscription key={s.id} subscription={s} />;
