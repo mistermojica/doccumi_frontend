@@ -6,6 +6,10 @@ import moment from 'moment';
 import 'moment/locale/es-do';
 // import Moment from 'react-moment';
 // import 'moment-timezone';
+import {
+  MoreHoriz as MoreHorizIcon,
+  Delete as DeleteIcon
+} from '@mui/icons-material';
 import AppContext from '@app/contexts/AppContext';
 import './Subscription.css';
 
@@ -53,7 +57,7 @@ const AccountSubscription = ({subscription}) => {
   );
 };
 
-const PaymentMethods = ({paymentMethod}) => {
+const PaymentMethods = ({paymentMethod, defaultPM}) => {
   // const AppCtx = useContext(AppContext);
 
   // const handleCancel = () => {
@@ -74,7 +78,9 @@ const PaymentMethods = ({paymentMethod}) => {
           ....
           {paymentMethod?.card?.last4}
         </div>
-        <div className="col-md-2">{' Default'}</div>
+        <div className="col-md-2">
+          {defaultPM === true ? 'Predeterminado' : ''}
+        </div>
         <div className="col-md-1">{' Expira '}</div>
         <div className="col-md-1.5">
           {paymentMethod?.card?.exp_month +
@@ -82,7 +88,11 @@ const PaymentMethods = ({paymentMethod}) => {
             paymentMethod?.card?.exp_year}
         </div>
         <div className="col-md-1">
-          <a href="#">X</a>
+          {/* <a href="#"> */}
+          <span style={{cursor: 'pointer'}}>
+            {defaultPM === true ? <MoreHorizIcon /> : <DeleteIcon />}
+          </span>
+          {/* </a> */}
         </div>
       </div>
     </section>
@@ -275,7 +285,15 @@ const Account = () => {
                 </strong>
                 <div id="paymentMethods">
                   {paymentMethods.map((s) => {
-                    return <PaymentMethods key={s.id} paymentMethod={s} />;
+                    const defaultPM =
+                      customer.invoice_settings.default_payment_method === s.id;
+                    return (
+                      <PaymentMethods
+                        key={s.id}
+                        paymentMethod={s}
+                        defaultPM={defaultPM}
+                      />
+                    );
                   })}
                 </div>
               </div>
