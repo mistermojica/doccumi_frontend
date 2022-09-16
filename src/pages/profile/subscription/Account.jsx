@@ -8,12 +8,30 @@ import 'moment/locale/es-do';
 // import 'moment-timezone';
 import {
   MoreHoriz as MoreHorizIcon,
-  Delete as DeleteIcon
+  Info as InfoIcon
 } from '@mui/icons-material';
+import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import {styled} from '@mui/material/styles';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
 import AppContext from '@app/contexts/AppContext';
 import './Subscription.css';
 
 // Moment.globalLocale = 'es-do';
+
+const HtmlTooltip = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}} />
+))(({theme}) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9'
+  }
+}));
 
 const AccountSubscription = ({subscription}) => {
   // const AppCtx = useContext(AppContext);
@@ -58,11 +76,36 @@ const AccountSubscription = ({subscription}) => {
 };
 
 const PaymentMethods = ({paymentMethod, defaultPM}) => {
-  // const AppCtx = useContext(AppContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    console.log('klk');
+    setAnchorEl(null);
+  };
 
-  // const handleCancel = () => {
-  //   AppCtx.setNavigate({to: 'cancel', data: {subscription: subscription.id}});
-  // };
+  const deletePaymentMethod = (pmId) => {
+    const fetchData = async () => {
+      const {paymentMethod} = await fetch(
+        'http://localhost:8004/delete-payment-method',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({paymentMethodId: pmId})
+        }
+      ).then((r) => r.json());
+
+      console.log({paymentMethod});
+
+      // setCustomer(customer);
+
+      handleClose();
+    };
+
+    fetchData();
+  };
 
   return (
     <section>
@@ -74,25 +117,93 @@ const PaymentMethods = ({paymentMethod, defaultPM}) => {
         <div className="col-md-1">
           {paymentMethod?.card?.brand.toUpperCase()}
         </div>
-        <div className="col-md-1">
+        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
           ....
           {paymentMethod?.card?.last4}
         </div>
         <div className="col-md-2">
-          {defaultPM === true ? 'Predeterminado' : ''}
+          {defaultPM === true ? (
+            <span className="small bg-secondary rounded pl-1 pr-1 pb-1">
+              Predeterminado
+            </span>
+          ) : (
+            ''
+          )}
         </div>
-        <div className="col-md-1">{' Expira '}</div>
+        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
+          {' Expira '}
+        </div>
         <div className="col-md-1.5">
           {paymentMethod?.card?.exp_month +
             ' / ' +
             paymentMethod?.card?.exp_year}
         </div>
         <div className="col-md-1">
-          {/* <a href="#"> */}
-          <span style={{cursor: 'pointer'}}>
-            {defaultPM === true ? <MoreHorizIcon /> : <DeleteIcon />}
-          </span>
-          {/* </a> */}
+          {/* <span style={{cursor: 'pointer'}}> */}
+          {defaultPM === true ? (
+            <HtmlTooltip
+              placement="top"
+              title={
+                <React.Fragment>
+                  <Typography color="inherit">
+                    <small>
+                      Tu método de pago predeterminado no puede ser eliminado
+                      debido a que tienes un plan activo.
+                    </small>
+                  </Typography>
+                </React.Fragment>
+              }
+            >
+              <InfoIcon style={{marginLeft: 10}} />
+            </HtmlTooltip>
+          ) : (
+            <>
+              {/* <IconButton
+                aria-label="fingerprint"
+                color="default"
+                onClick={handleClick}
+              >
+                <MoreHorizIcon
+                  id="basic-button"
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                />
+              </IconButton> */}
+              <Button
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+              >
+                Dashboard
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button'
+                }}
+              >
+                <MenuItem
+                  key={'def_' + paymentMethod?.id}
+                  onClick={handleClose}
+                >
+                  Hacer predeterminada
+                </MenuItem>
+                <MenuItem
+                  key={'del_' + paymentMethod?.id}
+                  onClick={deletePaymentMethod(paymentMethod?.id)}
+                >
+                  Eliminar
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+          {/* </span> */}
         </div>
       </div>
     </section>
@@ -104,7 +215,7 @@ const Account = () => {
 
   const [customer, setCustomer] = useState({});
   const [subscriptions, setSubscriptions] = useState([]);
-  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [cards, setCards] = useState([]);
 
   const [interval, setInterval] = useState('');
 
@@ -171,17 +282,17 @@ const Account = () => {
 
   const getPaymentMethods = () => {
     const fetchData = async () => {
-      const {payment_methods} = await fetch(
+      const {cards} = await fetch(
         'http://localhost:8004/list-payment-methods'
       ).then((r) => r.json());
 
-      setPaymentMethods(payment_methods.data);
+      setCards(cards);
     };
 
     fetchData();
   };
 
-  if (!subscriptions && !paymentMethods) {
+  if (!subscriptions && !cards) {
     return '';
   }
 
@@ -244,14 +355,6 @@ const Account = () => {
                     : 'Inactivo'}
                 </strong>
                 .
-                {/* <br />
-              <br />
-              Método de pago:{' '}
-              <strong>
-                {subscriptions[0] &&
-                  subscriptions[0]?.default_payment_method?.card?.last4}
-              </strong>
-              . */}
               </div>
               <div className="col-md-3 text-center">
                 <Button
@@ -279,12 +382,10 @@ const Account = () => {
               <div className="col-md-12">
                 <hr />
                 <strong>
-                  {paymentMethods.length > 1
-                    ? 'MÉTODOS DE PAGO'
-                    : 'MÉTODO DE PAGO'}
+                  {cards.length > 1 ? 'MÉTODOS DE PAGO' : 'MÉTODO DE PAGO'}
                 </strong>
-                <div id="paymentMethods">
-                  {paymentMethods.map((s) => {
+                <div id="cards">
+                  {cards.map((s) => {
                     const defaultPM =
                       customer.invoice_settings.default_payment_method === s.id;
                     return (
