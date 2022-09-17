@@ -3,7 +3,6 @@
     "esModuleInterop": true,
     "paths": {
       "@app/*": ["./src/*", "./dist/*"],
-      "@appold/*": ["./src/*"],
       "@store/*": ["./src/store/*"],
       "@store": ["./src/store/"],
       "@components": ["./src/components/index"],

@@ -41,7 +41,7 @@ const SubscribeForm = (props) => {
           setMessage('Your payment is processing.');
           break;
         case 'requires_payment_method':
-          setMessage('Your payment was not successful, please try again.');
+          setMessage('');
           break;
         default:
           setMessage('Something went wrong.');

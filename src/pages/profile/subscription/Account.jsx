@@ -6,10 +6,32 @@ import moment from 'moment';
 import 'moment/locale/es-do';
 // import Moment from 'react-moment';
 // import 'moment-timezone';
+import {
+  MoreHoriz as MoreHorizIcon,
+  Info as InfoIcon
+} from '@mui/icons-material';
+import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import {styled} from '@mui/material/styles';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
 import AppContext from '@app/contexts/AppContext';
 import './Subscription.css';
 
 // Moment.globalLocale = 'es-do';
+
+const HtmlTooltip = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}} />
+))(({theme}) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9'
+  }
+}));
 
 const AccountSubscription = ({subscription}) => {
   // const AppCtx = useContext(AppContext);
@@ -53,10 +75,148 @@ const AccountSubscription = ({subscription}) => {
   );
 };
 
+const PaymentMethods = ({paymentMethod, defaultPM}) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    console.log('klk');
+    setAnchorEl(null);
+  };
+
+  const deletePaymentMethod = (pmId) => {
+    const fetchData = async () => {
+      const {paymentMethod} = await fetch(
+        'http://localhost:8004/delete-payment-method',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({paymentMethodId: pmId})
+        }
+      ).then((r) => r.json());
+
+      console.log({paymentMethod});
+
+      // setCustomer(customer);
+
+      handleClose();
+    };
+
+    fetchData();
+  };
+
+  return (
+    <section>
+      <hr />
+      {/* <a
+        href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
+      ></a> */}
+      <div className="row">
+        <div className="col-md-1">
+          {paymentMethod?.card?.brand.toUpperCase()}
+        </div>
+        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
+          ....
+          {paymentMethod?.card?.last4}
+        </div>
+        <div className="col-md-2">
+          {defaultPM === true ? (
+            <span className="small bg-secondary rounded pl-1 pr-1 pb-1">
+              Predeterminado
+            </span>
+          ) : (
+            ''
+          )}
+        </div>
+        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
+          {' Expira '}
+        </div>
+        <div className="col-md-1.5">
+          {paymentMethod?.card?.exp_month +
+            ' / ' +
+            paymentMethod?.card?.exp_year}
+        </div>
+        <div className="col-md-1">
+          {/* <span style={{cursor: 'pointer'}}> */}
+          {defaultPM === true ? (
+            <HtmlTooltip
+              placement="top"
+              title={
+                <React.Fragment>
+                  <Typography color="inherit">
+                    <small>
+                      Tu método de pago predeterminado no puede ser eliminado
+                      debido a que tienes un plan activo.
+                    </small>
+                  </Typography>
+                </React.Fragment>
+              }
+            >
+              <InfoIcon style={{marginLeft: 10}} />
+            </HtmlTooltip>
+          ) : (
+            <>
+              {/* <IconButton
+                aria-label="fingerprint"
+                color="default"
+                onClick={handleClick}
+              >
+                <MoreHorizIcon
+                  id="basic-button"
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                />
+              </IconButton> */}
+              <Button
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+              >
+                Dashboard
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button'
+                }}
+              >
+                <MenuItem
+                  key={'def_' + paymentMethod?.id}
+                  onClick={handleClose}
+                >
+                  Hacer predeterminada
+                </MenuItem>
+                <MenuItem
+                  key={'del_' + paymentMethod?.id}
+                  onClick={deletePaymentMethod(paymentMethod?.id)}
+                >
+                  Eliminar
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+          {/* </span> */}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Account = () => {
   const AppCtx = useContext(AppContext);
 
+  const [customer, setCustomer] = useState({});
   const [subscriptions, setSubscriptions] = useState([]);
+  const [cards, setCards] = useState([]);
+
   const [interval, setInterval] = useState('');
 
   const handleAddNew = () => {
@@ -71,6 +231,24 @@ const Account = () => {
   };
 
   useEffect(() => {
+    getCustomer();
+    getSubscriptions();
+    getPaymentMethods();
+  }, []);
+
+  const getCustomer = () => {
+    const fetchData = async () => {
+      const {customer} = await fetch(
+        'http://localhost:8004/load-customer'
+      ).then((r) => r.json());
+
+      setCustomer(customer);
+    };
+
+    fetchData();
+  };
+
+  const getSubscriptions = () => {
     const fetchData = async () => {
       const {subscriptions} = await fetch(
         'http://localhost:8004/subscriptions'
@@ -100,121 +278,150 @@ const Account = () => {
     };
 
     fetchData();
-  }, []);
+  };
 
-  if (!subscriptions) {
+  const getPaymentMethods = () => {
+    const fetchData = async () => {
+      const {cards} = await fetch(
+        'http://localhost:8004/list-payment-methods'
+      ).then((r) => r.json());
+
+      setCards(cards);
+    };
+
+    fetchData();
+  };
+
+  if (!subscriptions && !cards) {
     return '';
   }
 
   return (
-    <div>
-      <h5>PLAN ACTUAL</h5>
-      <hr />
-      {subscriptions.length === 0 ||
-      subscriptions.filter((doc) => {
-        return doc.status == 'active';
-      })[0] === undefined ? (
-        <Button
-          type="button"
-          theme="primary"
-          onClick={handleAddNew}
-          style={{width: '200px', height: '50px'}}
-        >
-          Obtener plan
-        </Button>
-      ) : (
-        <>
-          <div className="form-group row">
-            <div className="col-md-7">
-              <h5>
-                <strong>{subscriptions[0]?.plan?.product?.name}</strong>
-              </h5>
-              <br />
-              Monto:{' '}
-              <strong>
-                {subscriptions[0]?.items?.data[0]?.plan?.currency.toUpperCase()}
-                ${subscriptions[0]?.items?.data[0]?.plan?.amount / 100}
-              </strong>{' '}
-              por{' '}
-              <strong>
-                {subscriptions[0]?.items?.data[0]?.plan?.interval_count}{' '}
-              </strong>
-              {interval}
-              .
-              <br />
-              <br />
-              Fecha de renovación:{' '}
-              <strong>
-                {subscriptions[0] &&
-                  moment(
-                    new Date(
-                      subscriptions[0]?.current_period_end * 1000
-                    ).toString()
-                  ).format('LL')}
-              </strong>
-              .
-              <br />
-              <br />
-              Estado subscripción:{' '}
-              <strong>
-                {subscriptions[0] && subscriptions[0]?.status === 'active'
-                  ? 'Activo'
-                  : 'Inactivo'}
-              </strong>
-              .
-              {/* <br />
-            <br />
-            Método de pago:{' '}
-            <strong>
-              {subscriptions[0] &&
-                subscriptions[0]?.default_payment_method?.card?.last4}
-            </strong>
-            . */}
-            </div>
-            <div className="col-md-3 text-center">
-              <Button
-                type="button"
-                theme="primary"
-                onClick={handleAddNew}
-                style={{width: '200px', height: '50px'}}
-              >
-                Cambiar plan
-              </Button>
-              <br />
-              <br />
-              <Button
-                type="button"
-                theme="danger"
-                onClick={handleCancel}
-                style={{width: '200px', height: '50px'}}
-                // onClick={() => createSubscription(price.id)}
-              >
-                Cancelar plan
-              </Button>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-12">
-              <hr />
-              HISTORIAL DE FACTURAS
-              <div id="subscriptions">
-                {subscriptions.map((s) => {
-                  return <AccountSubscription key={s.id} subscription={s} />;
-                })}
+    <>
+      <div>
+        <h5>
+          <strong>PLAN ACTUAL</strong>
+        </h5>
+        <hr />
+        {subscriptions.length === 0 ||
+        subscriptions.filter((doc) => {
+          return doc.status == 'active';
+        })[0] === undefined ? (
+          <Button
+            type="button"
+            theme="primary"
+            onClick={handleAddNew}
+            style={{width: '200px', height: '50px'}}
+          >
+            Obtener plan
+          </Button>
+        ) : (
+          <>
+            <div className="form-group row">
+              <div className="col-md-7">
+                <h5>
+                  <strong>{subscriptions[0]?.plan?.product?.name}</strong>
+                </h5>
+                <br />
+                Monto:{' '}
+                <strong>
+                  {subscriptions[0]?.items?.data[0]?.plan?.currency.toUpperCase()}
+                  ${subscriptions[0]?.items?.data[0]?.plan?.amount / 100}
+                </strong>{' '}
+                por{' '}
+                <strong>
+                  {subscriptions[0]?.items?.data[0]?.plan?.interval_count}{' '}
+                </strong>
+                {interval}
+                .
+                <br />
+                <br />
+                Fecha de renovación:{' '}
+                <strong>
+                  {subscriptions[0] &&
+                    moment(
+                      new Date(
+                        subscriptions[0]?.current_period_end * 1000
+                      ).toString()
+                    ).format('LL')}
+                </strong>
+                .
+                <br />
+                <br />
+                Estado subscripción:{' '}
+                <strong>
+                  {subscriptions[0] && subscriptions[0]?.status === 'active'
+                    ? 'Activo'
+                    : 'Inactivo'}
+                </strong>
+                .
+              </div>
+              <div className="col-md-3 text-center">
+                <Button
+                  type="button"
+                  theme="primary"
+                  onClick={handleAddNew}
+                  style={{width: '200px', height: '50px'}}
+                >
+                  Cambiar plan
+                </Button>
+                <br />
+                <br />
+                <Button
+                  type="button"
+                  theme="danger"
+                  onClick={handleCancel}
+                  style={{width: '200px', height: '50px'}}
+                  // onClick={() => createSubscription(price.id)}
+                >
+                  Cancelar plan
+                </Button>
               </div>
             </div>
-          </div>
-        </>
-      )}
-      {/* &nbsp; */}
-      {/* <a href="/profile">Restart demo</a> */}
-      {/* <h2>Subscriptions</h2> */}
-      {/* <div id="subscriptions">
-        {subscriptions.map((s) => {
-          return <AccountSubscription key={s.id} subscription={s} />;
-        })}
-      </div> */}
-    </div>
+            <div className="row">
+              <div className="col-md-12">
+                <hr />
+                <strong>
+                  {cards.length > 1 ? 'MÉTODOS DE PAGO' : 'MÉTODO DE PAGO'}
+                </strong>
+                <div id="cards">
+                  {cards.map((s) => {
+                    const defaultPM =
+                      customer.invoice_settings.default_payment_method === s.id;
+                    return (
+                      <PaymentMethods
+                        key={s.id}
+                        paymentMethod={s}
+                        defaultPM={defaultPM}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12">
+                <hr />
+                <strong>HISTORIAL DE FACTURAS</strong>
+                <div id="subscriptions">
+                  {subscriptions.map((s) => {
+                    return <AccountSubscription key={s.id} subscription={s} />;
+                  })}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        {/* &nbsp; */}
+        {/* <a href="/profile">Restart demo</a> */}
+        {/* <h2>Subscriptions</h2> */}
+        {/* <div id="subscriptions">
+          {subscriptions.map((s) => {
+            return <AccountSubscription key={s.id} subscription={s} />;
+          })}
+        </div> */}
+      </div>
+    </>
   );
 };
 
