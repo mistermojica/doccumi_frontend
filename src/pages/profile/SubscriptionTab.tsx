@@ -23,6 +23,8 @@ import Register from './subscription/Register';
 // @ts-ignore
 import Prices from './subscription/Prices';
 // @ts-ignore
+import ConfirmPrice from './subscription/ConfirmPrice';
+// @ts-ignore
 import Subscribe from './subscription/Subscribe';
 // @ts-ignore
 import Account from './subscription/Account';
@@ -185,6 +187,8 @@ const SubscriptionTab = (props: any) => {
     switch (page) {
       case 'prices':
         return <Prices user={userClone} />;
+      case 'confirm':
+        return <ConfirmPrice user={userClone} />;
       case 'subscribe':
         return <Subscribe user={userClone} />;
       case 'account':

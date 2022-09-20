@@ -9,7 +9,7 @@ import axios from 'axios';
 import AppContext from '@app/contexts/AppContext';
 // import {Redirect} from 'react-router-dom';
 
-const Prices = (props) => {
+const ConfirmPrice = (props) => {
   const AppCtx = useContext(AppContext);
   const {user} = props;
 
@@ -71,7 +71,7 @@ const Prices = (props) => {
 
   const setNavigateTo = (price) => {
     AppCtx.setNavigate({
-      to: 'confirm',
+      to: 'subscribe',
       data: {price}
     });
   };
@@ -92,7 +92,7 @@ const Prices = (props) => {
   return (
     <div>
       <h5>
-        <strong>Selecciona un plan:</strong>
+        <strong>Confirmar nuevo plan:</strong>
       </h5>
       <br />
       <div className="price-list">
@@ -148,4 +148,4 @@ const Prices = (props) => {
   );
 };
 
-export default Prices;
+export default ConfirmPrice;
