@@ -24,15 +24,15 @@ const Subscribe = (props) => {
   console.log('props', props);
 
   // Get the lookup key for the price from the previous page redirect.
-  const [clientSecret] = useState(AppCtx.Navigate.data.clientSecret);
+  const [clientSecret, setClientSecret] = useState('');
   const [price] = useState(AppCtx.Navigate.data.price);
-  // const [subscriptionId] = useState(AppCtx.Navigate.data.subscriptionId);
+  const [subscriptionId, setSubscriptionId] = useState('');
   // const [items] = useState(AppCtx.Navigate.data.items);
   // const [name, setName] = useState(user.profile.nombre);
   // const [email, setEmail] = useState(user.profile.email);
   // const [messages, _setMessages] = useState('');
   // const [isLoading, setIsLoading] = useState(false);
-  const [clientSecretNew, setClientSecretNew] = useState('');
+  // const [clientSecretNew, setClientSecretNew] = useState('');
 
   // const [paymentIntent, setPaymentIntent] = useState();
 
@@ -46,21 +46,15 @@ const Subscribe = (props) => {
   // const elements = useElements();
 
   useEffect(() => {
-    console.log({clientSecretNew});
     if (price) {
-      createSubscription(price);
+      console.log({clientSecret, price});
+      createSubscription();
     }
-  }, [clientSecretNew]);
+  }, []);
 
   useEffect(() => {
-    stripeCreatePaymentIntent();
-
-    if (!clientSecretNew) {
-      return;
-    }
-
+    // stripeCreatePaymentIntent();
     // console.log({items});
-
     // stripe.retrievePaymentIntent(clientSecret2).then(({paymentIntent}) => {
     // switch (paymentIntent.status) {
     //   case 'succeeded':
@@ -82,37 +76,32 @@ const Subscribe = (props) => {
     // });
   }, []);
 
-  const stripeCreatePaymentIntent = () => {
-    const customConfig = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-    const url = 'http://localhost:8004/create-payment-intent';
-    const body = {
-      items: [
-        {
-          // id: items[0].id,
-          // price: AppCtx.Navigate.data.price.id
-          amount: 10000
-        }
-      ]
-    };
+  // const stripeCreatePaymentIntent = () => {
+  //   const customConfig = {
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   };
+  //   const url = 'http://localhost:8004/create-payment-intent';
+  //   const body = {
+  //     priceId: price.id,
+  //     customerId: user.profile.usuario_stripe
+  //   };
 
-    axios
-      .post(url, body, customConfig)
-      .then((response) => {
-        const result = response.data;
-        mlCL('result:', result);
-        setClientSecretNew(result.clientSecret);
-      })
-      .catch((err) => {
-        mlCL('err:', err);
-      });
-  };
+  //   axios
+  //     .post(url, body, customConfig)
+  //     .then((response) => {
+  //       const result = response.data;
+  //       mlCL('result:', result);
+  //       setClientSecretNew(result.clientSecret);
+  //     })
+  //     .catch((err) => {
+  //       mlCL('err:', err);
+  //     });
+  // };
 
-  const createSubscription = async (price) => {
-    const {subscriptionId, items} = await fetch(
+  const createSubscription = async () => {
+    const {subscriptionId, clientSecret, items} = await fetch(
       'http://localhost:8004/create-subscription',
       {
         method: 'POST',
@@ -125,6 +114,9 @@ const Subscribe = (props) => {
         })
       }
     ).then((r) => r.json());
+
+    setSubscriptionId(subscriptionId);
+    setClientSecret(clientSecret);
 
     // AppCtx.setNavigate({
     //   to: 'subscribe',
@@ -248,11 +240,13 @@ const Subscribe = (props) => {
   // }
 
   const options = {
-    clientSecret: clientSecretNew,
+    clientSecret: clientSecret,
     theme: 'stripe'
   };
 
-  console.log({options});
+  // if (!clientSecret || !subscriptionId) {
+  //   return;
+  // }
 
   return (
     <>
@@ -286,9 +280,13 @@ const Subscribe = (props) => {
       </form> */}
       {/* <form id="payment-form" onSubmit={handleSubmit} style={{width: '70%'}}> */}
       {/* <PaymentElement id="payment-element" /> */}
-      {clientSecretNew && (
+      {clientSecret && subscriptionId && (
         <Elements options={options} stripe={stripePromise}>
-          <SubscribeForm clientSecret={clientSecretNew} />
+          <SubscribeForm
+            clientSecret={clientSecret}
+            user={user}
+            subscriptionId={subscriptionId}
+          />
         </Elements>
       )}
       {/* <hr /> */}

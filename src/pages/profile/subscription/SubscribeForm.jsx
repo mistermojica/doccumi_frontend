@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 
 import React, {useEffect, useState, useContext} from 'react';
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
@@ -10,6 +11,7 @@ const SubscribeForm = (props) => {
   const AppCtx = useContext(AppContext);
   const stripe = useStripe();
   const elements = useElements();
+  const {user, subscriptionId} = props;
 
   const [clientSecret] = useState(props.clientSecret);
   const [message, setMessage] = useState(null);
@@ -41,7 +43,7 @@ const SubscribeForm = (props) => {
           setMessage('Your payment is processing.');
           break;
         case 'requires_payment_method':
-          setMessage('');
+          setMessage('Se requiere un método de pago');
           break;
         default:
           setMessage('Something went wrong.');
@@ -52,9 +54,6 @@ const SubscribeForm = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log({stripe});
-    console.log({elements});
 
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
@@ -84,6 +83,14 @@ const SubscribeForm = (props) => {
         if (paymentIntent && paymentIntent.status === 'succeeded') {
           setMessage('Pago exitoso!');
           // return <Redirect to={{pathname: '/account'}} />
+          // ROMG ACTIVAR
+
+          updateSubscription({
+            priceId: AppCtx.Navigate.data.price.id,
+            subscriptionId: subscriptionId,
+            customerId: user.profile.usuario_stripe
+          });
+
           AppCtx.setNavigate({
             to: 'account',
             data: {price: AppCtx.Navigate.data.price}
@@ -119,6 +126,23 @@ const SubscribeForm = (props) => {
     // }
 
     setIsLoading(false);
+  };
+
+  const updateSubscription = (ctx) => {
+    const fetchData = async () => {
+      const {paymentMethod} = await fetch(
+        'http://localhost:8004/update-subscription',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(ctx)
+        }
+      ).then((r) => r.json());
+
+      // getPaymentMethods();
+    };
+
+    fetchData();
   };
 
   return (

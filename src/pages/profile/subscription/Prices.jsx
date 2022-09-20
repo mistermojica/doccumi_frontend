@@ -3,6 +3,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Button} from '@components';
+import CheckIcon from '@mui/icons-material/Check';
 import axios from 'axios';
 // @ts-ignore
 import AppContext from '@app/contexts/AppContext';
@@ -13,6 +14,7 @@ const Prices = (props) => {
   const {user} = props;
 
   const [prices, setPrices] = useState([]);
+  const [currentPriceId, setCurrentPriceId] = useState('');
   const [subscriptionData, setSubscriptionData] = useState(null);
 
   // const navigate = useNavigate();
@@ -22,10 +24,11 @@ const Prices = (props) => {
     axios
       .get(url)
       .then((response) => {
-        const {prices} = response.data;
+        const {prices, currentPriceId} = response.data;
         console.log('prices:', prices);
         prices.sort((a, b) => a.unit_amount - b.unit_amount);
         setPrices(prices);
+        setCurrentPriceId(currentPriceId);
       })
       .catch((err) => {
         console.log('err:', err);
@@ -45,7 +48,7 @@ const Prices = (props) => {
 
   // const createSubscription = async (price) => {
   //   const {subscriptionId, clientSecret, items} = await fetch(
-  //     'http://localhost:8004/create-subscription',
+  //     'http://localhost:8004/create-xsubscription',
   //     {
   //       method: 'POST',
   //       headers: {
@@ -67,7 +70,10 @@ const Prices = (props) => {
   // };
 
   const setNavigateTo = (price) => {
-    AppCtx.setNavigate({to: 'subscribe', data: {price}});
+    AppCtx.setNavigate({
+      to: 'subscribe',
+      data: {price}
+    });
   };
 
   // if (subscriptionData) {
@@ -114,13 +120,24 @@ const Prices = (props) => {
               <br />
               <div className="form-group row">
                 <div className="col-md-12 text-center">
-                  <Button
-                    type="button"
-                    theme="primary"
-                    onClick={() => setNavigateTo(price)}
-                  >
-                    Seleccionar
-                  </Button>
+                  {price.id !== currentPriceId ? (
+                    <Button
+                      type="button"
+                      theme={
+                        price.id === currentPriceId ? 'secondary' : 'primary'
+                      }
+                      disabled={price.id === currentPriceId}
+                      onClick={() => setNavigateTo(price)}
+                    >
+                      Seleccionar
+                    </Button>
+                  ) : (
+                    <>
+                      <CheckIcon />
+                      &nbsp;
+                      <span>Plan actual</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

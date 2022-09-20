@@ -100,7 +100,7 @@ const ProfileTab = (props: any) => {
   //       'Content-Type': 'application/json'
   //     }
   //   };
-  //   const url = 'http://localhost:8004/create-payment-intent';
+  //   const url = 'http://localhost:8004/create-xpaymentx-intent';
   //   const body = {items: [{id: 'xl-tshirt'}]};
   //   console.log({body});
   //   axios
@@ -126,7 +126,7 @@ const ProfileTab = (props: any) => {
   // Create PaymentIntent as soon as the page loads
   // stripeCreatePaymentIntent();
 
-  // fetch('http://localhost:8003/create-payment-intent', {
+  // fetch('http://localhost:8003/create-xpaymentx-intent', {
   //   method: 'POST',
   //   headers: {'Content-Type': 'application/json'},
   //   body: JSON.stringify({items: [{id: 'xl-tshirt'}]})

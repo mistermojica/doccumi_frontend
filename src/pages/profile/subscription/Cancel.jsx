@@ -58,7 +58,7 @@ const Cancel = () => {
   }, []);
 
   if (cancelled) {
-    return '';
+    return null;
   }
 
   return (

@@ -21,195 +21,6 @@ import './Subscription.css';
 
 // Moment.globalLocale = 'es-do';
 
-const HtmlTooltip = styled(({className, ...props}) => (
-  <Tooltip {...props} classes={{popper: className}} />
-))(({theme}) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 220,
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9'
-  }
-}));
-
-const AccountSubscription = ({subscription}) => {
-  // const AppCtx = useContext(AppContext);
-
-  // const handleCancel = () => {
-  //   AppCtx.setNavigate({to: 'cancel', data: {subscription: subscription.id}});
-  // };
-
-  return (
-    <section>
-      <hr />
-      {/* <a
-        href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
-      ></a> */}
-      <div className="row">
-        <div className="col-md-3">
-          {moment(new Date(subscription?.start_date * 1000).toString())
-            .locale('es-do')
-            .format('LL')}
-        </div>
-        <div className="col-md-3">
-          {subscription?.items?.data[0]?.plan?.currency.toUpperCase()}$
-          {subscription?.items?.data[0]?.plan?.amount / 100}
-        </div>
-        <div className="col-md-3">
-          {subscription.status === 'active'
-            ? 'Pagada'
-            : subscription.status === 'canceled'
-            ? 'Cancelada'
-            : 'Inactiva'}
-        </div>
-        <div className="col-md-3">{subscription?.plan?.product?.name}</div>
-      </div>
-      {/* <p>Card last4: {subscription.default_payment_method?.card?.last4}</p> */}
-      {/* <Link to={{pathname: '/change-plan', state: {subscription: subscription.id }}}>Change plan</Link><br /> */}
-      {/* <Link to={{pathname: '/cancel', state: {subscription: subscription.id }}}>Cancel</Link> */}
-      {/* <button type="button" onClick={handleCancel}>
-        Cancel
-      </button> */}
-    </section>
-  );
-};
-
-const PaymentMethods = ({paymentMethod, defaultPM}) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    console.log('klk');
-    setAnchorEl(null);
-  };
-
-  const deletePaymentMethod = (pmId) => {
-    const fetchData = async () => {
-      const {paymentMethod} = await fetch(
-        'http://localhost:8004/delete-payment-method',
-        {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({paymentMethodId: pmId})
-        }
-      ).then((r) => r.json());
-
-      console.log({paymentMethod});
-
-      // setCustomer(customer);
-
-      handleClose();
-    };
-
-    fetchData();
-  };
-
-  return (
-    <section>
-      <hr />
-      {/* <a
-        href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
-      ></a> */}
-      <div className="row">
-        <div className="col-md-1">
-          {paymentMethod?.card?.brand.toUpperCase()}
-        </div>
-        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
-          ....
-          {paymentMethod?.card?.last4}
-        </div>
-        <div className="col-md-2">
-          {defaultPM === true ? (
-            <span className="small bg-secondary rounded pl-1 pr-1 pb-1">
-              Predeterminado
-            </span>
-          ) : (
-            ''
-          )}
-        </div>
-        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
-          {' Expira '}
-        </div>
-        <div className="col-md-1.5">
-          {paymentMethod?.card?.exp_month +
-            ' / ' +
-            paymentMethod?.card?.exp_year}
-        </div>
-        <div className="col-md-1">
-          {/* <span style={{cursor: 'pointer'}}> */}
-          {defaultPM === true ? (
-            <HtmlTooltip
-              placement="top"
-              title={
-                <React.Fragment>
-                  <Typography color="inherit">
-                    <small>
-                      Tu método de pago predeterminado no puede ser eliminado
-                      debido a que tienes un plan activo.
-                    </small>
-                  </Typography>
-                </React.Fragment>
-              }
-            >
-              <InfoIcon style={{marginLeft: 10}} />
-            </HtmlTooltip>
-          ) : (
-            <>
-              {/* <IconButton
-                aria-label="fingerprint"
-                color="default"
-                onClick={handleClick}
-              >
-                <MoreHorizIcon
-                  id="basic-button"
-                  aria-controls={open ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                />
-              </IconButton> */}
-              <Button
-                id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-              >
-                Dashboard
-              </Button>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button'
-                }}
-              >
-                <MenuItem
-                  key={'def_' + paymentMethod?.id}
-                  onClick={handleClose}
-                >
-                  Hacer predeterminada
-                </MenuItem>
-                <MenuItem
-                  key={'del_' + paymentMethod?.id}
-                  onClick={deletePaymentMethod(paymentMethod?.id)}
-                >
-                  Eliminar
-                </MenuItem>
-              </Menu>
-            </>
-          )}
-          {/* </span> */}
-        </div>
-      </div>
-    </section>
-  );
-};
-
 const Account = () => {
   const AppCtx = useContext(AppContext);
 
@@ -229,12 +40,6 @@ const Account = () => {
       data: {subscription: subscriptions[0]}
     });
   };
-
-  useEffect(() => {
-    getCustomer();
-    getSubscriptions();
-    getPaymentMethods();
-  }, []);
 
   const getCustomer = () => {
     const fetchData = async () => {
@@ -292,8 +97,51 @@ const Account = () => {
     fetchData();
   };
 
+  const deletePaymentMethod = (pmId) => {
+    const fetchData = async () => {
+      const {paymentMethod} = await fetch(
+        'http://localhost:8004/delete-payment-method',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({paymentMethodId: pmId})
+        }
+      ).then((r) => r.json());
+
+      getPaymentMethods();
+    };
+
+    fetchData();
+  };
+
+  const setDefaultPaymentMethod = (pmId) => {
+    const fetchData = async () => {
+      const {customerUpdated} = await fetch(
+        'http://localhost:8004/set-default-payment-method',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({customerId: customer.id, paymentMethodId: pmId})
+        }
+      ).then((r) => r.json());
+
+      console.log({customerUpdated});
+
+      setCustomer(customerUpdated);
+      getPaymentMethods();
+    };
+
+    fetchData();
+  };
+
+  useEffect(() => {
+    getCustomer();
+    getSubscriptions();
+    getPaymentMethods();
+  }, []);
+
   if (!subscriptions && !cards) {
-    return '';
+    return null;
   }
 
   return (
@@ -387,12 +235,16 @@ const Account = () => {
                 <div id="cards">
                   {cards.map((s) => {
                     const defaultPM =
-                      customer.invoice_settings.default_payment_method === s.id;
+                      customer?.invoice_settings?.default_payment_method ===
+                      s.id;
+                    console.log(s.id, defaultPM);
                     return (
-                      <PaymentMethods
+                      <PaymentMethod
                         key={s.id}
                         paymentMethod={s}
                         defaultPM={defaultPM}
+                        deletePaymentMethodCB={deletePaymentMethod}
+                        setDefaultPaymentMethodCB={setDefaultPaymentMethod}
                       />
                     );
                   })}
@@ -420,6 +272,186 @@ const Account = () => {
             return <AccountSubscription key={s.id} subscription={s} />;
           })}
         </div> */}
+      </div>
+    </>
+  );
+};
+
+const HtmlTooltip = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}} />
+))(({theme}) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9'
+  }
+}));
+
+const AccountSubscription = ({subscription}) => {
+  // const AppCtx = useContext(AppContext);
+
+  // const handleCancel = () => {
+  //   AppCtx.setNavigate({to: 'cancel', data: {subscription: subscription.id}});
+  // };
+
+  return (
+    <section>
+      <hr />
+      {/* <a
+        href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
+      ></a> */}
+      <div className="row">
+        <div className="col-md-3">
+          {moment(new Date(subscription?.start_date * 1000).toString())
+            .locale('es-do')
+            .format('LL')}
+        </div>
+        <div className="col-md-3">
+          {subscription?.items?.data[0]?.plan?.currency.toUpperCase()}$
+          {subscription?.items?.data[0]?.plan?.amount / 100}
+        </div>
+        <div className="col-md-3">
+          {subscription.status === 'active'
+            ? 'Pagada'
+            : subscription.status === 'canceled'
+            ? 'Cancelada'
+            : 'Inactiva'}
+        </div>
+        <div className="col-md-3">{subscription?.plan?.product?.name}</div>
+      </div>
+      {/* <p>Card last4: {subscription.default_payment_method?.card?.last4}</p> */}
+      {/* <Link to={{pathname: '/change-plan', state: {subscription: subscription.id }}}>Change plan</Link><br /> */}
+      {/* <Link to={{pathname: '/cancel', state: {subscription: subscription.id }}}>Cancel</Link> */}
+      {/* <button type="button" onClick={handleCancel}>
+        Cancel
+      </button> */}
+    </section>
+  );
+};
+
+const PaymentMethod = ({
+  paymentMethod,
+  defaultPM,
+  deletePaymentMethodCB,
+  setDefaultPaymentMethodCB
+}) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    console.log('handleClose');
+    setAnchorEl(null);
+  };
+
+  const handleDeletePaymentMethod = (id) => {
+    console.log('handleDeletePaymentMethod');
+    deletePaymentMethodCB(id);
+    handleClose();
+  };
+
+  const handleSetDefaultPaymentMethod = (id) => {
+    console.log('handleSetDefaultPaymentMethod');
+    setDefaultPaymentMethodCB(id);
+    handleClose();
+  };
+
+  return (
+    <>
+      <hr />
+      {/* <a
+        href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
+      ></a> */}
+      <div className="row">
+        <div className="col-md-1">
+          {paymentMethod?.card?.brand.toUpperCase()}
+        </div>
+        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
+          ....
+          {paymentMethod?.card?.last4}
+        </div>
+        <div className="col-md-2">
+          {defaultPM === true ? (
+            <span className="small bg-secondary rounded pl-1 pr-1 pb-1">
+              Predeterminado
+            </span>
+          ) : (
+            ''
+          )}
+        </div>
+        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
+          {' Expira '}
+        </div>
+        <div className="col-md-1.5">
+          {paymentMethod?.card?.exp_month +
+            ' / ' +
+            paymentMethod?.card?.exp_year}
+        </div>
+        <div className="col-md-1">
+          {/* <span style={{cursor: 'pointer'}}> */}
+          {defaultPM === true ? (
+            <HtmlTooltip
+              placement="top"
+              title={
+                <React.Fragment>
+                  <Typography color="inherit">
+                    <small>
+                      Tu método de pago predeterminado no puede ser eliminado
+                      debido a que tienes un plan activo.
+                    </small>
+                  </Typography>
+                </React.Fragment>
+              }
+            >
+              <InfoIcon style={{marginLeft: 10}} />
+            </HtmlTooltip>
+          ) : (
+            <>
+              <IconButton
+                aria-label="fingerprint"
+                color="default"
+                onClick={handleClick}
+              >
+                <MoreHorizIcon
+                  id="basic-button"
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                />
+              </IconButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button'
+                }}
+              >
+                <MenuItem
+                  key={'def_' + paymentMethod?.id}
+                  onClick={() => {
+                    handleSetDefaultPaymentMethod(paymentMethod?.id);
+                  }}
+                >
+                  Hacer predeterminada
+                </MenuItem>
+                <MenuItem
+                  key={'del_' + paymentMethod?.id}
+                  onClick={() => {
+                    handleDeletePaymentMethod(paymentMethod?.id);
+                  }}
+                >
+                  Eliminar
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+          {/* </span> */}
+        </div>
       </div>
     </>
   );

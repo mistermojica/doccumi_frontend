@@ -118,7 +118,7 @@ const SubscriptionTab = (props: any) => {
   //       'Content-Type': 'application/json'
   //     }
   //   };
-  //   const url = 'http://localhost:8004/create-payment-intent';
+  //   const url = 'http://localhost:8004/create-xpaymentx-intent';
   //   const body = {items: [{id: 'xl-tshirt'}]};
   //   console.log({body});
   //   axios
@@ -144,7 +144,7 @@ const SubscriptionTab = (props: any) => {
   // Create PaymentIntent as soon as the page loads
   // stripeCreatePaymentIntent();
 
-  // fetch('http://localhost:8003/create-payment-intent', {
+  // fetch('http://localhost:8003/create-xpaymentx-intent', {
   //   method: 'POST',
   //   headers: {'Content-Type': 'application/json'},
   //   body: JSON.stringify({items: [{id: 'xl-tshirt'}]})
@@ -192,7 +192,7 @@ const SubscriptionTab = (props: any) => {
       case 'cancel':
         return <Cancel />;
       default:
-        return <Account user={userClone} />;
+        return <Account />;
       // return <Prices user={userClone} />;
       // return <Register user={userClone} />;
     }
