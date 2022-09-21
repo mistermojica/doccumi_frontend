@@ -15,7 +15,10 @@ const Prices = (props) => {
 
   const [prices, setPrices] = useState([]);
   const [currentPriceId, setCurrentPriceId] = useState('');
-  const [subscriptionData, setSubscriptionData] = useState(null);
+  const [subscription] = useState(AppCtx?.Navigate?.data?.subscription);
+  const [defaultPaymentMethod] = useState(
+    AppCtx?.Navigate?.data?.defaultPaymentMethod
+  );
 
   // const navigate = useNavigate();
 
@@ -25,7 +28,6 @@ const Prices = (props) => {
       .get(url)
       .then((response) => {
         const {prices, currentPriceId} = response.data;
-        console.log('prices:', prices);
         prices.sort((a, b) => a.unit_amount - b.unit_amount);
         setPrices(prices);
         setCurrentPriceId(currentPriceId);
@@ -72,7 +74,7 @@ const Prices = (props) => {
   const setNavigateTo = (price) => {
     AppCtx.setNavigate({
       to: 'confirm',
-      data: {price}
+      data: {price, subscription, defaultPaymentMethod}
     });
   };
 

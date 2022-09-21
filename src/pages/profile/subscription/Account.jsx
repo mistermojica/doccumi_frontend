@@ -27,11 +27,14 @@ const Account = () => {
   const [customer, setCustomer] = useState({});
   const [subscriptions, setSubscriptions] = useState([]);
   const [cards, setCards] = useState([]);
-
+  const [defaultPM, setDefaultPM] = useState({});
   const [interval, setInterval] = useState('');
 
   const handleAddNew = () => {
-    AppCtx.setNavigate({to: 'prices', data: {}});
+    AppCtx.setNavigate({
+      to: 'prices',
+      data: {subscription: subscriptions[0], defaultPaymentMethod: defaultPM}
+    });
   };
 
   const handleCancel = () => {
@@ -125,10 +128,16 @@ const Account = () => {
         }
       ).then((r) => r.json());
 
-      console.log({customerUpdated});
-
       setCustomer(customerUpdated);
       getPaymentMethods();
+      cards.forEach((card) => {
+        if (
+          customerUpdated?.invoice_settings?.default_payment_method === card.id
+        ) {
+          console.log('setDefaultPaymentMethod:', {card});
+          setDefaultPM(card);
+        }
+      });
     };
 
     fetchData();
@@ -140,7 +149,18 @@ const Account = () => {
     getPaymentMethods();
   }, []);
 
-  if (!subscriptions && !cards) {
+  useEffect(() => {
+    if (cards && customer) {
+      cards.forEach((card) => {
+        if (customer?.invoice_settings?.default_payment_method === card.id) {
+          console.log('useEffect:', {card});
+          setDefaultPM(card);
+        }
+      });
+    }
+  }, [cards, customer]);
+
+  if (!subscriptions && !cards && !customer) {
     return null;
   }
 
@@ -234,15 +254,14 @@ const Account = () => {
                 </strong>
                 <div id="cards">
                   {cards.map((s) => {
-                    const defaultPM =
+                    const isDefaultPM =
                       customer?.invoice_settings?.default_payment_method ===
                       s.id;
-                    console.log(s.id, defaultPM);
                     return (
                       <PaymentMethod
                         key={s.id}
                         paymentMethod={s}
-                        defaultPM={defaultPM}
+                        defaultPM={isDefaultPM}
                         deletePaymentMethodCB={deletePaymentMethod}
                         setDefaultPaymentMethodCB={setDefaultPaymentMethod}
                       />
