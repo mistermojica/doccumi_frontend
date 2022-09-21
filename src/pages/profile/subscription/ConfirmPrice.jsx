@@ -108,7 +108,7 @@ const ConfirmPrice = (props) => {
               )}
             />
             <br />
-            <div className="form-group row">
+            <div className="row">
               <div className="col-md-10">
                 <p>
                   Lo que pagarás por{' '}
@@ -121,7 +121,6 @@ const ConfirmPrice = (props) => {
                         ?.concat('000')
                     )
                   ).toLocaleDateString('es-DO')}
-                  <br />
                 </p>
               </div>
               <div className="col-md-2 text-right">
@@ -134,7 +133,55 @@ const ConfirmPrice = (props) => {
               </div>
             </div>
             <hr />
-            <div className="form-group row">
+            <div className="pl-2 pr-2 mb-3 pt-3 pb-1 border rounded bg-light align-middle">
+              <div className="row">
+                <div className="col-md-10">
+                  <p>Crédito prorrateado del plan ???</p>
+                </div>
+                <div className="col-md-2 text-right">
+                  <strong>
+                    <strong>
+                      {new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD'
+                      }).format(invoicePreview?.lines?.data[0]?.amount / 100)}
+                    </strong>
+                  </strong>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-10">
+                  <p>Cargo prorrateado del plan {price.product.name}</p>
+                </div>
+                <div className="col-md-2 text-right">
+                  <strong>
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'currency',
+                      currency: 'USD'
+                    }).format(
+                      invoicePreview?.lines?.data[1]?.plan?.amount / 100
+                    )}
+                  </strong>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-10">
+                  <p>
+                    <strong>Total</strong>
+                  </p>
+                </div>
+                <div className="col-md-2 text-right">
+                  <strong>
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'currency',
+                      currency: 'USD'
+                    }).format(invoicePreview.amount_remaining / 100)}
+                  </strong>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              {/* Pagar con tarjeta: */}
               <div className="col-md-10">
                 <p>Importe adeudado: hoy</p>
               </div>
@@ -147,15 +194,16 @@ const ConfirmPrice = (props) => {
                 </strong>
               </div>
             </div>
-            <hr />
-            <div className="form-group row">
-              <div className="col-md-10">Pagar con tarjeta:</div>
-              <div className="col-md-2">
+            <div className="row">
+              <div className="col-md-10">
+                <a href="#">Ver detalles</a>
+              </div>
+              <div className="col-md-2 text-right">
                 {defaultPaymentMethod?.card?.brand.toUpperCase()} ....{' '}
                 {defaultPaymentMethod?.card?.last4}
               </div>
-              <hr />
             </div>
+            <hr />
             <div className="form-group row">
               <div className="col-md-12 text-center">
                 {price.id !== currentPriceId ? (
