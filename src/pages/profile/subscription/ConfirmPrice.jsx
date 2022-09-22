@@ -4,6 +4,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Button} from '@components';
 import CheckIcon from '@mui/icons-material/Check';
+import Collapse from 'react-bootstrap/Collapse';
 // @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 
@@ -19,6 +20,7 @@ const ConfirmPrice = (props) => {
   const [currentPriceId, setCurrentPriceId] = useState('');
   const [invoicePreview, setInvoicePreview] = useState({});
   const [interval, setInterval] = useState('');
+  const [showDetails, setShowDetails] = useState(false);
 
   // const navigate = useNavigate();
 
@@ -71,6 +73,11 @@ const ConfirmPrice = (props) => {
       to: 'subscribe',
       data: {price}
     });
+  };
+
+  const handleShowHideDetails = (e) => {
+    e.preventDefault();
+    setShowDetails(!showDetails);
   };
 
   // if (subscriptionData) {
@@ -133,53 +140,58 @@ const ConfirmPrice = (props) => {
               </div>
             </div>
             <hr />
-            <div className="pl-2 pr-2 mb-3 pt-3 pb-1 border rounded bg-light align-middle">
-              <div className="row">
-                <div className="col-md-10">
-                  <p>Crédito prorrateado del plan ???</p>
+            <Collapse in={showDetails}>
+              <div
+                id="collapse-details"
+                className="pl-2 pr-2 mb-3 pt-3 pb-1 border rounded bg-light align-middle"
+              >
+                <div className="row">
+                  <div className="col-md-10">
+                    <p>Crédito prorrateado del plan anterior:</p>
+                  </div>
+                  <div className="col-md-2 text-right">
+                    <strong>
+                      <strong>
+                        {new Intl.NumberFormat('en-US', {
+                          style: 'currency',
+                          currency: 'USD'
+                        }).format(invoicePreview?.lines?.data[0]?.amount / 100)}
+                      </strong>
+                    </strong>
+                  </div>
                 </div>
-                <div className="col-md-2 text-right">
-                  <strong>
+                <div className="row">
+                  <div className="col-md-10">
+                    <p>Cargo prorrateado del plan {price.product.name}:</p>
+                  </div>
+                  <div className="col-md-2 text-right">
                     <strong>
                       {new Intl.NumberFormat('en-US', {
                         style: 'currency',
                         currency: 'USD'
-                      }).format(invoicePreview?.lines?.data[0]?.amount / 100)}
+                      }).format(
+                        invoicePreview?.lines?.data[1]?.plan?.amount / 100
+                      )}
                     </strong>
-                  </strong>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-10">
+                    <p>
+                      <strong>Total</strong>
+                    </p>
+                  </div>
+                  <div className="col-md-2 text-right">
+                    <strong>
+                      {new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD'
+                      }).format(invoicePreview.amount_remaining / 100)}
+                    </strong>
+                  </div>
                 </div>
               </div>
-              <div className="row">
-                <div className="col-md-10">
-                  <p>Cargo prorrateado del plan {price.product.name}</p>
-                </div>
-                <div className="col-md-2 text-right">
-                  <strong>
-                    {new Intl.NumberFormat('en-US', {
-                      style: 'currency',
-                      currency: 'USD'
-                    }).format(
-                      invoicePreview?.lines?.data[1]?.plan?.amount / 100
-                    )}
-                  </strong>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-10">
-                  <p>
-                    <strong>Total</strong>
-                  </p>
-                </div>
-                <div className="col-md-2 text-right">
-                  <strong>
-                    {new Intl.NumberFormat('en-US', {
-                      style: 'currency',
-                      currency: 'USD'
-                    }).format(invoicePreview.amount_remaining / 100)}
-                  </strong>
-                </div>
-              </div>
-            </div>
+            </Collapse>
             <div className="row">
               {/* Pagar con tarjeta: */}
               <div className="col-md-10">
@@ -196,7 +208,15 @@ const ConfirmPrice = (props) => {
             </div>
             <div className="row">
               <div className="col-md-10">
-                <a href="#">Ver detalles</a>
+                <a
+                  // type="button"
+                  href="#"
+                  aria-controls="collapse-details"
+                  aria-expanded={showDetails}
+                  onClick={handleShowHideDetails}
+                >
+                  Ver detalles
+                </a>
               </div>
               <div className="col-md-2 text-right">
                 {defaultPaymentMethod?.card?.brand.toUpperCase()} ....{' '}
