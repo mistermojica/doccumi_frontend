@@ -21,10 +21,19 @@ const ConfirmPrice = (props) => {
   const [invoicePreview, setInvoicePreview] = useState({});
   const [interval, setInterval] = useState('');
   const [showDetails, setShowDetails] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [clientSecret, setClientSecret] = useState('');
+  const [subscriptionId, setSubscriptionId] = useState('');
 
   // const navigate = useNavigate();
 
   useEffect(() => {
+    if (price) {
+      console.log({clientSecret, price});
+      createSubscription();
+    }
+
     let inter = '';
 
     if (price?.recurring?.interval === 'month') {
@@ -68,12 +77,67 @@ const ConfirmPrice = (props) => {
     setInvoicePreview(invoice);
   };
 
-  const setNavigateTo = (price) => {
-    AppCtx.setNavigate({
-      to: 'subscribe',
-      data: {price}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    updateSubscription({
+      priceId: price.id,
+      subscriptionId,
+      customerId: user.profile.usuario_stripe
     });
   };
+
+  const createSubscription = async () => {
+    const {subscriptionId, clientSecret, items} = await fetch(
+      'http://localhost:8004/create-subscription',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          priceId: price.id,
+          customerId: user.profile.usuario_stripe
+        })
+      }
+    ).then((r) => r.json());
+
+    setSubscriptionId(subscriptionId);
+    setClientSecret(clientSecret);
+  };
+
+  const updateSubscription = (ctx) => {
+    setIsLoading(true);
+
+    const fetchData = async () => {
+      const {paymentMethod} = await fetch(
+        'http://localhost:8004/update-subscription',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(ctx)
+        }
+      ).then((r) => r.json());
+
+      // getPaymentMethods();
+
+      setIsLoading(false);
+
+      AppCtx.setNavigate({
+        to: 'account',
+        data: {price}
+      });
+    };
+
+    fetchData();
+  };
+
+  // const setNavigateTo = (price) => {
+  //   AppCtx.setNavigate({
+  //     to: 'subscribe',
+  //     data: {price}
+  //   });
+  // };
 
   const handleShowHideDetails = (e) => {
     e.preventDefault();
@@ -228,16 +292,31 @@ const ConfirmPrice = (props) => {
               <div className="col-md-12 text-center">
                 {price.id !== currentPriceId ? (
                   <Button
-                    type="button"
-                    theme={
-                      price.id === currentPriceId ? 'secondary' : 'primary'
-                    }
-                    disabled={price.id === currentPriceId}
-                    onClick={() => setNavigateTo(price)}
+                    id="submit"
+                    onClick={handleSubmit}
+                    theme="primary"
+                    disabled={isLoading}
+                    style={{width: '200px', height: '50px'}}
                   >
-                    Confirmar
+                    <span id="button-text">
+                      {isLoading ? (
+                        <div className="spinner" id="spinner"></div>
+                      ) : (
+                        'Confirmar'
+                      )}
+                    </span>
                   </Button>
                 ) : (
+                  // <Button
+                  //   type="button"
+                  //   theme={
+                  //     price.id === currentPriceId ? 'secondary' : 'primary'
+                  //   }
+                  //   disabled={price.id === currentPriceId}
+                  //   onClick={() => setNavigateTo(price)}
+                  // >
+                  //   Confirmar
+                  // </Button>
                   <>
                     <CheckIcon />
                     &nbsp;

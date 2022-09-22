@@ -63,48 +63,46 @@ const SubscribeForm = (props) => {
 
     setIsLoading(true);
 
-    const cardElement = elements.getElement(CardElement);
+    // stripe
+    //   .confirmCardPayment(clientSecret, {
+    //     payment_method: {
+    //       card: cardElement,
+    //       billing_details: {
+    //         name: name
+    //       }
+    //       // receipt_email: email
+    //     }
+    //   })
+    //   .then((result) => {
+    //     setIsLoading(false);
 
-    stripe
-      .confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            name: name
-          }
-          // receipt_email: email
-        }
-      })
-      .then((result) => {
-        setIsLoading(false);
+    //     let {paymentIntent} = result;
 
-        let {paymentIntent} = result;
+    //     if (paymentIntent && paymentIntent.status === 'succeeded') {
+    //       setMessage('Pago exitoso!');
+    // return <Redirect to={{pathname: '/account'}} />
+    // ROMG ACTIVAR
 
-        if (paymentIntent && paymentIntent.status === 'succeeded') {
-          setMessage('Pago exitoso!');
-          // return <Redirect to={{pathname: '/account'}} />
-          // ROMG ACTIVAR
+    updateSubscription({
+      priceId: AppCtx.Navigate.data.price.id,
+      subscriptionId: subscriptionId,
+      customerId: user.profile.usuario_stripe
+    });
 
-          updateSubscription({
-            priceId: AppCtx.Navigate.data.price.id,
-            subscriptionId: subscriptionId,
-            customerId: user.profile.usuario_stripe
-          });
-
-          AppCtx.setNavigate({
-            to: 'account',
-            data: {price: AppCtx.Navigate.data.price}
-          });
-        }
-      })
-      .catch((error) => {
-        if (error) {
-          console.log('error:', error);
-          setMessage(error.message);
-          return;
-        }
-        setPaymentIntent(paymentIntent);
-      });
+    AppCtx.setNavigate({
+      to: 'account',
+      data: {price: AppCtx.Navigate.data.price}
+    });
+    // }
+    // })
+    // .catch((error) => {
+    //   if (error) {
+    //     console.log('error:', error);
+    //     setMessage(error.message);
+    //     return;
+    //   }
+    //   setPaymentIntent(paymentIntent);
+    // });
 
     // const {error} = await stripe.confirmPayment({
     //   elements,
@@ -127,6 +125,82 @@ const SubscribeForm = (props) => {
 
     setIsLoading(false);
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!stripe || !elements) {
+  //     // Stripe.js has not yet loaded.
+  //     // Make sure to disable form submission until Stripe.js has loaded.
+  //     return;
+  //   }
+
+  //   setIsLoading(true);
+
+  //   const cardElement = elements.getElement(CardElement);
+
+  //   stripe
+  //     .confirmCardPayment(clientSecret, {
+  //       payment_method: {
+  //         card: cardElement,
+  //         billing_details: {
+  //           name: name
+  //         }
+  //         // receipt_email: email
+  //       }
+  //     })
+  //     .then((result) => {
+  //       setIsLoading(false);
+
+  //       let {paymentIntent} = result;
+
+  //       if (paymentIntent && paymentIntent.status === 'succeeded') {
+  //         setMessage('Pago exitoso!');
+  //         // return <Redirect to={{pathname: '/account'}} />
+  //         // ROMG ACTIVAR
+
+  //         updateSubscription({
+  //           priceId: AppCtx.Navigate.data.price.id,
+  //           subscriptionId: subscriptionId,
+  //           customerId: user.profile.usuario_stripe
+  //         });
+
+  //         AppCtx.setNavigate({
+  //           to: 'account',
+  //           data: {price: AppCtx.Navigate.data.price}
+  //         });
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       if (error) {
+  //         console.log('error:', error);
+  //         setMessage(error.message);
+  //         return;
+  //       }
+  //       setPaymentIntent(paymentIntent);
+  //     });
+
+  //   // const {error} = await stripe.confirmPayment({
+  //   //   elements,
+  //   //   confirmParams: {
+  //   //     // Make sure to change this to your payment completion page
+  //   //     return_url: 'http://localhost:8004/doccumi-payment-response'
+  //   //   }
+  //   // });
+
+  //   // This point will only be reached if there is an immediate error when
+  //   // confirming the payment. Otherwise, your customer will be redirected to
+  //   // your `return_url`. For some payment methods like iDEAL, your customer will
+  //   // be redirected to an intermediate site first to authorize the payment, then
+  //   // redirected to the `return_url`.
+  //   // if (error.type === 'card_error' || error.type === 'validation_error') {
+  //   //   setMessage(error.message);
+  //   // } else {
+  //   //   setMessage('An unexpected error occurred.');
+  //   // }
+
+  //   setIsLoading(false);
+  // };
 
   const updateSubscription = (ctx) => {
     const fetchData = async () => {
