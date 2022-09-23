@@ -33,7 +33,12 @@ const Account = () => {
   const handleAddNew = () => {
     AppCtx.setNavigate({
       to: 'prices',
-      data: {subscription: subscriptions[0], defaultPaymentMethod: defaultPM}
+      data: {
+        subscription: ['active'].includes(subscriptions[0].status)
+          ? subscriptions[0]
+          : null,
+        defaultPaymentMethod: defaultPM
+      }
     });
   };
 
@@ -323,9 +328,15 @@ const AccountSubscription = ({subscription}) => {
       ></a> */}
       <div className="row">
         <div className="col-md-3">
-          {moment(new Date(subscription?.start_date * 1000).toString())
-            .locale('es-do')
-            .format('LL')}
+          <a
+            href={subscription?.latest_invoice?.hosted_invoice_url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {moment(new Date(subscription?.start_date * 1000).toString())
+              .locale('es-do')
+              .format('LL')}
+          </a>
         </div>
         <div className="col-md-3">
           {subscription?.items?.data[0]?.plan?.currency.toUpperCase()}$
