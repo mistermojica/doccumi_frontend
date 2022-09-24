@@ -1,17 +1,24 @@
 /* eslint no-underscore-dangle: 0 */
 /* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import _ from 'underscore';
+import {Button} from 'react-bootstrap';
+import {FormControlLabel, FormGroup} from '@mui/material';
 // import CKEditorOM from '@app/components/editors/CKEditorClassic';
 // import CKEditorOM from '@app/components/editors/CKEditorDecoupled';
 import CKEditorOM from '@app/components/editors/CKEditorDecoupled';
+import * as mammoth from 'mammoth';
 
 const PlantillasFormBody = (props) => {
   const {RowData, TiposData, onChangeCB, cxcReadOnly, PlaceHolderFields} =
     props;
 
   const [plaTipoDocumento, setTipoDocumento] = useState('');
+  const [EditorContent, setEditorContent] = useState('');
+
+  const myRefname = useRef(null);
 
   const onChangeLocal = (target) => {
     const {name, value} = target;
@@ -27,6 +34,91 @@ const PlantillasFormBody = (props) => {
     });
   };
 
+  const handleImportDocument = () => {
+    console.log('handleImportDocument');
+    myRefname.current.click();
+  };
+
+  const changeInputHandler = async (target) => {
+    console.log('changeInputHandler:', {target});
+    // uploadMultipleFiles(target.files);
+    parseWordDocxFile(target);
+  };
+
+  // const uploadMultipleFiles = (files) => {
+  //   console.log('uploadMultipleFiles:', {files});
+
+  //   const doc = files[0];
+
+  //   const reader = new FileReader();
+  //   reader.onloadend = () => {
+  //     console.log('reader.result:', reader.result);
+
+  //     mammoth
+  //       .convertToHtml({arrayBuffer: reader.result})
+  //       .then(function (result) {
+  //         var html = result.value; // The generated HTML
+  //         var messages = result.messages; // Any messages, such as warnings during conversion
+  //         console.log({messages});
+  //         console.log({html});
+  //       })
+  //       .done();
+
+  //     // const imgObj = {
+  //     // [e.target.id]: doc,
+  //     // url: reader.result
+  //     // };
+  //     // setImage(imgObj);
+  //     // onChange({e, imgObj});
+  //   };
+  //   reader.readAsArrayBuffer(doc);
+
+  //   // const arrUrlTemps = [];
+  //   // for (let i = 0; i < files.length; i += 1) {
+  //   //   const file = files[i];
+  //   //   const tempUrl = URL.createObjectURL(file);
+  //   //   arrUrlTemps.push(tempUrl);
+  //   // }
+  //   // uploadFiles(Array.from(files), arrUrlTemps);
+  // };
+
+  function parseWordDocxFile(target) {
+    var files = target.files || [];
+    if (!files.length) return;
+    var file = files[0];
+
+    console.time();
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      var arrayBuffer = reader.result;
+      // debugger
+
+      mammoth
+        .convertToHtml({arrayBuffer: arrayBuffer})
+        .then(function (resultObject) {
+          // result1.innerHTML = resultObject.value;
+          console.log('HTML:', resultObject.value);
+          setEditorContent(resultObject.value);
+        });
+      console.timeEnd();
+
+      // mammoth
+      //   .extractRawText({arrayBuffer: arrayBuffer})
+      //   .then(function (resultObject) {
+      //     // result2.innerHTML = resultObject.value;
+      //     console.log('TEXT:', resultObject.value);
+      //   });
+
+      // mammoth
+      //   .convertToMarkdown({arrayBuffer: arrayBuffer})
+      //   .then(function (resultObject) {
+      //     // result3.innerHTML = resultObject.value;
+      //     console.log('MARKDOWN:', resultObject.value);
+      //   });
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
   useEffect(() => {
     const fields = [...document.querySelectorAll('.form-control')];
     setReadOnly(fields);
@@ -37,6 +129,64 @@ const PlantillasFormBody = (props) => {
       <div>
         <div className="row">
           <div className="col-lg-12">
+            <div className="row">
+              <div className="col-lg-4">
+                <FormGroup
+                  sx={{
+                    width: '100%'
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <>
+                        <input
+                          type="file"
+                          accept=".doc,.docx"
+                          ref={myRefname}
+                          onChange={(e) => changeInputHandler(e.target)}
+                          id="importardocumento"
+                          style={{
+                            width: '100%',
+                            display: 'none'
+                          }}
+                        />
+                      </>
+                    }
+                    // label="Importar Documento Word"
+                    classes="btn btn-primary"
+                    // sx={{
+                    //   color: 'white',
+                    //   background: 'white',
+                    //   borderRadius: '6px',
+                    //   border: '1px solid #007bff',
+                    //   backgroundColor: '#007bff',
+                    // }}
+                    labelPlacement="bottom"
+                  />
+                  <Button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleImportDocument}
+                  >
+                    Importar Documento Word
+                  </Button>
+                </FormGroup>
+                {/* <Form.Group controlId="formFile">
+                  <Form.Control
+                    type="file"
+                    className="form-control mb-2"
+                    onChange={(e) => changeInputHandler(e.target)}
+                  />
+                </Form.Group> */}
+                {/* <input
+                  type="file"
+                  className="form-control"
+                  onChange={(e) => changeInputHandler(e.target)}
+                /> */}
+              </div>
+              <div className="col-lg-8"></div>
+            </div>
+            <br />
             <div className="row">
               <div className="col-sm-4">
                 <label htmlFor="plaNombre">
@@ -113,7 +263,7 @@ const PlantillasFormBody = (props) => {
         </div>
         <br />
         <input
-          type="text"
+          type="hidden"
           className="form-control"
           id="plaTipoDocumento"
           name="plaTipoDocumento"
@@ -136,7 +286,7 @@ const PlantillasFormBody = (props) => {
                     data:
                       RowData.plaContenido !== undefined
                         ? RowData.plaContenido
-                        : '',
+                        : EditorContent || '',
                     readOnly: cxcReadOnly,
                     PlaceHolderFields
                   }}

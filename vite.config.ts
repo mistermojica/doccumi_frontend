@@ -1,8 +1,9 @@
-import { defineConfig } from 'vite';
-import eslint from 'vite-plugin-eslint'
+import {defineConfig} from 'vite';
+import eslint from 'vite-plugin-eslint';
 import svgrPlugin from 'vite-plugin-svgr';
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react';
 import path from 'path';
+import {NodeGlobalsPolyfillPlugin} from '@esbuild-plugins/node-globals-polyfill';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,17 +13,17 @@ export default defineConfig({
     open: true
   },
   build: {
-    outDir: 'build',
+    outDir: 'build'
   },
   plugins: [
     react(),
     eslint(),
     svgrPlugin({
       svgrOptions: {
-        icon: true,
+        icon: true
         // ...svgr options (https://react-svgr.com/docs/options/)
-      },
-    }),
+      }
+    })
   ],
   resolve: {
     alias: {
@@ -32,11 +33,36 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@components': path.resolve(__dirname, './src/components'),
       '~': path.resolve(__dirname, './node_modules'),
-      '@mui/icons-material': path.resolve(__dirname, './node_modules/@mui/icons-material/esm'),
-      '@types/scheduler': path.resolve(__dirname, './node_modules/scheduler/cjs'),
+      '@mui/icons-material': path.resolve(
+        __dirname,
+        './node_modules/@mui/icons-material/esm'
+      ),
+      '@types/scheduler': path.resolve(
+        __dirname,
+        './node_modules/scheduler/cjs'
+      ),
       'chart.js': path.resolve(__dirname, './node_modules/chart.js'),
-    },
+      process: 'process/browser',
+      stream: 'stream-browserify',
+      zlib: 'browserify-zlib',
+      util: 'util'
+    }
   },
+  optimizeDeps: {
+    esbuildOptions: {
+      // Node.js global to browser globalThis
+      define: {
+        global: 'globalThis'
+      },
+      // Enable esbuild polyfill plugins
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          process: true,
+          buffer: true
+        })
+      ]
+    }
+  }
 });
 
 // alias: [
