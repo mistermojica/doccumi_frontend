@@ -2,7 +2,7 @@
 
 import React, {useState, useContext, useEffect} from 'react';
 import {loadStripe} from '@stripe/stripe-js';
-import {Elements} from '@stripe/react-stripe-js';
+import {Elements, ElementsConsumer} from '@stripe/react-stripe-js';
 import AppContext from '@app/contexts/AppContext';
 import AddCardForm from './AddCardForm';
 import * as Config from '@app/utils/config';
@@ -13,14 +13,9 @@ const AddCard = (props) => {
   const AppCtx = useContext(AppContext);
   const {user} = props;
 
-  console.log('AppCtx.price', AppCtx.Navigate.data.price);
-  console.log('AppCtx.data', AppCtx.Navigate.data);
-  console.log('props', props);
-
   // Get the lookup key for the price from the previous page redirect.
   const [clientSecret, setClientSecret] = useState('');
   const [price] = useState(AppCtx.Navigate.data.price);
-  const [subscriptionId, setSubscriptionId] = useState('');
 
   const NombreEntidad = 'Subscripciones';
   const NombreEntidadMin = NombreEntidad.toLowerCase();
@@ -28,42 +23,7 @@ const AddCard = (props) => {
     Config.gatDomainName().concat('/'.concat(NombreEntidadMin).concat('/'))
   );
 
-  useEffect(() => {
-    if (price) {
-      console.log({clientSecret, price});
-      createSubscription();
-    }
-  }, []);
-
-  const createSubscription = async () => {
-    const {subscriptionId, clientSecret, items} = await fetch(
-      UrlBase.concat('create-subscription'),
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          priceId: price.id,
-          customerId: user.profile.usuario_stripe
-        })
-      }
-    ).then((r) => r.json());
-
-    setClientSecret(clientSecret);
-
-    // AppCtx.setNavigate({
-    //   to: 'subscribe',
-    //   data: {subscriptionId, clientSecret, price, items}
-    // });
-
-    // setSubscriptionData({subscriptionId, clientSecret});
-  };
-
-  const options = {
-    clientSecret: clientSecret,
-    theme: 'stripe'
-  };
+  useEffect(() => {}, []);
 
   // if (!clientSecret || !subscriptionId) {
   //   return;
@@ -101,15 +61,15 @@ const AddCard = (props) => {
       </form> */}
       {/* <form id="payment-form" onSubmit={handleSubmit} style={{width: '70%'}}> */}
       {/* <PaymentElement id="payment-element" /> */}
-      {clientSecret && (
-        <Elements options={options} stripe={stripePromise}>
-          <AddCardForm
-            clientSecret={clientSecret}
-            user={user}
-            subscriptionId={subscriptionId}
-          />
+      {
+        <Elements stripe={stripePromise}>
+          <ElementsConsumer>
+            {({stripe, elements}) => (
+              <AddCardForm stripe={stripe} elements={elements} user={user} />
+            )}
+          </ElementsConsumer>
         </Elements>
-      )}
+      }
       {/* <hr /> */}
       {/* <Button
           id="submit"
