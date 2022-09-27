@@ -1,30 +1,25 @@
 /* eslint-disable no-unused-vars */
 
-import React, {useState, useEffect, useContext} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {Button} from '@components';
-import CheckIcon from '@mui/icons-material/Check';
-import Collapse from 'react-bootstrap/Collapse';
-// @ts-ignore
+import React, {useState, useContext, useEffect} from 'react';
+import {loadStripe} from '@stripe/stripe-js';
+import {Elements} from '@stripe/react-stripe-js';
 import AppContext from '@app/contexts/AppContext';
+import AddCardForm from './AddCardForm';
 import * as Config from '@app/utils/config';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const AddCard = (props) => {
   const AppCtx = useContext(AppContext);
   const {user} = props;
 
-  const [price] = useState(AppCtx.Navigate.data.price);
-  const [subscription] = useState(AppCtx.Navigate.data.subscription);
-  const [defaultPaymentMethod] = useState(
-    AppCtx.Navigate.data.defaultPaymentMethod
-  );
-  const [currentPriceId, setCurrentPriceId] = useState('');
-  const [invoicePreview, setInvoicePreview] = useState({});
-  const [interval, setInterval] = useState('');
-  const [showDetails, setShowDetails] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  console.log('AppCtx.price', AppCtx.Navigate.data.price);
+  console.log('AppCtx.data', AppCtx.Navigate.data);
+  console.log('props', props);
 
+  // Get the lookup key for the price from the previous page redirect.
   const [clientSecret, setClientSecret] = useState('');
+  const [price] = useState(AppCtx.Navigate.data.price);
   const [subscriptionId, setSubscriptionId] = useState('');
 
   const NombreEntidad = 'Subscripciones';
@@ -33,66 +28,12 @@ const AddCard = (props) => {
     Config.gatDomainName().concat('/'.concat(NombreEntidadMin).concat('/'))
   );
 
-  // const navigate = useNavigate();
-
   useEffect(() => {
     if (price) {
       console.log({clientSecret, price});
       createSubscription();
     }
-
-    let inter = '';
-
-    if (price?.recurring?.interval === 'month') {
-      if (price?.recurring?.interval_count === 1) {
-        inter = 'mes';
-      } else {
-        inter = 'meses';
-      }
-    } else if (price?.recurring?.interval === 'year') {
-      if (price?.recurring?.interval_count === 1) {
-        inter = 'año';
-      } else {
-        inter = 'años';
-      }
-    }
-
-    setInterval(inter);
-    getInvoicePreview();
   }, []);
-
-  useEffect(() => {
-    console.log({invoicePreview});
-    console.log({defaultPaymentMethod});
-  }, [invoicePreview]);
-
-  const getInvoicePreview = async () => {
-    const {invoice} = await fetch(UrlBase.concat('invoice-preview'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        subscriptionId: subscription.id,
-        priceId: price.id,
-        customerId: user.profile.usuario_stripe
-      })
-    }).then((r) => r.json());
-
-    console.log({invoice});
-
-    setInvoicePreview(invoice);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    updateSubscription({
-      priceId: price.id,
-      subscriptionId,
-      customerId: user.profile.usuario_stripe
-    });
-  };
 
   const createSubscription = async () => {
     const {subscriptionId, clientSecret, items} = await fetch(
@@ -109,233 +50,106 @@ const AddCard = (props) => {
       }
     ).then((r) => r.json());
 
-    setSubscriptionId(subscriptionId);
     setClientSecret(clientSecret);
+
+    // AppCtx.setNavigate({
+    //   to: 'subscribe',
+    //   data: {subscriptionId, clientSecret, price, items}
+    // });
+
+    // setSubscriptionData({subscriptionId, clientSecret});
   };
 
-  const updateSubscription = (ctx) => {
-    setIsLoading(true);
-
-    const fetchData = async () => {
-      const {paymentMethod} = await fetch(
-        UrlBase.concat('update-subscription'),
-        {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(ctx)
-        }
-      ).then((r) => r.json());
-
-      // getPaymentMethods();
-
-      setIsLoading(false);
-
-      AppCtx.setNavigate({
-        to: 'account',
-        data: {price}
-      });
-    };
-
-    fetchData();
+  const options = {
+    clientSecret: clientSecret,
+    theme: 'stripe'
   };
 
-  // const setNavigateTo = (price) => {
-  //   AppCtx.setNavigate({
-  //     to: 'subscribe',
-  //     data: {price}
-  //   });
-  // };
-
-  const handleShowHideDetails = (e) => {
-    e.preventDefault();
-    setShowDetails(!showDetails);
-  };
-
-  // if (subscriptionData) {
-  //   // navigate('/subscribe', subscriptionData);
-  //   AppCtx.setNavigate({to: 'subscribe', data: subscriptionData});
-  //   // return <Redirect to={{
-  //   //   pathname: '/subscribe',
-  //   //   state: subscriptionData
-  //   // }} />
+  // if (!clientSecret || !subscriptionId) {
+  //   return;
   // }
 
-  function createMarkup(texto, busqueda, reemplazo) {
-    return {__html: texto?.replaceAll(busqueda, reemplazo)};
-  }
-
   return (
-    <div>
-      <h4>
+    <>
+      <h5>
         <strong>Agrega un método de pago</strong>
-      </h4>
-      <br />
-      NUEVO PLAN:
+      </h5>
       <hr />
-      <div>
-        {price && interval && invoicePreview && (
-          <div key={price.id}>
-            <h5 className="text-left">
-              <strong>{price.product.name}</strong>
-            </h5>
-            <div
-              dangerouslySetInnerHTML={createMarkup(
-                price.product.description,
-                '- ',
-                '<br/>⦿ '
-              )}
-            />
-            <br />
-            <div className="row">
-              <div className="col-md-10">
-                <p>
-                  Lo que pagarás por{' '}
-                  <strong>{price?.recurring?.interval_count} </strong>
-                  {interval} a partir del{' '}
-                  {new Date(
-                    parseFloat(
-                      invoicePreview?.lines?.data[0]?.period?.end
-                        ?.toString()
-                        ?.concat('000')
-                    )
-                  ).toLocaleDateString('es-DO')}
-                </p>
-              </div>
-              <div className="col-md-2 text-right">
-                <strong>
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD'
-                  }).format(price.unit_amount / 100)}
-                </strong>
-              </div>
-            </div>
-            <hr />
-            <Collapse in={showDetails}>
-              <div
-                id="collapse-details"
-                className="pl-2 pr-2 mb-3 pt-3 pb-1 border rounded bg-light align-middle"
-              >
-                <div className="row">
-                  <div className="col-md-10">
-                    <p>Crédito prorrateado del plan anterior:</p>
-                  </div>
-                  <div className="col-md-2 text-right">
-                    <strong>
-                      <strong>
-                        {new Intl.NumberFormat('en-US', {
-                          style: 'currency',
-                          currency: 'USD'
-                        }).format(invoicePreview?.lines?.data[0]?.amount / 100)}
-                      </strong>
-                    </strong>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-10">
-                    <p>Cargo prorrateado del plan {price.product.name}:</p>
-                  </div>
-                  <div className="col-md-2 text-right">
-                    <strong>
-                      {new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD'
-                      }).format(
-                        invoicePreview?.lines?.data[1]?.plan?.amount / 100
-                      )}
-                    </strong>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-10">
-                    <p>
-                      <strong>Total</strong>
-                    </p>
-                  </div>
-                  <div className="col-md-2 text-right">
-                    <strong>
-                      {new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD'
-                      }).format(invoicePreview.amount_remaining / 100)}
-                    </strong>
-                  </div>
-                </div>
-              </div>
-            </Collapse>
-            <div className="row">
-              {/* Pagar con tarjeta: */}
-              <div className="col-md-10">
-                <p>Importe adeudado: hoy</p>
-              </div>
-              <div className="col-md-2 text-right">
-                <strong>
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD'
-                  }).format(invoicePreview.amount_remaining / 100)}
-                </strong>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-10">
-                <a
-                  // type="button"
-                  href="#"
-                  aria-controls="collapse-details"
-                  aria-expanded={showDetails}
-                  onClick={handleShowHideDetails}
-                >
-                  Ver detalles
-                </a>
-              </div>
-              <div className="col-md-2 text-right">
-                {defaultPaymentMethod?.card?.brand.toUpperCase()} ....{' '}
-                {defaultPaymentMethod?.card?.last4}
-              </div>
-            </div>
-            <hr />
-            <div className="form-group row">
-              <div className="col-md-12 text-center">
-                {price.id !== currentPriceId ? (
-                  <Button
-                    id="submit"
-                    onClick={handleSubmit}
-                    theme="primary"
-                    disabled={isLoading}
-                    style={{width: '200px', height: '50px'}}
-                  >
-                    <span id="button-text">
-                      {isLoading ? (
-                        <div className="spinner" id="spinner"></div>
-                      ) : (
-                        'Confirmar'
-                      )}
-                    </span>
-                  </Button>
-                ) : (
-                  // <Button
-                  //   type="button"
-                  //   theme={
-                  //     price.id === currentPriceId ? 'secondary' : 'primary'
-                  //   }
-                  //   disabled={price.id === currentPriceId}
-                  //   onClick={() => setNavigateTo(price)}
-                  // >
-                  //   Confirmar
-                  // </Button>
-                  <>
-                    <CheckIcon />
-                    &nbsp;
-                    <span>Plan actual</span>
-                  </>
-                )}
-              </div>
-            </div>
+      {/* <form onSubmit={handleSubmit}>
+        <label>
+          Nombre Completo
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+        <hr />
+        <CardElement />
+        <hr />
+        <PaymentElement />
+        <br />
+        <div className="form-group row">
+          <div className="">
+            <Button type="submit" theme="primary">
+              Subscribir
+            </Button>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+        <div>{messages}</div>
+      </form> */}
+      {/* <form id="payment-form" onSubmit={handleSubmit} style={{width: '70%'}}> */}
+      {/* <PaymentElement id="payment-element" /> */}
+      {clientSecret && (
+        <Elements options={options} stripe={stripePromise}>
+          <AddCardForm
+            clientSecret={clientSecret}
+            user={user}
+            subscriptionId={subscriptionId}
+          />
+        </Elements>
+      )}
+      {/* <hr /> */}
+      {/* <Button
+          id="submit"
+          type="submit"
+          theme="primary"
+          disabled={isLoading || !stripe || !elements}
+          style={{width: '200px', height: '50px'}}
+        >
+          <span id="button-text">
+            {isLoading ? (
+              <div className="spinner" id="spinner"></div>
+            ) : (
+              'Realizar pago'
+            )}
+          </span>
+        </Button> */}
+      {/* <button disabled={isLoading || !stripe || !elements} id="submit">
+          <span id="button-text">
+            {isLoading ? (
+              <div className="spinner" id="spinner"></div>
+            ) : (
+              'Realizar pago'
+            )}
+          </span>
+        </button> */}
+      {/* Show any error or success messages */}
+      {/* {messages && <div id="payment-message">{messages}</div>} */}
+      {/* </form> */}
+      <br />
+      <br />
+      <p>
+        Try the successful test card: <span>4242424242424242</span>.
+      </p>
+      <p>
+        Try the test card that requires SCA: <span>4000002500003155</span>.
+      </p>
+      <p>
+        Use any <i>future</i> expiry date, CVC,5 digit postal code
+      </p>
+    </>
   );
 };
 
