@@ -9,7 +9,7 @@ import Collapse from 'react-bootstrap/Collapse';
 import AppContext from '@app/contexts/AppContext';
 import * as Config from '@app/utils/config';
 
-const ConfirmPrice = (props) => {
+const AddCard = (props) => {
   const AppCtx = useContext(AppContext);
   const {user} = props;
 
@@ -167,7 +167,7 @@ const ConfirmPrice = (props) => {
   return (
     <div>
       <h4>
-        <strong>Confirma tu nuevo plan</strong>
+        <strong>Agrega un método de pago</strong>
       </h4>
       <br />
       NUEVO PLAN:
@@ -339,4 +339,4 @@ const ConfirmPrice = (props) => {
   );
 };
 
-export default ConfirmPrice;
+export default AddCard;

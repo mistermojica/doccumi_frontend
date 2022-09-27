@@ -5,6 +5,7 @@ import {Button} from '@components';
 import * as moment from 'moment';
 import 'moment-timezone';
 import AppContext from '@app/contexts/AppContext';
+import * as Config from '@app/utils/config';
 import './Subscription.css';
 
 const Cancel = () => {
@@ -16,6 +17,12 @@ const Cancel = () => {
     AppCtx.Navigate.data.subscription
   );
 
+  const NombreEntidad = 'Subscripciones';
+  const NombreEntidadMin = NombreEntidad.toLowerCase();
+  const [UrlBase] = useState(
+    Config.gatDomainName().concat('/'.concat(NombreEntidadMin).concat('/'))
+  );
+
   const handleBack = async () => {
     AppCtx.setNavigate({to: 'account', data: {}});
   };
@@ -23,7 +30,7 @@ const Cancel = () => {
   const handleCancel = async (e) => {
     e.preventDefault();
 
-    await fetch('http://localhost:8004/cancel-subscription', {
+    await fetch(UrlBase.concat('cancel-subscription'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

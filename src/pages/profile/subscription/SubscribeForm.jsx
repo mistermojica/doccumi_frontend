@@ -4,6 +4,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import AppContext from '@app/contexts/AppContext';
+import * as Config from '@app/utils/config';
 import {Button} from '@components';
 import '../subscription/Stripe.css';
 
@@ -18,6 +19,12 @@ const SubscribeForm = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [paymentIntent, setPaymentIntent] = useState();
+
+  const NombreEntidad = 'Subscripciones';
+  const NombreEntidadMin = NombreEntidad.toLowerCase();
+  const [UrlBase] = useState(
+    Config.gatDomainName().concat('/'.concat(NombreEntidadMin).concat('/'))
+  );
 
   useEffect(() => {
     if (!stripe) {
@@ -108,7 +115,7 @@ const SubscribeForm = (props) => {
     //   elements,
     //   confirmParams: {
     //     // Make sure to change this to your payment completion page
-    //     return_url: 'http://localhost:8004/doccumi-payment-response'
+    //     return_url: 'http://delete/doccumi-payment-response'
     //   }
     // });
 
@@ -184,7 +191,7 @@ const SubscribeForm = (props) => {
   //   //   elements,
   //   //   confirmParams: {
   //   //     // Make sure to change this to your payment completion page
-  //   //     return_url: 'http://localhost:8004/doccumi-payment-response'
+  //   //     return_url: 'http://delete/doccumi-payment-response'
   //   //   }
   //   // });
 
@@ -205,7 +212,7 @@ const SubscribeForm = (props) => {
   const updateSubscription = (ctx) => {
     const fetchData = async () => {
       const {paymentMethod} = await fetch(
-        'http://localhost:8004/update-subscription',
+        UrlBase.concat('update-subscription'),
         {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},

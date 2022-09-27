@@ -2,6 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {PaymentElement, useStripe, useElements} from '@stripe/react-stripe-js';
+import * as Config from '@app/utils/config';
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -9,6 +10,9 @@ export default function CheckoutForm() {
 
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const NombreEntidad = 'Subscripciones';
+  const NombreEntidadMin = NombreEntidad.toLowerCase();
 
   useEffect(() => {
     if (!stripe) {
@@ -54,11 +58,15 @@ export default function CheckoutForm() {
 
     setIsLoading(true);
 
+    const url = Config.gatDomainName().concat(
+      '/'.concat(NombreEntidadMin).concat('/doccumi-payment-response')
+    );
+
     const {error} = await stripe.confirmPayment({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: 'http://localhost:8004/doccumi-payment-response'
+        return_url: url
       }
     });
 

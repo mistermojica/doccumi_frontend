@@ -7,6 +7,7 @@ import axios from 'axios';
 // import {Redirect} from 'react-router-dom';
 // @ts-ignore
 import AppContext from '@app/contexts/AppContext';
+import * as Config from '@app/utils/config';
 import './Subscription.css';
 
 const Register = (props) => {
@@ -15,6 +16,13 @@ const Register = (props) => {
 
   const [name, setName] = useState(user.profile.nombre);
   const [email, setEmail] = useState(user.profile.email);
+
+  const NombreEntidad = 'Subscripciones';
+  const NombreEntidadMin = NombreEntidad.toLowerCase();
+  const [UrlBase] = useState(
+    Config.gatDomainName().concat('/'.concat(NombreEntidadMin).concat('/'))
+  );
+
   // const [customer, setCustomer] = useState(null);
 
   // const navigate = useNavigate();
@@ -23,7 +31,7 @@ const Register = (props) => {
     // e.preventDefault();
 
     axios
-      .post('http://localhost:8004/create-customer', {
+      .post(UrlBase.concat('create-customer'), {
         email: user.profile.email,
         name: user.profile.nombre,
         phone: user.profile.telefono
@@ -38,7 +46,7 @@ const Register = (props) => {
         console.log('handleSubmit() => err:', err);
       });
 
-    // const {customer} = await fetch('http://localhost:8004/create-customer', {
+    // const {customer} = await fetch('http://delete/create-customer', {
     // method: 'post',
     // credentials: 'include',
     // mode: 'no-cors',

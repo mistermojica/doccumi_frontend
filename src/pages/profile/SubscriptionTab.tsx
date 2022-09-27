@@ -31,6 +31,8 @@ import Account from './subscription/Account';
 // @ts-ignore
 import Cancel from './subscription/Cancel';
 // @ts-ignore
+import AddCard from './subscription/AddCard';
+// @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -120,7 +122,7 @@ const SubscriptionTab = (props: any) => {
   //       'Content-Type': 'application/json'
   //     }
   //   };
-  //   const url = 'http://localhost:8004/create-xpaymentx-intent';
+  //   const url = 'http://delete/create-xpaymentx-intent';
   //   const body = {items: [{id: 'xl-tshirt'}]};
   //   console.log({body});
   //   axios
@@ -195,6 +197,8 @@ const SubscriptionTab = (props: any) => {
         return <Account />;
       case 'cancel':
         return <Cancel />;
+      case 'addcard':
+        return <AddCard user={userClone} />;
       default:
         return <Account />;
       // return <Prices user={userClone} />;

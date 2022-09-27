@@ -8,7 +8,8 @@ import 'moment/locale/es-do';
 // import 'moment-timezone';
 import {
   MoreHoriz as MoreHorizIcon,
-  Info as InfoIcon
+  Info as InfoIcon,
+  AddOutlined as MoreIcon
 } from '@mui/icons-material';
 import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -17,6 +18,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import AppContext from '@app/contexts/AppContext';
+import * as Config from '@app/utils/config';
 import './Subscription.css';
 
 // Moment.globalLocale = 'es-do';
@@ -29,6 +31,12 @@ const Account = () => {
   const [cards, setCards] = useState([]);
   const [defaultPM, setDefaultPM] = useState({});
   const [interval, setInterval] = useState('');
+
+  const NombreEntidad = 'Subscripciones';
+  const NombreEntidadMin = NombreEntidad.toLowerCase();
+  const [UrlBase] = useState(
+    Config.gatDomainName().concat('/'.concat(NombreEntidadMin).concat('/'))
+  );
 
   const handleAddNew = () => {
     AppCtx.setNavigate({
@@ -49,11 +57,20 @@ const Account = () => {
     });
   };
 
+  const handleGoAddCard = (e) => {
+    e.preventDefault();
+
+    AppCtx.setNavigate({
+      to: 'addcard',
+      data: {}
+    });
+  };
+
   const getCustomer = () => {
     const fetchData = async () => {
-      const {customer} = await fetch(
-        'http://localhost:8004/load-customer'
-      ).then((r) => r.json());
+      const {customer} = await fetch(UrlBase.concat('load-customer')).then(
+        (r) => r.json()
+      );
 
       setCustomer(customer);
     };
@@ -63,9 +80,9 @@ const Account = () => {
 
   const getSubscriptions = () => {
     const fetchData = async () => {
-      const {subscriptions} = await fetch(
-        'http://localhost:8004/subscriptions'
-      ).then((r) => r.json());
+      const {subscriptions} = await fetch(UrlBase.concat('subscriptions')).then(
+        (r) => r.json()
+      );
 
       setSubscriptions(subscriptions.data);
 
@@ -95,9 +112,9 @@ const Account = () => {
 
   const getPaymentMethods = () => {
     const fetchData = async () => {
-      const {cards} = await fetch(
-        'http://localhost:8004/list-payment-methods'
-      ).then((r) => r.json());
+      const {cards} = await fetch(UrlBase.concat('list-payment-methods')).then(
+        (r) => r.json()
+      );
 
       setCards(cards);
     };
@@ -108,7 +125,7 @@ const Account = () => {
   const deletePaymentMethod = (pmId) => {
     const fetchData = async () => {
       const {paymentMethod} = await fetch(
-        'http://localhost:8004/delete-payment-method',
+        UrlBase.concat('delete-payment-method'),
         {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
@@ -125,7 +142,7 @@ const Account = () => {
   const setDefaultPaymentMethod = (pmId) => {
     const fetchData = async () => {
       const {customerUpdated} = await fetch(
-        'http://localhost:8004/set-default-payment-method',
+        UrlBase.concat('set-default-payment-method'),
         {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
@@ -273,6 +290,13 @@ const Account = () => {
                     );
                   })}
                 </div>
+              </div>
+              <div className="col-md-12">
+                <a href="#" onClick={handleGoAddCard}>
+                  <p style={{marginTop: 20, color: 'black'}}>
+                    <MoreIcon /> Agregar método de pago
+                  </p>
+                </a>
               </div>
             </div>
             <div className="row">

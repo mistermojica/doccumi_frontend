@@ -7,6 +7,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import axios from 'axios';
 // @ts-ignore
 import AppContext from '@app/contexts/AppContext';
+import * as Config from '@app/utils/config';
 // import {Redirect} from 'react-router-dom';
 
 const Prices = (props) => {
@@ -20,12 +21,17 @@ const Prices = (props) => {
     AppCtx?.Navigate?.data?.defaultPaymentMethod
   );
 
+  const NombreEntidad = 'Subscripciones';
+  const NombreEntidadMin = NombreEntidad.toLowerCase();
+  const [UrlBase] = useState(
+    Config.gatDomainName().concat('/'.concat(NombreEntidadMin).concat('/'))
+  );
+
   // const navigate = useNavigate();
 
   const getPrices = () => {
-    const url = 'http://localhost:8004/prices';
     axios
-      .get(url)
+      .get(UrlBase.concat('prices'))
       .then((response) => {
         const {prices, currentPriceId} = response.data;
         prices.sort((a, b) => a.unit_amount - b.unit_amount);
@@ -40,7 +46,7 @@ const Prices = (props) => {
   useEffect(() => {
     getPrices();
     // const fetchPrices = async () => {
-    //   const {prices} = await fetch('http://localhost:8004/config').then((r) =>
+    //   const {prices} = await fetch('http://delete/config').then((r) =>
     //     r.json()
     //   );
     //   setPrices(prices);
@@ -50,7 +56,7 @@ const Prices = (props) => {
 
   // const createSubscription = async (price) => {
   //   const {subscriptionId, clientSecret, items} = await fetch(
-  //     'http://localhost:8004/create-xsubscription',
+  //     'http://delete/create-xsubscription',
   //     {
   //       method: 'POST',
   //       headers: {

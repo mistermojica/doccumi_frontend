@@ -100,7 +100,7 @@ const ProfileTab = (props: any) => {
   //       'Content-Type': 'application/json'
   //     }
   //   };
-  //   const url = 'http://localhost:8004/create-xpaymentx-intent';
+  //   const url = 'http://delete/create-xpaymentx-intent';
   //   const body = {items: [{id: 'xl-tshirt'}]};
   //   console.log({body});
   //   axios

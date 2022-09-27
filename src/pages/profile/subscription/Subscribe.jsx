@@ -11,6 +11,7 @@ import {mlCL} from '@app/utils/helpers';
 // import {useStripe, useElements} from '@stripe/react-stripe-js';
 import AppContext from '@app/contexts/AppContext';
 import SubscribeForm from './SubscribeForm';
+import * as Config from '@app/utils/config';
 // import '../subscription/Stripe.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -27,6 +28,13 @@ const Subscribe = (props) => {
   const [clientSecret, setClientSecret] = useState('');
   const [price] = useState(AppCtx.Navigate.data.price);
   const [subscriptionId, setSubscriptionId] = useState('');
+
+  const NombreEntidad = 'Subscripciones';
+  const NombreEntidadMin = NombreEntidad.toLowerCase();
+  const [UrlBase] = useState(
+    Config.gatDomainName().concat('/'.concat(NombreEntidadMin).concat('/'))
+  );
+
   // const [items] = useState(AppCtx.Navigate.data.items);
   // const [name, setName] = useState(user.profile.nombre);
   // const [email, setEmail] = useState(user.profile.email);
@@ -82,7 +90,7 @@ const Subscribe = (props) => {
   //       'Content-Type': 'application/json'
   //     }
   //   };
-  //   const url = 'http://localhost:8004/create-payment-intent';
+  //   const url = 'http://delete/create-payment-intent';
   //   const body = {
   //     priceId: price.id,
   //     customerId: user.profile.usuario_stripe
@@ -102,7 +110,7 @@ const Subscribe = (props) => {
 
   const createSubscription = async () => {
     const {subscriptionId, clientSecret, items} = await fetch(
-      'http://localhost:8004/create-subscription',
+      UrlBase.concat('create-subscription'),
       {
         method: 'POST',
         headers: {
