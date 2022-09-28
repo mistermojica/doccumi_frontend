@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, useRef} from 'react';
 import {
   Elements,
   CardNumberElement,
@@ -37,47 +37,73 @@ const SubscribeForm = (props) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
 
-  useEffect(() => {
-    // if (!stripe) {
-    //   return;
-    // }
-    // if (!clientSecret) {
-    //   return;
-    // }
-    // stripe.retrievePaymentIntent(clientSecret).then(({paymentIntent}) => {
-    //   switch (paymentIntent.status) {
-    //     case 'succeeded':
-    //       setMessage('Payment succeeded!');
-    //       break;
-    //     case 'processing':
-    //       setMessage('Your payment is processing.');
-    //       break;
-    //     case 'requires_payment_method':
-    //       setMessage('Se requiere un método de pago');
-    //       break;
-    //     default:
-    //       setMessage('Something went wrong.');
-    //       break;
-    //   }
-    // });
-  }, [stripe]);
+  const refName = useRef(null);
+  const refPostal = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('inside handleSubmit');
 
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
       // Make sure to disable form submission until Stripe.js has loaded.
+      console.log('!stripe || !elements');
       return;
     }
 
     setIsLoading(true);
 
-    updateSubscription({
-      priceId: AppCtx.Navigate.data.price.id,
-      subscriptionId: subscriptionId,
+    // what we had
+    const cardNumber = elements.getElement(CardNumberElement);
+    const cardExpiry = elements.getElement(CardExpiryElement);
+    const cardCVC = elements.getElement(CardCvcElement);
+
+    console.log({cardNumber});
+    console.log({cardExpiry});
+    console.log({cardCVC});
+
+    console.log('refName:', refName.current.value);
+    console.log('refPostal:', refPostal.current.value);
+
+    /*
+      Returns:
+      result.paymentMethod: a PaymentMethod was created successfully.
+      result.error: there was an error.
+      */
+
+    // PARA CREAR NUEVO METODO DE PAGO
+    const {paymentMethod, error: paymentMethodError} =
+      await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardNumber,
+        billing_details: {
+          name: refName.current.value
+          // postal: refPostal.current.value
+        }
+      });
+
+    if (paymentMethodError) {
+      console.log({paymentMethodError});
+    }
+
+    console.log({paymentMethod});
+
+    // updateSubscription({
+    //   priceId: AppCtx.Navigate.data.price.id,
+    //   subscriptionId: subscriptionId,
+    //   customerId: user.profile.usuario_stripe
+    // });
+
+    const ctx = {
+      paymentMethodId: paymentMethod.id,
       customerId: user.profile.usuario_stripe
-    });
+    };
+
+    console.log('handleSubmit ctx:', {ctx});
+
+    const resultado = await createPaymentMethodToCustomer(ctx);
+
+    console.log({resultado});
 
     AppCtx.setNavigate({
       to: 'account',
@@ -87,16 +113,18 @@ const SubscribeForm = (props) => {
     setIsLoading(false);
   };
 
-  const updateSubscription = (ctx) => {
+  const createPaymentMethodToCustomer = (ctx) => {
     const fetchData = async () => {
       const {paymentMethod} = await fetch(
-        UrlBase.concat('update-subscription'),
+        UrlBase.concat('create-payment-method'),
         {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(ctx)
         }
       ).then((r) => r.json());
+
+      return paymentMethod;
 
       // getPaymentMethods();
     };
@@ -107,8 +135,8 @@ const SubscribeForm = (props) => {
   const handleBlur = () => {
     console.log('[blur]');
   };
-  const handleChange = (change) => {
-    console.log('[change]', change);
+  const handleChange = (e) => {
+    console.log('[change]', e);
   };
   const handleClick = () => {
     console.log('[click]');
@@ -161,15 +189,18 @@ const SubscribeForm = (props) => {
     }
   };
 
+  useEffect(() => {}, []);
+
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="name">Nombre en la tarjeta: </label>
       <br />
       <input
         id="name"
+        ref={refName}
         required
         placeholder="Maria Pérez"
-        value={name}
+        defaultValue={name}
         style={{
           height: '30px',
           padding: '5px',
@@ -195,7 +226,8 @@ const SubscribeForm = (props) => {
         <CardNumberElement
           id="cardNumber"
           onBlur={logEvent('blur')}
-          onChange={logEvent('change')}
+          onChange={handleChange}
+          // onChange={logEvent('change')}
           onFocus={logEvent('focus')}
           onReady={logEvent('ready')}
           options={ELEMENT_OPTIONS}
@@ -241,9 +273,10 @@ const SubscribeForm = (props) => {
       <br />
       <input
         id="postal"
+        ref={refPostal}
         required
         placeholder="12345"
-        value={postal}
+        defaultValue={postal}
         style={{
           height: '30px',
           padding: '5px',
