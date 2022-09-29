@@ -172,6 +172,10 @@ const MostrarVehículos = () => {
       name: 'Costo',
       selector: (row) => row.vehCosto
     },
+    {
+      name: 'Estado',
+      selector: (row) => row.vehEstado
+    },
     // {
     //   name: 'Matrícula',
     //   selector: (row) => row.vehFotoMatricula
@@ -257,7 +261,11 @@ const MostrarVehículos = () => {
       (item.vehTipoEmision &&
         item.vehTipoEmision.toLowerCase().includes(filterText.toLowerCase())) ||
       (item.vehTipoVehiculo &&
-        item.vehTipoVehiculo.toLowerCase().includes(filterText.toLowerCase()))
+        item.vehTipoVehiculo
+          .toLowerCase()
+          .includes(filterText.toLowerCase())) ||
+      (item.vehEstado &&
+        item.vehEstado.toLowerCase().includes(filterText.toLowerCase()))
   );
 
   const subHeaderComponentMemo = useMemo(() => {
