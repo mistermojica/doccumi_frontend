@@ -35,32 +35,6 @@ const AddCard = (props) => {
         <strong>Agrega un método de pago</strong>
       </h5>
       <hr />
-      {/* <form onSubmit={handleSubmit}>
-        <label>
-          Nombre Completo
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <hr />
-        <CardElement />
-        <hr />
-        <PaymentElement />
-        <br />
-        <div className="form-group row">
-          <div className="">
-            <Button type="submit" theme="primary">
-              Subscribir
-            </Button>
-          </div>
-        </div>
-        <div>{messages}</div>
-      </form> */}
-      {/* <form id="payment-form" onSubmit={handleSubmit} style={{width: '70%'}}> */}
-      {/* <PaymentElement id="payment-element" /> */}
       {
         <Elements stripe={stripePromise}>
           <ElementsConsumer>
@@ -70,45 +44,6 @@ const AddCard = (props) => {
           </ElementsConsumer>
         </Elements>
       }
-      {/* <hr /> */}
-      {/* <Button
-          id="submit"
-          type="submit"
-          theme="primary"
-          disabled={isLoading || !stripe || !elements}
-          style={{width: '200px', height: '50px'}}
-        >
-          <span id="button-text">
-            {isLoading ? (
-              <div className="spinner" id="spinner"></div>
-            ) : (
-              'Realizar pago'
-            )}
-          </span>
-        </Button> */}
-      {/* <button disabled={isLoading || !stripe || !elements} id="submit">
-          <span id="button-text">
-            {isLoading ? (
-              <div className="spinner" id="spinner"></div>
-            ) : (
-              'Realizar pago'
-            )}
-          </span>
-        </button> */}
-      {/* Show any error or success messages */}
-      {/* {messages && <div id="payment-message">{messages}</div>} */}
-      {/* </form> */}
-      <br />
-      <br />
-      <p>
-        Try the successful test card: <span>4242424242424242</span>.
-      </p>
-      <p>
-        Try the test card that requires SCA: <span>4000002500003155</span>.
-      </p>
-      <p>
-        Use any <i>future</i> expiry date, CVC,5 digit postal code
-      </p>
     </>
   );
 };

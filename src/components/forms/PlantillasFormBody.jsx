@@ -18,10 +18,13 @@ const PlantillasFormBody = (props) => {
   const [plaTipoDocumento, setTipoDocumento] = useState('');
   const [EditorContent, setEditorContent] = useState('');
 
-  const myRefname = useRef(null);
+  const refImportarDocumento = useRef(null);
+  const refPlaNombre = useRef('');
+  const refPlaEstado = useRef('');
 
   const onChangeLocal = (target) => {
     const {name, value} = target;
+    console.log({name, value});
     onChangeCB({name, value});
   };
 
@@ -36,7 +39,7 @@ const PlantillasFormBody = (props) => {
 
   const handleImportDocument = () => {
     console.log('handleImportDocument');
-    myRefname.current.click();
+    refImportarDocumento.current.click();
   };
 
   const changeInputHandler = async (target) => {
@@ -87,6 +90,12 @@ const PlantillasFormBody = (props) => {
     if (!files.length) return;
     var file = files[0];
 
+    const plaName = file.name.replace('.docx', '').replace('.doc', '');
+
+    refPlaNombre.current.value = plaName;
+
+    onChangeLocal({name: 'plaNombre', value: plaName});
+
     console.time();
     var reader = new FileReader();
     reader.onloadend = function () {
@@ -122,6 +131,9 @@ const PlantillasFormBody = (props) => {
   useEffect(() => {
     const fields = [...document.querySelectorAll('.form-control')];
     setReadOnly(fields);
+
+    refPlaEstado.current.value = 'activo';
+    onChangeLocal({name: 'plaEstado', value: 'activo'});
   }, []);
 
   return (
@@ -142,7 +154,7 @@ const PlantillasFormBody = (props) => {
                         <input
                           type="file"
                           accept=".doc,.docx"
-                          ref={myRefname}
+                          ref={refImportarDocumento}
                           onChange={(e) => changeInputHandler(e.target)}
                           id="importardocumento"
                           style={{
@@ -197,6 +209,7 @@ const PlantillasFormBody = (props) => {
                   className="form-control"
                   id="plaNombre"
                   name="plaNombre"
+                  ref={refPlaNombre}
                   title="Nombre Plantilla"
                   defaultValue={RowData.plaNombre}
                   onChange={(e) => onChangeLocal(e.target)}
@@ -246,6 +259,7 @@ const PlantillasFormBody = (props) => {
                   className="selectpicker form-control"
                   id="plaEstado"
                   name="plaEstado"
+                  ref={refPlaEstado}
                   title="Seleccione un estado"
                   required
                   defaultValue={RowData.plaEstado}
