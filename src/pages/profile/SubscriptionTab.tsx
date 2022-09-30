@@ -200,8 +200,7 @@ const SubscriptionTab = (props: any) => {
       case 'addcard':
         return <AddCard user={userClone} />;
       default:
-        return <Account />;
-      // return <Prices user={userClone} />;
+        return <Account user={userClone} />;
       // return <Register user={userClone} />;
     }
   };

@@ -20,7 +20,9 @@ const SubscribeForm = (props) => {
   const elements = useElements();
   const {user} = props;
 
-  const [price, nFrom, nTo] = useState(AppCtx.Navigate.data);
+  const [price] = useState(AppCtx?.Navigate?.data?.price);
+  const [nFrom] = useState(AppCtx?.Navigate?.data?.nFrom);
+  const [nTo] = useState(AppCtx?.Navigate?.data?.nTo);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -80,8 +82,15 @@ const SubscribeForm = (props) => {
       const resultado = createPaymentMethodToCustomer(ctx)
         .then((result) => {
           console.log({result});
+          console.log({nFrom, nTo});
+          console.log({price});
+          let goTo = 'account';
+          if (nFrom === 'prices') {
+            goTo = nTo;
+          }
+
           AppCtx.setNavigate({
-            to: 'account',
+            to: goTo,
             data: {price: AppCtx.Navigate.data.price}
           });
         })

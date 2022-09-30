@@ -68,6 +68,7 @@ const Account = (props) => {
   };
 
   const getCustomer = () => {
+    console.log({user});
     const fetchData = async () => {
       const {customer} = await fetch(UrlBase.concat('load-customer'), {
         method: 'POST',

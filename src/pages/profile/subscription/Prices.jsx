@@ -80,17 +80,18 @@ const Prices = (props) => {
   // };
 
   const setNavigateTo = (goTo, price) => {
+    let dataNav = {};
+
     if (goTo === 'confirm') {
-      AppCtx.setNavigate({
-        to: goTo,
-        data: {price, subscription, defaultPaymentMethod}
-      });
+      dataNav = {price, subscription, defaultPaymentMethod};
     } else {
-      AppCtx.setNavigate({
-        to: goTo,
-        data: {nFrom: 'prices', nTo: 'account'}
-      });
+      dataNav = {price, nFrom: 'prices', nTo: 'confirm'};
     }
+
+    AppCtx.setNavigate({
+      to: goTo,
+      data: dataNav
+    });
   };
 
   // if (subscriptionData) {
