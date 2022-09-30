@@ -22,10 +22,12 @@ import {setWindowClass} from '@app/utils/helpers';
 import {Form, InputGroup} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-import * as AuthService from '../../services/auth';
+import * as Config from '@app/utils/config';
+import * as AuthService from '@app/services/auth';
 
 const Register = () => {
   const [isAuthLoading, setAuthLoading] = useState(false);
+  const [UrlBase] = useState(Config.gatDomainName().concat('/subscripciones/'));
   // const [isGoogleAuthLoading, setGoogleAuthLoading] = useState(false);
   // const [isFacebookAuthLoading, setFacebookAuthLoading] = useState(false);
   const [t] = useTranslation();
@@ -66,7 +68,7 @@ const Register = () => {
   const stripeCreateCustomer = (ctx: any) => {
     const promise = new Promise(function (resolve, reject) {
       axios
-        .post('http://localhost:8004/create-customer', {
+        .post(UrlBase.concat('create-customer'), {
           email: ctx.email,
           name: ctx.name,
           phone: ctx.phone

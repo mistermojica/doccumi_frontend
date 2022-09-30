@@ -23,8 +23,9 @@ import './Subscription.css';
 
 // Moment.globalLocale = 'es-do';
 
-const Account = () => {
+const Account = (props) => {
   const AppCtx = useContext(AppContext);
+  const {user} = props;
 
   const [customer, setCustomer] = useState({});
   const [subscriptions, setSubscriptions] = useState([]);
@@ -42,7 +43,7 @@ const Account = () => {
     AppCtx.setNavigate({
       to: 'prices',
       data: {
-        subscription: ['active'].includes(subscriptions[0].status)
+        subscription: ['active'].includes(subscriptions[0]?.status)
           ? subscriptions[0]
           : null,
         defaultPaymentMethod: defaultPM
@@ -68,9 +69,11 @@ const Account = () => {
 
   const getCustomer = () => {
     const fetchData = async () => {
-      const {customer} = await fetch(UrlBase.concat('load-customer')).then(
-        (r) => r.json()
-      );
+      const {customer} = await fetch(UrlBase.concat('load-customer'), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({customerId: user.profile.usuario_stripe})
+      }).then((r) => r.json());
 
       setCustomer(customer);
     };
@@ -80,9 +83,11 @@ const Account = () => {
 
   const getSubscriptions = () => {
     const fetchData = async () => {
-      const {subscriptions} = await fetch(UrlBase.concat('subscriptions')).then(
-        (r) => r.json()
-      );
+      const {subscriptions} = await fetch(UrlBase.concat('subscriptions'), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({customerId: user.profile.usuario_stripe})
+      }).then((r) => r.json());
 
       setSubscriptions(subscriptions.data);
 
@@ -112,9 +117,11 @@ const Account = () => {
 
   const getPaymentMethods = () => {
     const fetchData = async () => {
-      const {cards} = await fetch(UrlBase.concat('list-payment-methods')).then(
-        (r) => r.json()
-      );
+      const {cards} = await fetch(UrlBase.concat('list-payment-methods'), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({customerId: user.profile.usuario_stripe})
+      }).then((r) => r.json());
 
       setCards(cards);
     };

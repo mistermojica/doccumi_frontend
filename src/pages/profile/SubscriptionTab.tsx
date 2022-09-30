@@ -194,7 +194,7 @@ const SubscriptionTab = (props: any) => {
       case 'subscribe':
         return <Subscribe user={userClone} />;
       case 'account':
-        return <Account />;
+        return <Account user={userClone} />;
       case 'cancel':
         return <Cancel />;
       case 'addcard':
