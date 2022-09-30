@@ -58,7 +58,9 @@ const ConfirmPrice = (props) => {
     }
 
     setInterval(inter);
-    getInvoicePreview();
+    if (subscription && price) {
+      getInvoicePreview();
+    }
   }, []);
 
   useEffect(() => {
@@ -78,8 +80,6 @@ const ConfirmPrice = (props) => {
         customerId: user.profile.usuario_stripe
       })
     }).then((r) => r.json());
-
-    console.log({invoice});
 
     setInvoicePreview(invoice);
   };
@@ -192,13 +192,15 @@ const ConfirmPrice = (props) => {
                   Lo que pagarás por{' '}
                   <strong>{price?.recurring?.interval_count} </strong>
                   {interval} a partir del{' '}
-                  {new Date(
-                    parseFloat(
-                      invoicePreview?.lines?.data[0]?.period?.end
-                        ?.toString()
-                        ?.concat('000')
-                    )
-                  ).toLocaleDateString('es-DO')}
+                  {invoicePreview?.lines !== undefined
+                    ? new Date(
+                        parseFloat(
+                          invoicePreview?.lines?.data[0]?.period?.end
+                            ?.toString()
+                            ?.concat('000')
+                        )
+                      ).toLocaleDateString('es-DO')
+                    : new Date().toLocaleDateString('es-DO')}
                 </p>
               </div>
               <div className="col-md-2 text-right">
@@ -211,90 +213,109 @@ const ConfirmPrice = (props) => {
               </div>
             </div>
             <hr />
-            <Collapse in={showDetails}>
-              <div
-                id="collapse-details"
-                className="pl-2 pr-2 mb-3 pt-3 pb-1 border rounded bg-light align-middle"
-              >
+            {invoicePreview?.lines !== undefined ? (
+              <>
+                <Collapse in={showDetails}>
+                  <div
+                    id="collapse-details"
+                    className="pl-2 pr-2 mb-3 pt-3 pb-1 border rounded bg-light align-middle"
+                  >
+                    <div className="row">
+                      <div className="col-md-10">
+                        <p>Crédito prorrateado del plan anterior:</p>
+                      </div>
+                      <div className="col-md-2 text-right">
+                        <strong>
+                          <strong>
+                            {invoicePreview?.lines !== undefined
+                              ? new Intl.NumberFormat('en-US', {
+                                  style: 'currency',
+                                  currency: 'USD'
+                                }).format(
+                                  invoicePreview?.lines?.data[0]?.amount / 100
+                                )
+                              : '$0.00'}
+                          </strong>
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-10">
+                        <p>Cargo prorrateado del plan {price.product.name}:</p>
+                      </div>
+                      <div className="col-md-2 text-right">
+                        <strong>
+                          {invoicePreview?.lines !== undefined
+                            ? new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'USD'
+                              }).format(
+                                invoicePreview?.lines?.data[1]?.plan?.amount /
+                                  100
+                              )
+                            : '$0.00'}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-10">
+                        <p>
+                          <strong>Total</strong>
+                        </p>
+                      </div>
+                      <div className="col-md-2 text-right">
+                        <strong>
+                          {invoicePreview?.lines !== undefined
+                            ? new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'USD'
+                              }).format(invoicePreview.amount_remaining / 100)
+                            : '$0.00'}
+                        </strong>
+                      </div>
+                    </div>
+                  </div>
+                </Collapse>
+
                 <div className="row">
+                  {/* Pagar con tarjeta: */}
                   <div className="col-md-10">
-                    <p>Crédito prorrateado del plan anterior:</p>
+                    <p>Importe adeudado:{invoicePreview.amount_remaining}hoy</p>
                   </div>
                   <div className="col-md-2 text-right">
                     <strong>
-                      <strong>
-                        {new Intl.NumberFormat('en-US', {
-                          style: 'currency',
-                          currency: 'USD'
-                        }).format(invoicePreview?.lines?.data[0]?.amount / 100)}
-                      </strong>
+                      {invoicePreview?.lines !== undefined
+                        ? new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD'
+                          }).format(invoicePreview.amount_remaining / 100)
+                        : new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD'
+                          }).format(price.unit_amount / 100)}
                     </strong>
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-md-10">
-                    <p>Cargo prorrateado del plan {price.product.name}:</p>
+                    <a
+                      // type="button"
+                      href="#"
+                      aria-controls="collapse-details"
+                      aria-expanded={showDetails}
+                      onClick={handleShowHideDetails}
+                    >
+                      Ver detalles
+                    </a>
                   </div>
                   <div className="col-md-2 text-right">
-                    <strong>
-                      {new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD'
-                      }).format(
-                        invoicePreview?.lines?.data[1]?.plan?.amount / 100
-                      )}
-                    </strong>
+                    {defaultPaymentMethod?.card?.brand.toUpperCase()} ....{' '}
+                    {defaultPaymentMethod?.card?.last4}
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-10">
-                    <p>
-                      <strong>Total</strong>
-                    </p>
-                  </div>
-                  <div className="col-md-2 text-right">
-                    <strong>
-                      {new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD'
-                      }).format(invoicePreview.amount_remaining / 100)}
-                    </strong>
-                  </div>
-                </div>
-              </div>
-            </Collapse>
-            <div className="row">
-              {/* Pagar con tarjeta: */}
-              <div className="col-md-10">
-                <p>Importe adeudado:{invoicePreview.amount_remaining}hoy</p>
-              </div>
-              <div className="col-md-2 text-right">
-                <strong>
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD'
-                  }).format(invoicePreview.amount_remaining / 100)}
-                </strong>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-10">
-                <a
-                  // type="button"
-                  href="#"
-                  aria-controls="collapse-details"
-                  aria-expanded={showDetails}
-                  onClick={handleShowHideDetails}
-                >
-                  Ver detalles
-                </a>
-              </div>
-              <div className="col-md-2 text-right">
-                {defaultPaymentMethod?.card?.brand.toUpperCase()} ....{' '}
-                {defaultPaymentMethod?.card?.last4}
-              </div>
-            </div>
-            <hr />
+                <hr />
+              </>
+            ) : null}
             <div className="form-group row">
               <div className="col-md-12 text-center">
                 {price.id !== currentPriceId ? (

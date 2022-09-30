@@ -67,6 +67,12 @@ const SubscribeForm = (props) => {
       }
     });
 
+    let goTo = 'account';
+    if (nFrom === 'prices') {
+      refMakeDefault.current.checked = true;
+      goTo = 'confirm';
+    }
+
     if (pmError) {
       setPaymentMethodError(pmError);
       console.log({pmError});
@@ -81,14 +87,6 @@ const SubscribeForm = (props) => {
 
       const resultado = createPaymentMethodToCustomer(ctx)
         .then((result) => {
-          console.log({result});
-          console.log({nFrom, nTo});
-          console.log({price});
-          let goTo = 'account';
-          if (nFrom === 'prices') {
-            goTo = nTo;
-          }
-
           AppCtx.setNavigate({
             to: goTo,
             data: {price: AppCtx.Navigate.data.price}
