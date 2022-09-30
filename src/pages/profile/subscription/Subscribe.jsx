@@ -20,10 +20,6 @@ const Subscribe = (props) => {
   const AppCtx = useContext(AppContext);
   const {user} = props;
 
-  console.log('AppCtx.price', AppCtx.Navigate.data.price);
-  console.log('AppCtx.data', AppCtx.Navigate.data);
-  console.log('props', props);
-
   // Get the lookup key for the price from the previous page redirect.
   const [clientSecret, setClientSecret] = useState('');
   const [price] = useState(AppCtx.Navigate.data.price);

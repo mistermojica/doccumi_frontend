@@ -266,7 +266,7 @@ const ConfirmPrice = (props) => {
             <div className="row">
               {/* Pagar con tarjeta: */}
               <div className="col-md-10">
-                <p>Importe adeudado: hoy</p>
+                <p>Importe adeudado:{invoicePreview.amount_remaining}hoy</p>
               </div>
               <div className="col-md-2 text-right">
                 <strong>

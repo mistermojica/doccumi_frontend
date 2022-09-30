@@ -20,6 +20,8 @@ const SubscribeForm = (props) => {
   const elements = useElements();
   const {user} = props;
 
+  const [price, nFrom, nTo] = useState(AppCtx.Navigate.data);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const NombreEntidad = 'Subscripciones';
@@ -137,15 +139,19 @@ const SubscribeForm = (props) => {
   };
 
   useEffect(() => {
+    // console.log(JSON.stringify({nFrom, nTo}));
+
     if (
       paymentMethodError &&
       online_payment_error_codes[paymentMethodError?.code] !== undefined
     ) {
       setErrorMessage(online_payment_error_codes[paymentMethodError?.code]);
     } else {
-      setErrorMessage(
-        'Ha ocurrido un error inesperado al registrar este método de pago. Por favor revise los datos y vuelva a intentarlo.'
-      );
+      if (paymentMethodError) {
+        setErrorMessage(
+          'Ha ocurrido un error inesperado al registrar este método de pago. Por favor revise los datos y vuelva a intentarlo.'
+        );
+      }
     }
   }, [paymentMethodError]);
 

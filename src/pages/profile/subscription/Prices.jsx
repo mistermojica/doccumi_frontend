@@ -31,7 +31,9 @@ const Prices = (props) => {
 
   const getPrices = () => {
     axios
-      .get(UrlBase.concat('prices'))
+      .post(UrlBase.concat('prices'), {
+        customerId: user.profile.usuario_stripe
+      })
       .then((response) => {
         const {prices, currentPriceId} = response.data;
         prices.sort((a, b) => a.unit_amount - b.unit_amount);
@@ -77,11 +79,18 @@ const Prices = (props) => {
   //   // setSubscriptionData({subscriptionId, clientSecret});
   // };
 
-  const setNavigateTo = (price) => {
-    AppCtx.setNavigate({
-      to: 'confirm',
-      data: {price, subscription, defaultPaymentMethod}
-    });
+  const setNavigateTo = (goTo, price) => {
+    if (goTo === 'confirm') {
+      AppCtx.setNavigate({
+        to: goTo,
+        data: {price, subscription, defaultPaymentMethod}
+      });
+    } else {
+      AppCtx.setNavigate({
+        to: goTo,
+        data: {nFrom: 'prices', nTo: 'account'}
+      });
+    }
   };
 
   // if (subscriptionData) {
@@ -135,7 +144,12 @@ const Prices = (props) => {
                         price.id === currentPriceId ? 'secondary' : 'primary'
                       }
                       disabled={price.id === currentPriceId}
-                      onClick={() => setNavigateTo(price)}
+                      onClick={() =>
+                        setNavigateTo(
+                          currentPriceId ? 'confirm' : 'addcard',
+                          price
+                        )
+                      }
                     >
                       Seleccionar
                     </Button>
