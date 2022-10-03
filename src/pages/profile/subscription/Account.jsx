@@ -90,6 +90,8 @@ const Account = (props) => {
         body: JSON.stringify({customerId: user.profile.usuario_stripe})
       }).then((r) => r.json());
 
+      subscriptions.data.sort(compareStatus);
+
       setSubscriptions(subscriptions.data);
 
       let inter = '';
@@ -171,6 +173,16 @@ const Account = (props) => {
     };
 
     fetchData();
+  };
+
+  const compareStatus = (a, b) => {
+    if (a.status < b.status) {
+      return -1;
+    }
+    if (a.status > b.status) {
+      return 1;
+    }
+    return 0;
   };
 
   useEffect(() => {
