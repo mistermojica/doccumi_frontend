@@ -138,32 +138,30 @@ const Prices = (props) => {
               <br />
               <div className="form-group row">
                 <div className="col-md-12 text-center">
-                  {price.id !== currentPrice.id ? (
+                  {price.id !== currentPrice?.id ? (
                     <Button
                       type="button"
-                      theme={
-                        price.id === currentPrice.id ? 'secondary' : 'primary'
-                      }
-                      disabled={price.id === currentPrice.id}
+                      theme="primary"
+                      // disabled={price.id === currentPrice?.id}
                       onClick={() =>
                         setNavigateTo(
-                          currentPrice.id ? 'confirm' : 'addcard',
+                          currentPrice?.id ? 'confirm' : 'addcard',
                           price
                         )
                       }
                     >
                       Seleccionar
                     </Button>
-                  ) : currentPrice.active === true ? (
+                  ) : currentPrice?.active === true ? (
                     <Button
                       type="button"
                       theme={
-                        price.id === currentPrice.id ? 'secondary' : 'primary'
+                        price.id === currentPrice?.id ? 'secondary' : 'primary'
                       }
-                      disabled={price.id === currentPrice.id}
+                      disabled={price.id === currentPrice?.id}
                       onClick={() =>
                         setNavigateTo(
-                          currentPrice.id ? 'confirm' : 'addcard',
+                          currentPrice?.id ? 'confirm' : 'addcard',
                           price
                         )
                       }

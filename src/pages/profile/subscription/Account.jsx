@@ -84,11 +84,17 @@ const Account = (props) => {
 
   const getSubscriptions = () => {
     const fetchData = async () => {
-      const {subscriptions} = await fetch(UrlBase.concat('subscriptions'), {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({customerId: user.profile.usuario_stripe})
-      }).then((r) => r.json());
+      const {subscriptions} = await fetch(
+        UrlBase.concat('subscriptions-by-status'),
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            customerId: user.profile.usuario_stripe,
+            statusCode: 'active'
+          })
+        }
+      ).then((r) => r.json());
 
       subscriptions.data.sort(compareStatus);
 

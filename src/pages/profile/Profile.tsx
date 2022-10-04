@@ -30,17 +30,22 @@ const Profile = () => {
     if (activeTab !== tab) setActiveTab(tab);
   };
 
+  const e2o = (data: any) => {
+    var result = JSON.parse(JSON.stringify(data));
+    return result;
+  };
+
   const onChange = (img: any) => {
-    const uc = {...user};
-    // console.log({img});
+    const uc = e2o(userClone);
     if (img.id === 'addImageFoto') {
-      uc.foto = img.url;
+      uc.profile.foto = img.url;
       setFoto(img.url);
     }
     if (img.id === 'addImageLogo') {
-      uc.logo = img.url;
+      uc.profile.logo = img.url;
       setLogo(img.url);
     }
+    console.log({uc});
     setUserClone(uc);
   };
 
@@ -63,7 +68,7 @@ const Profile = () => {
                     <UploadImage
                       id="addImageLogo"
                       key="imgLogo"
-                      foto={user.profile.logo}
+                      imagen={user.profile.logo}
                       onChange={onChange}
                     />
                   </div>
@@ -100,7 +105,7 @@ const Profile = () => {
                     <UploadImage
                       id="addImageFoto"
                       key="imgFoto"
-                      foto={user.profile.foto}
+                      imagen={user.profile.foto}
                       onChange={onChange}
                     />
                   </div>
@@ -239,6 +244,8 @@ const Profile = () => {
                     <ProfileTab
                       user={userClone}
                       isActive={activeTab === 'PROFILE'}
+                      foto={foto}
+                      logo={logo}
                     />
                     <SubscriptionTab
                       user={userClone}
@@ -247,8 +254,6 @@ const Profile = () => {
                     <SettingsTab
                       user={userClone}
                       isActive={activeTab === 'SETTINGS'}
-                      foto={foto}
-                      logo={logo}
                     />
                   </div>
                 </div>
