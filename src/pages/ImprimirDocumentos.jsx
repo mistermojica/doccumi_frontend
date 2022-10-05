@@ -94,10 +94,6 @@ const ImprimirDocumentos = () => {
 
   const handlePrintDocuments = (e) => {
     e.preventDefault();
-    mlCL('impVehiculo:', impVehiculo);
-    mlCL('impCliente:', impCliente);
-    mlCL('impTiposDocumentos:', impTiposDocumentos);
-    mlCL('impTipos:', Array.from(impTipos.keys()));
 
     if (
       impVehiculo === 0 ||
@@ -439,7 +435,7 @@ const ImprimirDocumentos = () => {
                     <div className="row">
                       <div className="col-sm-2 d-flex align-items-center">
                         <label htmlFor="impVehiculo">
-                          <strong>Vehículo:</strong>
+                          <strong>Inventario:</strong>
                         </label>
                       </div>
                       <div className="col-sm-10">

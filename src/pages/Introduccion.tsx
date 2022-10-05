@@ -29,10 +29,10 @@ import AppContext from '@app/contexts/AppContext';
 
 const steps = [
   {
-    label: 'REGISTRA UN VEHÍCULO',
-    description: `El primer paso que debes realizar es la creación de un vehículo. 
-      Para esto debes seleccionar la opción "Agregar Vehículo +" del menú 
-      "Gestión de Vehículos" que se encuentra a la izquierda.`,
+    label: 'REGISTRA UN INVENTARIO',
+    description: `El primer paso que debes realizar es la creación de un inventario. 
+      Para esto debes seleccionar la opción "Agregar Inventario +" del menú 
+      "Gestión de Inventario" que se encuentra a la izquierda.`,
     image: './img/paso1.png',
     number: LooksOneRoundedIcon,
     link: '/agregar-vehiculo'

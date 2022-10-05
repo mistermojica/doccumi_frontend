@@ -481,7 +481,7 @@ const AsignarPlantillas = () => {
                     <div className="row">
                       <div className="col-sm-6">
                         <label htmlFor="vehiculo">
-                          <strong>Vehículo</strong>
+                          <strong>Inventario</strong>
                         </label>
                         <AsyncSelect
                           id="vehiculo"

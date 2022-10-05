@@ -257,7 +257,7 @@ const AgregarVehiculo = () => {
 
   return (
     <div>
-      <ContentHeader title="Agregar Vehículo" />
+      <ContentHeader title="Agregar Inventario" />
       <section className="content">
         <div className="container-fluid">
           <div className="card">

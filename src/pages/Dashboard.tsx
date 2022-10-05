@@ -224,7 +224,7 @@ const Dashboard = () => {
                 icon="ion-android-car"
                 count={item.cantidad}
                 amount={item.monto}
-                title={item.descripcion_larga}
+                title={item?.descripcion_larga}
                 navigateTo="/"
               />
             </div>
@@ -257,7 +257,7 @@ const Dashboard = () => {
         </div>
         <div className="col-lg-6 col-12">
           <Card className="text-center">
-            <Card.Header as="h4">Inventario de Vehículos</Card.Header>
+            <Card.Header as="h4">Inventario</Card.Header>
             <Card.Body className="p-5">
               {/* <Card.Title>Special title treatment</Card.Title> */}
               {DataChartsLocalI.hasData ? (

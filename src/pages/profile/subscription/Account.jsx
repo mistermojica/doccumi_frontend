@@ -107,7 +107,7 @@ const Account = (props) => {
         }
       ).then((r) => r.json());
 
-      subscriptions.data.sort(compareStatus);
+      // subscriptions.data.sort(compareStatus);
 
       // subscriptions.data.map((s) => {
       //   console.log(s.id, s.status);
@@ -198,16 +198,6 @@ const Account = (props) => {
     };
 
     fetchData();
-  };
-
-  const compareStatus = (a, b) => {
-    if (a.status < b.status) {
-      return -1;
-    }
-    if (a.status > b.status) {
-      return 1;
-    }
-    return 0;
   };
 
   useEffect(() => {

@@ -32,7 +32,7 @@
   "main": {
     "label": {
       "moreInfo": "More info",
-      "verVehiculos": "Ver Vehículos",
+      "verVehiculos": "Ver Inventario",
       "follow": "Follow",
       "aboutMe": "About Me",
       "education": "Education",
@@ -81,20 +81,20 @@
       "dashboard": "Dashboard",
       "profile": "Profile",
       "blank": "Blank",
-      "mainMenu": "Gestión Vehículos",
+      "mainMenu": "Gestión Inventario",
       "vehiculos": {
-        "gestionVehiculos": "Gestión Vehículos",
-        "agregarVehiculo": "Agregar Vehículo +",
-        "mostrarVehiculos": "Mostrar Vehículos",
-        "gestionarVehiculos": "Gestionar Vehículos",
+        "gestionVehiculos": "Gestión Inventario",
+        "agregarVehiculo": "Agregar Inventario +",
+        "mostrarVehiculos": "Mostrar Inventario",
+        "gestionarVehiculos": "Gestionar Inventario",
         "configuracion": "Configuración",
         "mostrarGaleria": "Mostrar Galería",
         "enVenta": "En Venta",
         "pendientes": "Pendientes",
         "vendidos": "Vendidos",
         "enTaller": "En Taller",
-        "inventarioVehiculos": "Inventario de Vehículos",
-        "pieChart": "Inventario de Vehículos"
+        "inventarioVehiculos": "Inventario",
+        "pieChart": "Inventario"
       },
       "clientes": {
         "gestionClientes": "Gestión Clientes",

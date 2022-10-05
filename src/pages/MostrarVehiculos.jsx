@@ -153,7 +153,7 @@ const MostrarVehículos = () => {
       selector: (row) => row.vehTipoEmision
     },
     {
-      name: 'Tipo Vehículo',
+      name: 'Tipo Inventario',
       selector: (row) => row.vehTipoVehiculo
     },
     {
@@ -498,7 +498,7 @@ const MostrarVehículos = () => {
 
   return (
     <div>
-      <ContentHeader title="Mostrar Vehículos" />
+      <ContentHeader title="Mostrar Inventario" />
       <section className="content">
         <div className="container-fluid">
           <div className="card">
@@ -511,7 +511,7 @@ const MostrarVehículos = () => {
                   }}
                 >
                   <i className="fa fa-plu">&nbsp;</i>
-                  Agregar Nuevo Vehículo
+                  Agregar Nuevo Inventario
                 </Button>
               </div>
             </div>
@@ -547,7 +547,7 @@ const MostrarVehículos = () => {
                 size="lg"
               >
                 <Modal.Header closeButton>
-                  <Modal.Title>Ver Datos Vehículo</Modal.Title>
+                  <Modal.Title>Ver Datos Inventario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   {ExtraFieldsConfig && ExtraFieldsConfig.size > 0 && (
@@ -572,7 +572,7 @@ const MostrarVehículos = () => {
                             className="btn btn-danger"
                             onClick={handleDelete}
                           >
-                            Borrar Vehículo
+                            Borrar Inventario
                           </Button>
                         )}
                       </div>
@@ -597,7 +597,7 @@ const MostrarVehículos = () => {
                 size="lg"
               >
                 <Modal.Header closeButton>
-                  <Modal.Title>Editar Vehículo</Modal.Title>
+                  <Modal.Title>Editar Inventario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   {ExtraFieldsConfig && ExtraFieldsConfig.size > 0 && (

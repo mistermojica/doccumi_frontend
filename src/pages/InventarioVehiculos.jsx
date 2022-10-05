@@ -472,7 +472,7 @@ const InventarioVehiculos = () => {
 
   return (
     <div>
-      <ContentHeader title="Inventario de Vehículos" />
+      <ContentHeader title="Inventario" />
       <section className="content">
         <div className="container-fluid">
           <div className="card">

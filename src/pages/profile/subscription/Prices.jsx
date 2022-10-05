@@ -135,8 +135,21 @@ const Prices = (props) => {
               <div>
                 <center>
                   <strong>
-                    ${price.unit_amount / 100} / {price.product.name}
+                    ${price?.unit_amount / 100} / {price?.product?.name}
                   </strong>
+                  <br />
+                  {/* <small>{JSON.stringify(price)}</small> */}
+                  <small>
+                    $
+                    {(
+                      price?.unit_amount /
+                      100 /
+                      (price?.recurring?.interval === 'month'
+                        ? price?.recurring?.interval_count
+                        : 12)
+                    ).toFixed(0)}{' '}
+                    por mes.
+                  </small>
                 </center>
               </div>
               <br />
@@ -157,6 +170,12 @@ const Prices = (props) => {
                       Seleccionar
                     </Button>
                   ) : currentPrice?.active === true ? (
+                    <>
+                      <CheckIcon />
+                      &nbsp;
+                      <span>Plan actual</span>
+                    </>
+                  ) : (
                     <Button
                       type="button"
                       theme={
@@ -172,12 +191,6 @@ const Prices = (props) => {
                     >
                       Seleccionar
                     </Button>
-                  ) : (
-                    <>
-                      <CheckIcon />
-                      &nbsp;
-                      <span>Plan actual</span>
-                    </>
                   )}
                 </div>
               </div>
