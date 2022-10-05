@@ -94,6 +94,10 @@ const Prices = (props) => {
     });
   };
 
+  const handleBack = async () => {
+    AppCtx.setNavigate({to: 'account', data: {}});
+  };
+
   // if (subscriptionData) {
   //   // navigate('/subscribe', subscriptionData);
   //   AppCtx.setNavigate({to: 'subscribe', data: subscriptionData});
@@ -167,6 +171,23 @@ const Prices = (props) => {
           );
         })}
       </div>
+      <br />
+      <div className="container">
+        <div className="row">
+          <div className="col text-center">
+            <Button
+              type="button"
+              theme="secondary"
+              className="auto"
+              onClick={handleBack}
+              style={{width: '200px', height: '50px'}}
+            >
+              Volver
+            </Button>
+          </div>
+        </div>
+      </div>
+      <br />
     </div>
   );
 };

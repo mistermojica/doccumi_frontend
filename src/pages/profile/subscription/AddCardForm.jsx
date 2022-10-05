@@ -103,6 +103,10 @@ const SubscribeForm = (props) => {
     setIsLoading(false);
   };
 
+  const handleBack = async () => {
+    AppCtx.setNavigate({to: 'account', data: {}});
+  };
+
   const createPaymentMethodToCustomer = (ctx) => {
     const promise = new Promise((resolve, reject) => {
       const fetchData = async () => {
@@ -339,6 +343,16 @@ const SubscribeForm = (props) => {
                   'Guardar tarjeta'
                 )}
               </span>
+            </Button>
+            <br />
+            <br />
+            <Button
+              type="button"
+              theme="secondary"
+              onClick={handleBack}
+              style={{width: '200px', height: '50px'}}
+            >
+              Volver
             </Button>
           </div>
         </div>

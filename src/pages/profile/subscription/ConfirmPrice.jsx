@@ -94,6 +94,10 @@ const ConfirmPrice = (props) => {
     });
   };
 
+  const handleBack = async () => {
+    AppCtx.setNavigate({to: 'account', data: {}});
+  };
+
   const createSubscription = async () => {
     const {subscriptionId, clientSecret, items} = await fetch(
       UrlBase.concat('create-subscription'),
@@ -319,21 +323,33 @@ const ConfirmPrice = (props) => {
             <div className="form-group row">
               <div className="col-md-12 text-center">
                 {price.id !== currentPriceId ? (
-                  <Button
-                    id="submit"
-                    onClick={handleSubmit}
-                    theme="primary"
-                    disabled={isLoading}
-                    style={{width: '200px', height: '50px'}}
-                  >
-                    <span id="button-text">
-                      {isLoading ? (
-                        <div className="spinner" id="spinner"></div>
-                      ) : (
-                        'Confirmar'
-                      )}
-                    </span>
-                  </Button>
+                  <>
+                    <Button
+                      id="submit"
+                      onClick={handleSubmit}
+                      theme="primary"
+                      disabled={isLoading}
+                      style={{width: '200px', height: '50px'}}
+                    >
+                      <span id="button-text">
+                        {isLoading ? (
+                          <div className="spinner" id="spinner"></div>
+                        ) : (
+                          'Confirmar'
+                        )}
+                      </span>
+                    </Button>
+                    <br />
+                    <br />
+                    <Button
+                      type="button"
+                      theme="secondary"
+                      onClick={handleBack}
+                      style={{width: '200px', height: '50px'}}
+                    >
+                      Volver
+                    </Button>
+                  </>
                 ) : (
                   // <Button
                   //   type="button"

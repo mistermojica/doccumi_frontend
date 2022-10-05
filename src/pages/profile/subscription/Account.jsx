@@ -82,6 +82,17 @@ const Account = (props) => {
     fetchData();
   };
 
+  function compareStatus(a, b) {
+    console.log(a.status);
+    if (a.status < b.status) {
+      return -1;
+    }
+    if (a.status > b.status) {
+      return 1;
+    }
+    return 0;
+  }
+
   const getSubscriptions = () => {
     const fetchData = async () => {
       const {subscriptions} = await fetch(UrlBase.concat('subscriptions'), {
@@ -90,7 +101,15 @@ const Account = (props) => {
         body: JSON.stringify({customerId: user.profile.usuario_stripe})
       }).then((r) => r.json());
 
-      setSubscriptions(subscriptions.data);
+      // subscriptions.data.map((s) => {
+      //   console.log(s.id, s.status);
+      // });
+
+      setSubscriptions(subscriptions.data.sort(compareStatus));
+
+      // subscriptions.data.map((s) => {
+      //   console.log(s.id, s.status);
+      // });
 
       let inter = '';
 
@@ -437,7 +456,7 @@ const PaymentMethod = ({
         </div>
         <div className="col-md-2">
           {defaultPM === true ? (
-            <span className="small bg-secondary rounded pl-1 pr-1 pb-1">
+            <span className="small bg-secondary rounded pl-1 pr-1 pb-1 pt-1">
               Predeterminado
             </span>
           ) : (

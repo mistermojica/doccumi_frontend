@@ -122,7 +122,7 @@ const Cancel = () => {
                 type="button"
                 theme="danger"
                 onClick={handleCancel}
-                style={{width: '300px', height: '50px'}}
+                style={{width: '200px', height: '50px'}}
                 // onClick={() => createSubscription(price.id)}
               >
                 Cancelar plan
@@ -133,7 +133,7 @@ const Cancel = () => {
                 type="button"
                 theme="secondary"
                 onClick={handleBack}
-                style={{width: '300px', height: '50px'}}
+                style={{width: '200px', height: '50px'}}
               >
                 Volver
               </Button>
