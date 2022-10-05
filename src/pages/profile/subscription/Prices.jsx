@@ -15,7 +15,7 @@ const Prices = (props) => {
   const {user} = props;
 
   const [prices, setPrices] = useState([]);
-  const [currentPriceId, setCurrentPriceId] = useState('');
+  const [currentPrice, setCurrentPrice] = useState({});
   const [subscription] = useState(AppCtx?.Navigate?.data?.subscription);
   const [defaultPaymentMethod] = useState(
     AppCtx?.Navigate?.data?.defaultPaymentMethod
@@ -35,10 +35,10 @@ const Prices = (props) => {
         customerId: user.profile.usuario_stripe
       })
       .then((response) => {
-        const {prices, currentPriceId} = response.data;
+        const {prices, currentPrice} = response.data;
         prices.sort((a, b) => a.unit_amount - b.unit_amount);
         setPrices(prices);
-        setCurrentPriceId(currentPriceId);
+        setCurrentPrice(currentPrice);
       })
       .catch((err) => {
         console.log('err:', err);
@@ -142,16 +142,30 @@ const Prices = (props) => {
               <br />
               <div className="form-group row">
                 <div className="col-md-12 text-center">
-                  {price.id !== currentPriceId ? (
+                  {price.id !== currentPrice?.id ? (
+                    <Button
+                      type="button"
+                      theme="primary"
+                      // disabled={price.id === currentPrice?.id}
+                      onClick={() =>
+                        setNavigateTo(
+                          currentPrice?.id ? 'confirm' : 'addcard',
+                          price
+                        )
+                      }
+                    >
+                      Seleccionar
+                    </Button>
+                  ) : currentPrice?.active === true ? (
                     <Button
                       type="button"
                       theme={
-                        price.id === currentPriceId ? 'secondary' : 'primary'
+                        price.id === currentPrice?.id ? 'secondary' : 'primary'
                       }
-                      disabled={price.id === currentPriceId}
+                      disabled={price.id === currentPrice?.id}
                       onClick={() =>
                         setNavigateTo(
-                          currentPriceId ? 'confirm' : 'addcard',
+                          currentPrice?.id ? 'confirm' : 'addcard',
                           price
                         )
                       }

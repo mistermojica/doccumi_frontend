@@ -95,11 +95,19 @@ const Account = (props) => {
 
   const getSubscriptions = () => {
     const fetchData = async () => {
-      const {subscriptions} = await fetch(UrlBase.concat('subscriptions'), {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({customerId: user.profile.usuario_stripe})
-      }).then((r) => r.json());
+      const {subscriptions} = await fetch(
+        UrlBase.concat('subscriptions-by-status'),
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            customerId: user.profile.usuario_stripe,
+            statusCode: 'active'
+          })
+        }
+      ).then((r) => r.json());
+
+      subscriptions.data.sort(compareStatus);
 
       // subscriptions.data.map((s) => {
       //   console.log(s.id, s.status);
@@ -190,6 +198,16 @@ const Account = (props) => {
     };
 
     fetchData();
+  };
+
+  const compareStatus = (a, b) => {
+    if (a.status < b.status) {
+      return -1;
+    }
+    if (a.status > b.status) {
+      return 1;
+    }
+    return 0;
   };
 
   useEffect(() => {

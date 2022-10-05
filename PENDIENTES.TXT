@@ -2,13 +2,15 @@ PENDIENTES DOCCUMI
 
 ----------------------------------------------------------
 
-◦	I- Estabilizar el envio del customerId en todos los métodos pendientes del controlador subscripciones
-◦	I- Crear videos de promoción
+◦	I- Crear formulario de soporte y seguimiento a casos.
+◦	I- Crear botón e indicador de membresía con plan actual en el menú principal al lado del selector de idiomas
 ◦	I- Redactar Términos y Condiciones y Politica de Privacidad
+◦	P- Crear videos de promoción
 
 ----------------------------------------------------------
 
-    H- Corregir página de perfil
+◦	H- Estabilizar el envio del customerId en todos los métodos pendientes del controlador subscripciones
+◦   H- Corregir página de perfil
 ◦	H- Importar plantilla desde archivo DOCX
 ◦	H- Implementar sistema de pago en línea
 ◦	H- Diseñar sitio web de promoción

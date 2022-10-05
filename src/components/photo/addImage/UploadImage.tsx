@@ -11,7 +11,7 @@ import camera from './camera.png';
 import profile from './profile.png';
 
 const UploadImage = (props: any) => {
-  const {id, foto, onChange} = props;
+  const {id, imagen, onChange} = props;
 
   const [image, setImage] = useState({id: '', url: ''});
 
@@ -112,7 +112,7 @@ const UploadImage = (props: any) => {
             width: '90px',
             borderRadius: 360
           }}
-          src={image.url || foto || profile}
+          src={image.url || imagen || profile}
         />
       </Toolbar>
       <FormGroup
