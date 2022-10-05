@@ -18,8 +18,6 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon
 } from '@mui/icons-material';
-import {faTimes} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import FilterComponent from '@app/components/data-table/FilterComponent';
 import GenericoFormBody from '@app/components/forms/GenericoFormBody';
 import AppContext from '@app/contexts/AppContext';
@@ -117,7 +115,7 @@ const MostrarCampos = () => {
     value: '',
     options: [
       {value: 'Clientes', name: 'Clientes'},
-      {value: 'Vehiculos', name: 'Vehiculos'}
+      {value: 'Vehiculos', name: 'Inventario'}
     ]
   });
   BodyLabels.set('camCampo', {label: 'Campo en BD', type: 'hidden'});
@@ -155,7 +153,8 @@ const MostrarCampos = () => {
     },
     {
       name: 'Modelo',
-      selector: (row) => row.camModelo
+      selector: (row) =>
+        row.camModelo === 'Vehiculos' ? 'Inventario' : row.camModelo
     },
     {
       name: 'Campo Base de Datos',
