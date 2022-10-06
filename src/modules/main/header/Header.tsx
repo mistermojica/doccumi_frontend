@@ -8,6 +8,7 @@ import {Button} from '@app/components';
 // import NotificationsDropdown from '@app/modules/main/header/notifications-dropdown/NotificationsDropdown';
 import LanguagesDropdown from '@app/modules/main/header/languages-dropdown/LanguagesDropdown';
 import UserDropdown from '@app/modules/main/header/user-dropdown/UserDropdown';
+import SubscriptionPlan from '@app/pages/profile/subscription/SubscriptionPlan';
 
 const Header = () => {
   const [t] = useTranslation();
@@ -55,6 +56,7 @@ const Header = () => {
         </li>
       </ul>
       <ul className="navbar-nav ml-auto">
+        <SubscriptionPlan />
         {/* <MessagesDropdown /> */}
         {/* <NotificationsDropdown /> */}
         <LanguagesDropdown />

@@ -2,7 +2,6 @@ PENDIENTES DOCCUMI
 
 ----------------------------------------------------------
 
-◦	I- Crear formulario de soporte y seguimiento a casos.
 ◦	I- Crear botón e indicador de membresía con plan actual en el menú principal al lado del selector de idiomas
 ◦	I- Mostrar disclaimer al usar las publicaciones en RRHH.
 ◦	I- Validar que las credenciales puedan hacer login en las RRSS.
@@ -11,6 +10,7 @@ PENDIENTES DOCCUMI
 
 ----------------------------------------------------------
 
+◦	H- Crear formulario de soporte y seguimiento a casos.
 ◦	H- Cambiar término Vehículos por Inventario.
 ◦	H- Mostrar precio por mes en cada plan.
 ◦	H- Estabilizar el envio del customerId en todos los métodos pendientes del controlador subscripciones

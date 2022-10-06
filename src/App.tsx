@@ -32,6 +32,7 @@ import MostrarCampos from '@pages/MostrarCampos';
 import AgregarTipo from '@pages/AgregarTipo';
 import MostrarTipos from '@pages/MostrarTipos';
 import AgregarSoporte from '@app/pages/AgregarSoporte';
+import MostrarSoportes from '@app/pages/MostrarSoportes';
 import Blank from '@pages/Blank';
 import CalculadoraPrestamo from '@pages/CalculadoraPrestamo';
 import InventarioVehiculos from '@pages/InventarioVehiculos';
@@ -105,7 +106,7 @@ const App = () => {
               <Route path="/agregar-tipos" element={<AgregarTipo />} />
               <Route path="/gestionar-tipos" element={<MostrarTipos />} />
               <Route path="/agregar-soportes" element={<AgregarSoporte />} />
-
+              <Route path="/gestionar-soportes" element={<MostrarSoportes />} />
               <Route
                 path="/mostrar-plantillas"
                 element={<MostrarPlantillas />}
