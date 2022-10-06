@@ -20,8 +20,18 @@ export const getProfile = async () => {
 };
 
 export const getProfileId = () => {
-  const profile = gatekeeper.getProfileId();
-  return profile;
+  const profileId = gatekeeper.getProfileId();
+  return profileId;
+};
+
+export const getProfileStripeId = () => {
+  const stripeId = gatekeeper.getProfileStripeId();
+  return stripeId;
+};
+
+export const getProfileEmail = () => {
+  const email = gatekeeper.getProfileEmail();
+  return email;
 };
 
 export const loginByAuth = async (email: string, password: string) => {

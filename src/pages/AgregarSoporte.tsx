@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState} from 'react';
 import _ from 'underscore';
 import {Button} from 'react-bootstrap';
 import axios from 'axios';
@@ -11,47 +11,57 @@ import {useNavigate} from 'react-router-dom';
 import GenericoFormBody from '@app/components/forms/GenericoFormBody';
 import {mlCL} from '@app/utils/helpers';
 // @ts-ignore
-import AppContext from '@app/contexts/AppContext';
 import AlertDialog from '@app/components/dialogs/AlertDialog';
 import * as AuthService from '@app/services/auth';
 // @ts-ignore
 import * as Config from '@app/utils/config';
 
-const AgregarCampo = () => {
+const AgregarSoporte = () => {
   const navegar = useNavigate();
 
-  const NombreEntidad = 'Tipos';
+  const NombreEntidad = 'Soportes';
   const NombreEntidadMin = NombreEntidad.toLowerCase();
 
   const [reqBody, setBody] = useState<any>({
-    tipCodigo: '',
-    tipNombre: '',
-    tipModelo: '',
-    tipOrden: 10,
-    tipDueno: AuthService.getProfileId(),
-    tipEstado: 'activo'
+    sopDueno: AuthService.getProfileId(),
+    sopCorreo: AuthService.getProfileEmail(),
+    sopAsunto: '',
+    sopDescripcion: '',
+    sopTipo: '',
+    sopEstado: 'activo'
   });
 
   const [BodyLabels, setBodyLabels] = useState<any>(new Map());
-  BodyLabels.set('tipCodigo', {label: 'Código', type: 'hidden'});
-  BodyLabels.set('tipNombre', {label: 'Nombre', type: 'text'});
-  BodyLabels.set('tipModelo', {
-    label: 'Modelo',
+  // BodyLabels.set('sopCorreo', {label: 'Correo Electrónico', type: 'text'});
+  BodyLabels.set('sopAsunto', {label: 'Asunto', type: 'text', size: '6'});
+  BodyLabels.set('sopTipo', {
+    label: 'Tipo',
     type: 'select',
-    value: 'documentos',
-    options: [{value: 'documentos', name: 'Documentos'}]
-  });
-  BodyLabels.set('tipOrden', {label: 'Orden', type: 'number'});
-  BodyLabels.set('tipDueno', {label: 'Dueño', type: 'hidden'});
-  BodyLabels.set('tipEstado', {
-    label: 'Estado',
-    type: 'select',
-    value: 'activo',
+    value: '',
+    size: '6',
     options: [
-      {value: 'activo', name: 'Activo'},
-      {value: 'borrado', name: 'Borrado'}
+      {value: 'Facturación', name: 'Facturación'},
+      {value: 'Creación de Cliente', name: 'Creación de Cliente'},
+      {value: 'Creación de Documento', name: 'Creación de Documento'},
+      {value: 'Otra', name: 'Otra'}
     ]
   });
+  BodyLabels.set('sopDescripcion', {
+    label: 'Descripción',
+    type: 'textarea',
+    size: '12'
+  });
+  BodyLabels.set('sopDueno', {label: 'Dueño', type: 'hidden', size: '6'});
+  BodyLabels.set('sopEstado', {label: 'Estado', type: 'hidden', size: '6'});
+  // BodyLabels.set('sopEstado', {
+  //   label: 'Estado',
+  //   type: 'select',
+  //   value: 'activo',
+  //   options: [
+  //     {value: 'activo', name: 'Activo'},
+  //     {value: 'borrado', name: 'Borrado'}
+  //   ]
+  // });
 
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -84,8 +94,12 @@ const AgregarCampo = () => {
         } else {
           const {name, value} = cbData;
           reqBody[name] = value;
-          if (name === 'tipNombre') {
-            reqBody.tipCodigo = value
+          if (name === 'camNombre') {
+            reqBody.camCodigo = value
+              .toLowerCase()
+              .replace(/ /g, '_')
+              .replace(/\./g, '');
+            reqBody.camCampo = value
               .toLowerCase()
               .replace(/ /g, '_')
               .replace(/\./g, '');
@@ -94,16 +108,14 @@ const AgregarCampo = () => {
       });
       setBody(reqBody);
     }
-
     validateFormData(reqBody);
   };
 
   const validateFormData = (campos: any) => {
     let emptyFieldFound = false;
 
-    console.log({campos});
-
-    _.each(campos, (value) => {
+    _.each(campos, (value, key) => {
+      console.log({key, value});
       if (value === '' || value === '0' || value === 0 || value < 0) {
         emptyFieldFound = true;
       }
@@ -208,4 +220,4 @@ const AgregarCampo = () => {
   );
 };
 
-export default AgregarCampo;
+export default AgregarSoporte;

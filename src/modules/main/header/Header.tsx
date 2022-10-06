@@ -49,7 +49,7 @@ const Header = () => {
           </Link>
         </li>
         <li className="nav-item d-none d-sm-inline-block">
-          <Link to="/" className="nav-link">
+          <Link to="/agregar-soportes" className="nav-link">
             {t('header.label.support')}
           </Link>
         </li>

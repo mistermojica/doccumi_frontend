@@ -17,40 +17,33 @@ import * as AuthService from '@app/services/auth';
 // @ts-ignore
 import * as Config from '@app/utils/config';
 
-const AgregarCampo = () => {
+const AgregarTipo = () => {
   const navegar = useNavigate();
 
-  const NombreEntidad = 'Campos';
+  const NombreEntidad = 'Tipos';
   const NombreEntidadMin = NombreEntidad.toLowerCase();
 
   const [reqBody, setBody] = useState<any>({
-    camCodigo: '',
-    camNombre: '',
-    camModelo: '',
-    camCampo: '',
-    camOrden: 10,
-    camTipo: 'privado',
-    camDueno: AuthService.getProfileId(),
-    camEstado: 'activo'
+    tipCodigo: '',
+    tipNombre: '',
+    tipModelo: '',
+    tipOrden: 10,
+    tipDueno: AuthService.getProfileId(),
+    tipEstado: 'activo'
   });
 
   const [BodyLabels, setBodyLabels] = useState<any>(new Map());
-  BodyLabels.set('camCodigo', {label: 'Código', type: 'hidden'});
-  BodyLabels.set('camNombre', {label: 'Nombre', type: 'text'});
-  BodyLabels.set('camModelo', {
+  BodyLabels.set('tipCodigo', {label: 'Código', type: 'hidden'});
+  BodyLabels.set('tipNombre', {label: 'Nombre', type: 'text'});
+  BodyLabels.set('tipModelo', {
     label: 'Modelo',
     type: 'select',
-    value: '',
-    options: [
-      {value: 'Clientes', name: 'Clientes'},
-      {value: 'Vehiculos', name: 'Inventario'}
-    ]
+    value: 'documentos',
+    options: [{value: 'documentos', name: 'Documentos'}]
   });
-  BodyLabels.set('camCampo', {label: 'Campo en BD', type: 'hidden'});
-  BodyLabels.set('camOrden', {label: 'Orden', type: 'number'});
-  BodyLabels.set('camDueno', {label: 'Dueño', type: 'hidden'});
-  BodyLabels.set('camTipo', {label: 'Tipo', type: 'hidden'});
-  BodyLabels.set('camEstado', {
+  BodyLabels.set('tipOrden', {label: 'Orden', type: 'number'});
+  BodyLabels.set('tipDueno', {label: 'Dueño', type: 'hidden'});
+  BodyLabels.set('tipEstado', {
     label: 'Estado',
     type: 'select',
     value: 'activo',
@@ -91,12 +84,8 @@ const AgregarCampo = () => {
         } else {
           const {name, value} = cbData;
           reqBody[name] = value;
-          if (name === 'camNombre') {
-            reqBody.camCodigo = value
-              .toLowerCase()
-              .replace(/ /g, '_')
-              .replace(/\./g, '');
-            reqBody.camCampo = value
+          if (name === 'tipNombre') {
+            reqBody.tipCodigo = value
               .toLowerCase()
               .replace(/ /g, '_')
               .replace(/\./g, '');
@@ -105,11 +94,14 @@ const AgregarCampo = () => {
       });
       setBody(reqBody);
     }
+
     validateFormData(reqBody);
   };
 
   const validateFormData = (campos: any) => {
     let emptyFieldFound = false;
+
+    console.log({campos});
 
     _.each(campos, (value) => {
       if (value === '' || value === '0' || value === 0 || value < 0) {
@@ -216,4 +208,4 @@ const AgregarCampo = () => {
   );
 };
 
-export default AgregarCampo;
+export default AgregarTipo;

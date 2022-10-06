@@ -54,7 +54,7 @@ const GenericoFormBody = (props) => {
             RowValue[1]?.type === 'select' ? (
               <div
                 key={'div_sel_k'.concat(RowKey)}
-                className="col-sm-6"
+                className={'col-sm-'.concat(RowValue[1]?.size || '6')}
                 style={{
                   display: RowValue[1]?.type === 'hidden' ? 'none' : 'block'
                 }}
@@ -93,10 +93,35 @@ const GenericoFormBody = (props) => {
                 </select>
                 <br key={'br_sel_k'.concat(RowKey)} />
               </div>
+            ) : RowValue[1]?.type === 'textarea' ? (
+              <div
+                key={'div_input_k'.concat(RowKey)}
+                className={'col-sm-'.concat(RowValue[1]?.size || '12')}
+              >
+                <label
+                  key={'label_input_k'.concat(RowKey)}
+                  htmlFor={RowValue[0]}
+                >
+                  <strong key={'strong_input_k'.concat(RowKey)}>
+                    {RowValue[1]?.label}:
+                  </strong>
+                </label>
+                <textarea
+                  key={'input_input_k'.concat(RowKey)}
+                  rows="5"
+                  className="form-control"
+                  id={RowValue[0]}
+                  name={RowValue[0]}
+                  defaultValue={RowData[RowValue[0]]}
+                  onChange={(e) => onChangeLocal(e.target)}
+                  // onFocus={(e) => onFocusLocal(e.target)}
+                ></textarea>
+                <br key={'br_input_k'.concat(RowKey)} />
+              </div>
             ) : (
               <div
                 key={'div_input_k'.concat(RowKey)}
-                className="col-sm-6"
+                className={'col-sm-'.concat(RowValue[1]?.size || '6')}
                 style={{
                   display:
                     RowValue[1]?.type === 'hidden' ||

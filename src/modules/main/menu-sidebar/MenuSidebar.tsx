@@ -161,6 +161,10 @@ export const MENU: IMenuItem[] = [
         name: 'menusidebar.label.configuraciones.tipos.gestionarTipos',
         path: '/gestionar-tipos'
       },
+      // {
+      //   name: 'menusidebar.label.configuraciones.tipos.gestionarSoporte',
+      //   path: '/gestionar-soportes'
+      // },
       {
         name: 'menusidebar.label.configuraciones.perfil.credenciales',
         path: '/profile'

@@ -12,7 +12,6 @@ import {calculateWindowSize} from '@app/utils/helpers';
 import {useDispatch, useSelector} from 'react-redux';
 import {setWindowSize} from '@app/store/reducers/ui';
 
-// @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 
 import Introduccion from '@pages/Introduccion';
@@ -22,26 +21,19 @@ import Profile from '@pages/profile/Profile';
 import AgregarVehiculo from '@pages/AgregarVehiculo';
 import AgregarCliente from '@pages/AgregarCliente';
 import EditarCliente from '@pages/EditarCliente';
-// @ts-ignore
 import MostrarClientes from '@pages/MostrarClientes';
-// @ts-ignore
 import MostrarVehiculos from '@pages/MostrarVehiculos';
-// @ts-ignore
 import ImprimirDocumentos from '@app/pages/ImprimirDocumentos';
 import AgregarPlantilla from '@app/pages/AgregarPlantilla';
-// @ts-ignore
 import MostrarPlantillas from '@app/pages/MostrarPlantillas';
-// @ts-ignore
 import AsignarPlantillas from '@app/pages/AsignarPlantillas';
-import AgregarCampos from '@pages/AgregarCampos';
-// @ts-ignore
+import AgregarCampo from '@app/pages/AgregarCampo';
 import MostrarCampos from '@pages/MostrarCampos';
-import AgregarTipos from '@pages/AgregarTipos';
-// @ts-ignore
+import AgregarTipo from '@pages/AgregarTipo';
 import MostrarTipos from '@pages/MostrarTipos';
+import AgregarSoporte from '@app/pages/AgregarSoporte';
 import Blank from '@pages/Blank';
 import CalculadoraPrestamo from '@pages/CalculadoraPrestamo';
-// @ts-ignore
 import InventarioVehiculos from '@pages/InventarioVehiculos';
 
 import PublicRoute from './routes/PublicRoute';
@@ -108,10 +100,12 @@ const App = () => {
               <Route path="/mostrar-clientes" element={<MostrarClientes />} />
               <Route path="/mostrar-vehiculos" element={<MostrarVehiculos />} />
               <Route path="/agregar-plantilla" element={<AgregarPlantilla />} />
-              <Route path="/agregar-campos" element={<AgregarCampos />} />
+              <Route path="/agregar-campos" element={<AgregarCampo />} />
               <Route path="/gestionar-campos" element={<MostrarCampos />} />
-              <Route path="/agregar-tipos" element={<AgregarTipos />} />
+              <Route path="/agregar-tipos" element={<AgregarTipo />} />
               <Route path="/gestionar-tipos" element={<MostrarTipos />} />
+              <Route path="/agregar-soportes" element={<AgregarSoporte />} />
+
               <Route
                 path="/mostrar-plantillas"
                 element={<MostrarPlantillas />}

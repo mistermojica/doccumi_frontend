@@ -22,6 +22,9 @@ class Gatekeeper {
   constructor() {
     this.LOCALSTORAGE_IDENTIFIER = 'gatekeeper_token';
     this.LOCALSTORAGE_ID = 'gatekeeper_id';
+    this.LOCALSTORAGE_STRIPE_ID = 'gatekeeper_stripe_id';
+    this.LOCALSTORAGE_EMAIL = 'gatekeeper_email';
+
     this.URL = Config.gatDomainName().concat('');
     this.payload = {
       accountID: null,
@@ -84,6 +87,11 @@ class Gatekeeper {
         } else {
           localStorage.setItem(this.LOCALSTORAGE_IDENTIFIER, data.result.token);
           localStorage.setItem(this.LOCALSTORAGE_ID, data.result._id);
+          localStorage.setItem(this.LOCALSTORAGE_EMAIL, data.result.email);
+          localStorage.setItem(
+            this.LOCALSTORAGE_STRIPE_ID,
+            data.result.usuario_stripe
+          );
           result = data.result.token;
         }
         return result;
@@ -191,6 +199,7 @@ class Gatekeeper {
     return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
       const token = localStorage.getItem(this.LOCALSTORAGE_IDENTIFIER);
       const _id = localStorage.getItem(this.LOCALSTORAGE_ID);
+
       // const response = yield fetch(`${this.URL}/v1/users/profile`, {
       const response = yield fetch(`${this.URL}/usuarios/profile/${_id}`, {
         headers: {
@@ -210,6 +219,16 @@ class Gatekeeper {
   getProfileId() {
     const _id = localStorage.getItem(this.LOCALSTORAGE_ID);
     return _id;
+  }
+
+  getProfileStripeId() {
+    const stripeId = localStorage.getItem(this.LOCALSTORAGE_STRIPE_ID);
+    return stripeId;
+  }
+
+  getProfileEmail() {
+    const email = localStorage.getItem(this.LOCALSTORAGE_EMAIL);
+    return email;
   }
 }
 
