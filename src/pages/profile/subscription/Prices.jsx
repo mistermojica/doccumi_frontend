@@ -16,6 +16,7 @@ const Prices = (props) => {
 
   const [prices, setPrices] = useState([]);
   const [currentPrice, setCurrentPrice] = useState({});
+  const [defaultPaymentMethodId, setDefaultPaymentMethodId] = useState('');
   const [subscription] = useState(AppCtx?.Navigate?.data?.subscription);
   const [defaultPaymentMethod] = useState(
     AppCtx?.Navigate?.data?.defaultPaymentMethod
@@ -45,8 +46,23 @@ const Prices = (props) => {
       });
   };
 
+  const getDefaultPaymentMethodId = () => {
+    axios
+      .post(UrlBase.concat('get-default-payment-method'), {
+        customerId: user.profile.usuario_stripe
+      })
+      .then((response) => {
+        const {defaultPaymentMethodId} = response.data;
+        setDefaultPaymentMethodId(defaultPaymentMethodId);
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
+  };
+
   useEffect(() => {
     getPrices();
+    getDefaultPaymentMethodId();
     // const fetchPrices = async () => {
     //   const {prices} = await fetch('http://delete/config').then((r) =>
     //     r.json()
@@ -162,7 +178,7 @@ const Prices = (props) => {
                       // disabled={price.id === currentPrice?.id}
                       onClick={() =>
                         setNavigateTo(
-                          currentPrice?.id ? 'confirm' : 'addcard',
+                          defaultPaymentMethodId ? 'confirm' : 'addcard',
                           price
                         )
                       }

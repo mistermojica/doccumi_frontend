@@ -56,7 +56,7 @@ const Profile = () => {
 
   return (
     <>
-      <ContentHeader title="Profile" />
+      <ContentHeader title="Perfil de Usuario" />
       <section className="content">
         <div className="container-fluid">
           <div className="row">

@@ -208,6 +208,7 @@ const Account = (props) => {
 
   useEffect(() => {
     if (subscriptions) {
+      console.log({subscriptions});
       console.log('subscriptions.length:', subscriptions.length);
       console.log(
         'subscriptions.filter:',
@@ -217,7 +218,7 @@ const Account = (props) => {
         subscriptions.length === 0 ||
         subscriptions.filter((doc) => doc.status == 'active')[0] === undefined
       ) {
-        // handleAddNew();
+        handleAddNew();
       }
     }
   }, [subscriptions]);
