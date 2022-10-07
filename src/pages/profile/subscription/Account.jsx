@@ -207,6 +207,22 @@ const Account = (props) => {
   }, []);
 
   useEffect(() => {
+    if (subscriptions) {
+      console.log('subscriptions.length:', subscriptions.length);
+      console.log(
+        'subscriptions.filter:',
+        subscriptions.filter((doc) => doc.status == 'active')[0]
+      );
+      if (
+        subscriptions.length === 0 ||
+        subscriptions.filter((doc) => doc.status == 'active')[0] === undefined
+      ) {
+        // handleAddNew();
+      }
+    }
+  }, [subscriptions]);
+
+  useEffect(() => {
     if (cards && customer) {
       cards.forEach((card) => {
         if (customer?.invoice_settings?.default_payment_method === card.id) {

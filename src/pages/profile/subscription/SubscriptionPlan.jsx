@@ -5,8 +5,6 @@ import {useNavigate} from 'react-router-dom';
 import {Button} from '@components';
 import moment from 'moment';
 import 'moment/locale/es-do';
-// import Moment from 'react-moment';
-// import 'moment-timezone';
 import {
   MoreHoriz as MoreHorizIcon,
   Info as InfoIcon,
@@ -19,6 +17,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import AppContext from '@app/contexts/AppContext';
+import * as AuthService from '@app/services/auth';
 import * as Config from '@app/utils/config';
 import './Subscription.css';
 
@@ -26,7 +25,6 @@ import './Subscription.css';
 
 const Account = (props) => {
   const AppCtx = useContext(AppContext);
-  const {user} = props;
 
   const navigate = useNavigate();
 
@@ -44,40 +42,14 @@ const Account = (props) => {
 
   const handleAddNew = () => {
     navigate('/profile?activetab=SUBSCRIPTION');
-    // AppCtx.setNavigate({
-    //   to: 'prices',
-    //   data: {
-    //     subscription: ['active'].includes(subscriptions[0]?.status)
-    //       ? subscriptions[0]
-    //       : null,
-    //     defaultPaymentMethod: defaultPM
-    //   }
-    // });
-  };
-
-  const handleCancel = () => {
-    AppCtx.setNavigate({
-      to: 'cancel',
-      data: {subscription: subscriptions[0]}
-    });
-  };
-
-  const handleGoAddCard = (e) => {
-    e.preventDefault();
-
-    AppCtx.setNavigate({
-      to: 'addcard',
-      data: {}
-    });
   };
 
   const getCustomer = () => {
-    console.log({user});
     const fetchData = async () => {
       const {customer} = await fetch(UrlBase.concat('load-customer'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({customerId: user.profile.usuario_stripe})
+        body: JSON.stringify({customerId: AuthService.getProfileStripeId()})
       }).then((r) => r.json());
 
       setCustomer(customer);
@@ -105,23 +77,13 @@ const Account = (props) => {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            customerId: user.profile.usuario_stripe,
+            customerId: AuthService.getProfileStripeId(),
             statusCode: 'active'
           })
         }
       ).then((r) => r.json());
 
-      // subscriptions.data.sort(compareStatus);
-
-      // subscriptions.data.map((s) => {
-      //   console.log(s.id, s.status);
-      // });
-
       setSubscriptions(subscriptions.data.sort(compareStatus));
-
-      // subscriptions.data.map((s) => {
-      //   console.log(s.id, s.status);
-      // });
 
       let inter = '';
 
@@ -152,53 +114,10 @@ const Account = (props) => {
       const {cards} = await fetch(UrlBase.concat('list-payment-methods'), {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({customerId: user.profile.usuario_stripe})
+        body: JSON.stringify({customerId: AuthService.getProfileStripeId()})
       }).then((r) => r.json());
 
       setCards(cards);
-    };
-
-    fetchData();
-  };
-
-  const deletePaymentMethod = (pmId) => {
-    const fetchData = async () => {
-      const {paymentMethod} = await fetch(
-        UrlBase.concat('delete-payment-method'),
-        {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({paymentMethodId: pmId})
-        }
-      ).then((r) => r.json());
-
-      getPaymentMethods();
-    };
-
-    fetchData();
-  };
-
-  const setDefaultPaymentMethod = (pmId) => {
-    const fetchData = async () => {
-      const {customerUpdated} = await fetch(
-        UrlBase.concat('set-default-payment-method'),
-        {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({customerId: customer.id, paymentMethodId: pmId})
-        }
-      ).then((r) => r.json());
-
-      setCustomer(customerUpdated);
-      getPaymentMethods();
-      cards.forEach((card) => {
-        if (
-          customerUpdated?.invoice_settings?.default_payment_method === card.id
-        ) {
-          console.log('setDefaultPaymentMethod:', {card});
-          setDefaultPM(card);
-        }
-      });
     };
 
     fetchData();
@@ -214,7 +133,6 @@ const Account = (props) => {
     if (cards && customer) {
       cards.forEach((card) => {
         if (customer?.invoice_settings?.default_payment_method === card.id) {
-          console.log('useEffect:', {card});
           setDefaultPM(card);
         }
       });
@@ -241,120 +159,13 @@ const Account = (props) => {
             Planes de Servicio
           </Button>
         ) : (
-          <>
-            <div className="form-group row">
-              <div className="col-md-7">
-                <h5>
-                  <strong>{subscriptions[0]?.plan?.product?.name}</strong>
-                </h5>
-                <br />
-                Monto:{' '}
-                <strong>
-                  {subscriptions[0]?.items?.data[0]?.plan?.currency.toUpperCase()}
-                  ${subscriptions[0]?.items?.data[0]?.plan?.amount / 100}
-                </strong>{' '}
-                por{' '}
-                <strong>
-                  {subscriptions[0]?.items?.data[0]?.plan?.interval_count}{' '}
-                </strong>
-                {interval}
-                .
-                <br />
-                <br />
-                Fecha de renovación:{' '}
-                <strong>
-                  {subscriptions[0] &&
-                    moment(
-                      new Date(
-                        subscriptions[0]?.current_period_end * 1000
-                      ).toString()
-                    ).format('LL')}
-                </strong>
-                .
-                <br />
-                <br />
-                Estado subscripción:{' '}
-                <strong>
-                  {subscriptions[0] && subscriptions[0]?.status === 'active'
-                    ? 'Activo'
-                    : 'Inactivo'}
-                </strong>
-                .
-              </div>
-              <div className="col-md-3 text-center">
-                <Button
-                  type="button"
-                  theme="primary"
-                  onClick={handleAddNew}
-                  style={{width: '200px', height: '50px'}}
-                >
-                  Cambiar plan
-                </Button>
-                <br />
-                <br />
-                <Button
-                  type="button"
-                  theme="danger"
-                  onClick={handleCancel}
-                  style={{width: '200px', height: '50px'}}
-                  // onClick={() => createSubscription(price.id)}
-                >
-                  Cancelar plan
-                </Button>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12">
-                <hr />
-                <strong>
-                  {cards.length > 1 ? 'MÉTODOS DE PAGO' : 'MÉTODO DE PAGO'}
-                </strong>
-                <div id="cards">
-                  {cards.map((s) => {
-                    const isDefaultPM =
-                      customer?.invoice_settings?.default_payment_method ===
-                      s.id;
-                    return (
-                      <PaymentMethod
-                        key={s.id}
-                        paymentMethod={s}
-                        defaultPM={isDefaultPM}
-                        deletePaymentMethodCB={deletePaymentMethod}
-                        setDefaultPaymentMethodCB={setDefaultPaymentMethod}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="col-md-12">
-                <a href="#" onClick={handleGoAddCard}>
-                  <p style={{marginTop: 20, color: 'black'}}>
-                    <MoreIcon /> Agregar método de pago
-                  </p>
-                </a>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12">
-                <hr />
-                <strong>HISTORIAL DE FACTURAS</strong>
-                <div id="subscriptions">
-                  {subscriptions.map((s) => {
-                    return <AccountSubscription key={s.id} subscription={s} />;
-                  })}
-                </div>
-              </div>
-            </div>
-          </>
+          <div>
+            Plan Actual:{' '}
+            <strong>
+              {subscriptions[0]?.plan?.product?.name?.toUpperCase()}
+            </strong>
+          </div>
         )}
-        {/* &nbsp; */}
-        {/* <a href="/profile">Restart demo</a> */}
-        {/* <h2>Subscriptions</h2> */}
-        {/* <div id="subscriptions">
-          {subscriptions.map((s) => {
-            return <AccountSubscription key={s.id} subscription={s} />;
-          })}
-        </div> */}
       </div>
     </>
   );
