@@ -40,6 +40,9 @@ import InventarioVehiculos from '@pages/InventarioVehiculos';
 import PublicRoute from './routes/PublicRoute';
 import PrivateRoute from './routes/PrivateRoute';
 
+import * as Config from '@app/utils/config';
+import * as AuthService from '@app/services/auth';
+
 const App = () => {
   const [FileUploadData, setFileUploadData] = useState<any>(new Map());
   const [SubmitedUploadFilesData, setSubmitedUploadFilesData] = useState(false);
@@ -48,11 +51,13 @@ const App = () => {
   const [StripeData, setStripeData] = useState<any>({
     customer: {},
     subscriptions: [],
+    subscriptionsi: [],
     current_subscription: {},
     prices: [],
     current_price: {},
     default_payment_method: {}
   });
+  const [UrlBase] = useState(Config.gatDomainName().concat('/subscripciones/'));
 
   // const [searchParams, setSearchParams] = useSearchParams();
 
@@ -74,6 +79,50 @@ const App = () => {
     setStripeData
     // setSearchParams
   };
+
+  const loadStripeInit = () => {
+    const fetchData = async () => {
+      const {customer, subscriptions} = await fetch(
+        UrlBase.concat('load-stripe-init'),
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            customerId: AuthService.getProfileStripeId(),
+            statusCode: 'active'
+          })
+        }
+      ).then((r) => r.json());
+
+      const stripeData = {...StripeData};
+      stripeData.customer = customer;
+      stripeData.default_payment_method =
+        customer?.invoice_settings?.default_payment_method;
+      stripeData.subscriptionsi = subscriptions.data.sort(compareStatus);
+      setStripeData(stripeData);
+    };
+
+    fetchData();
+  };
+
+  function compareStatus(a: any, b: any) {
+    console.log(a.status);
+    if (a.status < b.status) {
+      return -1;
+    }
+    if (a.status > b.status) {
+      return 1;
+    }
+    return 0;
+  }
+
+  useEffect(() => {
+    loadStripeInit();
+  }, []);
+
+  useEffect(() => {
+    console.log({StripeData});
+  }, [StripeData]);
 
   useEffect(() => {
     const size = calculateWindowSize(windowSize.width);

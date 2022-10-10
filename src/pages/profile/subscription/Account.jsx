@@ -43,8 +43,10 @@ const Account = (props) => {
     AppCtx.setNavigate({
       to: 'prices',
       data: {
-        subscription: ['active'].includes(subscriptions[0]?.status)
-          ? subscriptions[0]
+        subscription: ['active'].includes(
+          AppCtx.StripeData.subscriptionsi[0]?.status
+        )
+          ? AppCtx.StripeData.subscriptionsi[0]
           : null,
         defaultPaymentMethod: defaultPM
       }
@@ -54,7 +56,7 @@ const Account = (props) => {
   const handleCancel = () => {
     AppCtx.setNavigate({
       to: 'cancel',
-      data: {subscription: subscriptions[0]}
+      data: {subscription: AppCtx.StripeData.subscriptionsi[0]}
     });
   };
 
@@ -68,18 +70,22 @@ const Account = (props) => {
   };
 
   const getCustomer = () => {
-    console.log({user});
-    const fetchData = async () => {
-      const {customer} = await fetch(UrlBase.concat('load-customer'), {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({customerId: user.profile.usuario_stripe})
-      }).then((r) => r.json());
+    const custlocal = {...AppCtx?.StripeData?.customer};
+    setCustomer(custlocal);
 
-      setCustomer(customer);
-    };
+    // console.log({custlocal});
 
-    fetchData();
+    // const fetchData = async () => {
+    //   const {customer} = await fetch(UrlBase.concat('load-customer'), {
+    //     method: 'POST',
+    //     headers: {'Content-Type': 'application/json'},
+    //     body: JSON.stringify({customerId: user.profile.usuario_stripe})
+    //   }).then((r) => r.json());
+
+    //   setCustomer(customer);
+    // };
+
+    // fetchData();
   };
 
   function compareStatus(a, b) {
@@ -94,53 +100,77 @@ const Account = (props) => {
   }
 
   const getSubscriptions = () => {
-    const fetchData = async () => {
-      const {subscriptions} = await fetch(
-        UrlBase.concat('subscriptions-by-status'),
-        {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            customerId: user.profile.usuario_stripe,
-            statusCode: 'active'
-          })
-        }
-      ).then((r) => r.json());
-
-      // subscriptions.data.sort(compareStatus);
-
-      // subscriptions.data.map((s) => {
-      //   console.log(s.id, s.status);
-      // });
-
-      setSubscriptions(subscriptions.data.sort(compareStatus));
-
-      // subscriptions.data.map((s) => {
-      //   console.log(s.id, s.status);
-      // });
-
-      let inter = '';
-
-      if (subscriptions.data[0]?.items?.data[0]?.plan?.interval === 'month') {
-        if (subscriptions.data[0]?.items?.data[0]?.plan?.interval_count === 1) {
-          inter = 'mes';
-        } else {
-          inter = 'meses';
-        }
-      } else if (
-        subscriptions.data[0]?.items?.data[0]?.plan?.interval === 'year'
-      ) {
-        if (subscriptions.data[0]?.items?.data[0]?.plan?.interval_count === 1) {
-          inter = 'año';
-        } else {
-          inter = 'años';
-        }
-      }
-
-      setInterval(inter);
+    const subslocal = {
+      ...AppCtx?.StripeData?.subscriptionsi.sort(compareStatus)
     };
 
-    fetchData();
+    // setSubscriptions(subslocal);
+
+    let inter = '';
+
+    if (subslocal[0]?.items?.data[0]?.plan?.interval === 'month') {
+      if (subslocal[0]?.items?.data[0]?.plan?.interval_count === 1) {
+        inter = 'mes';
+      } else {
+        inter = 'meses';
+      }
+    } else if (subslocal[0]?.items?.data[0]?.plan?.interval === 'year') {
+      if (subslocal[0]?.items?.data[0]?.plan?.interval_count === 1) {
+        inter = 'año';
+      } else {
+        inter = 'años';
+      }
+    }
+
+    setInterval(inter);
+
+    // const fetchData = async () => {
+    //   const {subscriptions} = await fetch(
+    //     UrlBase.concat('subscriptions-by-status'),
+    //     {
+    //       method: 'POST',
+    //       headers: {'Content-Type': 'application/json'},
+    //       body: JSON.stringify({
+    //         customerId: user.profile.usuario_stripe,
+    //         statusCode: 'active'
+    //       })
+    //     }
+    //   ).then((r) => r.json());
+
+    //   // subscriptions.data.sort(compareStatus);
+
+    //   // subscriptions.data.map((s) => {
+    //   //   console.log(s.id, s.status);
+    //   // });
+
+    //   setSubscriptions(subscriptions.data.sort(compareStatus));
+
+    //   // subscriptions.data.map((s) => {
+    //   //   console.log(s.id, s.status);
+    //   // });
+
+    //   let inter = '';
+
+    //   if (subscriptions.data[0]?.items?.data[0]?.plan?.interval === 'month') {
+    //     if (subscriptions.data[0]?.items?.data[0]?.plan?.interval_count === 1) {
+    //       inter = 'mes';
+    //     } else {
+    //       inter = 'meses';
+    //     }
+    //   } else if (
+    //     subscriptions.data[0]?.items?.data[0]?.plan?.interval === 'year'
+    //   ) {
+    //     if (subscriptions.data[0]?.items?.data[0]?.plan?.interval_count === 1) {
+    //       inter = 'año';
+    //     } else {
+    //       inter = 'años';
+    //     }
+    //   }
+
+    //   setInterval(inter);
+    // };
+
+    // fetchData();
   };
 
   const getPaymentMethods = () => {
@@ -201,53 +231,60 @@ const Account = (props) => {
   };
 
   useEffect(() => {
-    console.log(
-      'Account1 - useEffect() || AppCtx.StripeData.subscriptions:',
-      AppCtx.StripeData.subscriptions
-    );
+    // console.log(
+    //   'Account1 - useEffect() || AppCtx.StripeData.subscriptions:',
+    //   AppCtx.StripeData.subscriptions
+    // );
     getCustomer();
     getSubscriptions();
     getPaymentMethods();
   }, []);
 
   useEffect(() => {
-    if (subscriptions) {
+    // if (subscriptions) {
+    // console.log(
+    //   'Account2 - useEffect() || AppCtx.StripeData.subscriptions:',
+    //   AppCtx.StripeData.subscriptions
+    // );
+
+    // const StripeData = {...AppCtx.StripeData};
+    // StripeData.subscriptions = subscriptions;
+    // AppCtx.setStripeData(StripeData);
+
+    // console.log(
+    //   'Account3 - useEffect() || AppCtx.StripeData.subscriptions:',
+    //   AppCtx.StripeData.subscriptions
+    // );
+    // }
+
+    if (AppCtx.StripeData.subscriptionsi) {
+      console.log(AppCtx.StripeData.subscriptionsi);
       console.log(
-        'Account2 - useEffect() || AppCtx.StripeData.subscriptions:',
-        AppCtx.StripeData.subscriptions
+        'subscriptions.length:',
+        AppCtx.StripeData.subscriptionsi.length
       );
-
-      const StripeData = {...AppCtx.StripeData};
-      StripeData.subscriptions = subscriptions;
-      AppCtx.setStripeData(StripeData);
-
-      console.log(
-        'Account3 - useEffect() || AppCtx.StripeData.subscriptions:',
-        AppCtx.StripeData.subscriptions
-      );
-    }
-
-    if (subscriptions) {
-      console.log({subscriptions});
-      console.log('subscriptions.length:', subscriptions.length);
       console.log(
         'subscriptions.filter:',
-        subscriptions.filter((doc) => doc.status == 'active')[0]
+        AppCtx.StripeData.subscriptionsi.filter(
+          (doc) => doc.status == 'active'
+        )[0]
       );
       if (
-        subscriptions.length === 0 ||
-        subscriptions.filter((doc) => doc.status == 'active')[0] === undefined
+        AppCtx.StripeData.subscriptionsi.length === 0 ||
+        AppCtx.StripeData.subscriptionsi.filter(
+          (doc) => doc.status == 'active'
+        )[0] === undefined
       ) {
         handleAddNew();
       }
     }
-  }, [subscriptions]);
+  }, []);
 
   useEffect(() => {
-    console.log(
-      'Account4 - useEffect() || AppCtx.StripeData:',
-      AppCtx.StripeData
-    );
+    // console.log(
+    //   'Account4 - useEffect() || AppCtx.StripeData:',
+    //   AppCtx.StripeData
+    // );
   }, [AppCtx]);
 
   useEffect(() => {
@@ -261,7 +298,7 @@ const Account = (props) => {
     }
   }, [cards, customer]);
 
-  if (!subscriptions && !cards && !customer) {
+  if (!AppCtx.StripeData.subscriptionsi && !cards && !customer) {
     return null;
   }
 
@@ -272,8 +309,8 @@ const Account = (props) => {
           <strong>PLAN ACTUAL</strong>
         </h5>
         <hr />
-        {subscriptions.length === 0 ||
-        subscriptions.filter((doc) => {
+        {AppCtx.StripeData.subscriptionsi.length === 0 ||
+        AppCtx.StripeData.subscriptionsi.filter((doc) => {
           return doc.status == 'active';
         })[0] === undefined ? (
           <Button
@@ -289,17 +326,24 @@ const Account = (props) => {
             <div className="form-group row">
               <div className="col-md-7">
                 <h5>
-                  <strong>{subscriptions[0]?.plan?.product?.name}</strong>
+                  <strong>
+                    {AppCtx.StripeData.subscriptionsi[0]?.plan?.product?.name}
+                  </strong>
                 </h5>
                 <br />
                 Monto:{' '}
                 <strong>
-                  {subscriptions[0]?.items?.data[0]?.plan?.currency.toUpperCase()}
-                  ${subscriptions[0]?.items?.data[0]?.plan?.amount / 100}
+                  {AppCtx.StripeData.subscriptionsi[0]?.items?.data[0]?.plan?.currency.toUpperCase()}
+                  $
+                  {AppCtx.StripeData.subscriptionsi[0]?.items?.data[0]?.plan
+                    ?.amount / 100}
                 </strong>{' '}
                 por{' '}
                 <strong>
-                  {subscriptions[0]?.items?.data[0]?.plan?.interval_count}{' '}
+                  {
+                    AppCtx.StripeData.subscriptionsi[0]?.items?.data[0]?.plan
+                      ?.interval_count
+                  }{' '}
                 </strong>
                 {interval}
                 .
@@ -307,10 +351,11 @@ const Account = (props) => {
                 <br />
                 Fecha de renovación:{' '}
                 <strong>
-                  {subscriptions[0] &&
+                  {AppCtx.StripeData.subscriptionsi[0] &&
                     moment(
                       new Date(
-                        subscriptions[0]?.current_period_end * 1000
+                        AppCtx.StripeData.subscriptionsi[0]
+                          ?.current_period_end * 1000
                       ).toString()
                     ).format('LL')}
                 </strong>
@@ -319,7 +364,8 @@ const Account = (props) => {
                 <br />
                 Estado subscripción:{' '}
                 <strong>
-                  {subscriptions[0] && subscriptions[0]?.status === 'active'
+                  {AppCtx.StripeData.subscriptionsi[0] &&
+                  AppCtx.StripeData.subscriptionsi[0]?.status === 'active'
                     ? 'Activo'
                     : 'Inactivo'}
                 </strong>
@@ -383,7 +429,7 @@ const Account = (props) => {
                 <hr />
                 <strong>HISTORIAL DE FACTURAS</strong>
                 <div id="subscriptions">
-                  {subscriptions.map((s) => {
+                  {AppCtx.StripeData.subscriptionsi.map((s) => {
                     return <AccountSubscription key={s.id} subscription={s} />;
                   })}
                 </div>
