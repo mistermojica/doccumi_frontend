@@ -45,6 +45,15 @@ const App = () => {
   const [SubmitedUploadFilesData, setSubmitedUploadFilesData] = useState(false);
   const [SubmitedFormData, setSubmitedFormData] = useState<any>({});
   const [Navigate, setNavigate] = useState<any>({});
+  const [StripeData, setStripeData] = useState<any>({
+    customer: {},
+    subscriptions: [],
+    current_subscription: {},
+    prices: [],
+    current_price: {},
+    default_payment_method: {}
+  });
+
   // const [searchParams, setSearchParams] = useSearchParams();
 
   const windowSize = useWindowSize();
@@ -56,11 +65,13 @@ const App = () => {
     SubmitedUploadFilesData,
     SubmitedFormData,
     Navigate,
+    StripeData,
     // searchParams,
     setFileUploadData,
     setSubmitedUploadFilesData,
     setSubmitedFormData,
-    setNavigate
+    setNavigate,
+    setStripeData
     // setSearchParams
   };
 

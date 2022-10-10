@@ -64,6 +64,18 @@ const Account = (props) => {
     getSubscriptions();
   }, []);
 
+  useEffect(() => {
+    if (subscriptions) {
+      const StripeData = {...AppCtx.StripeData};
+      StripeData.subscriptions = subscriptions;
+      AppCtx.setStripeData(StripeData);
+    }
+  }, [subscriptions]);
+
+  useEffect(() => {
+    console.log('useEffect() || AppCtx.StripeData:', AppCtx.StripeData);
+  }, [AppCtx]);
+
   if (!subscriptions) {
     return null;
   }

@@ -201,12 +201,32 @@ const Account = (props) => {
   };
 
   useEffect(() => {
+    console.log(
+      'Account1 - useEffect() || AppCtx.StripeData.subscriptions:',
+      AppCtx.StripeData.subscriptions
+    );
     getCustomer();
     getSubscriptions();
     getPaymentMethods();
   }, []);
 
   useEffect(() => {
+    if (subscriptions) {
+      console.log(
+        'Account2 - useEffect() || AppCtx.StripeData.subscriptions:',
+        AppCtx.StripeData.subscriptions
+      );
+
+      const StripeData = {...AppCtx.StripeData};
+      StripeData.subscriptions = subscriptions;
+      AppCtx.setStripeData(StripeData);
+
+      console.log(
+        'Account3 - useEffect() || AppCtx.StripeData.subscriptions:',
+        AppCtx.StripeData.subscriptions
+      );
+    }
+
     if (subscriptions) {
       console.log({subscriptions});
       console.log('subscriptions.length:', subscriptions.length);
@@ -222,6 +242,13 @@ const Account = (props) => {
       }
     }
   }, [subscriptions]);
+
+  useEffect(() => {
+    console.log(
+      'Account4 - useEffect() || AppCtx.StripeData:',
+      AppCtx.StripeData
+    );
+  }, [AppCtx]);
 
   useEffect(() => {
     if (cards && customer) {
