@@ -92,8 +92,8 @@ const MostrarVehículos = () => {
   };
 
   const handlePublishInventory = (row, rrss) => {
-    console.log(rrss, row);
-    publishInventory({...row, to: rrss});
+    console.log({rrss, row});
+    publishInventory({inventario: row, to: rrss});
   };
 
   const handleAddNewShow = () => {
@@ -241,7 +241,7 @@ const MostrarVehículos = () => {
             size="sm"
             color="primary"
             onClick={() => {
-              handlePublishInventory(row, 'IG');
+              handlePublishInventory(row, 'instagram');
             }}
           >
             <InstagramIcon />
@@ -251,7 +251,7 @@ const MostrarVehículos = () => {
             size="sm"
             color="primary"
             onClick={() => {
-              handlePublishInventory(row, 'FB');
+              handlePublishInventory(row, 'marketplace');
             }}
           >
             <FacebookIcon />
@@ -517,9 +517,11 @@ const MostrarVehículos = () => {
   const publishInventory = (ctx) => {
     const url = Config.gatDomainName().concat('/publicaciones/publish');
     const body = {
-      inventario: ctx.row,
+      inventario: ctx.inventario,
       to: ctx.to
     };
+
+    mlCL('body:', {body});
 
     axios
       .post(url, body)
