@@ -16,7 +16,9 @@ import IconButton from '@mui/material/IconButton';
 import {
   Visibility as VisibilityIcon,
   Edit as EditIcon,
-  Delete as DeleteIcon
+  Delete as DeleteIcon,
+  Facebook as FacebookIcon,
+  Instagram as InstagramIcon
 } from '@mui/icons-material';
 import FilterComponent from '@app/components/data-table/FilterComponent';
 import VehiculosFormBody from '@app/components/forms/VehiculosFormBody';
@@ -87,6 +89,11 @@ const MostrarVehículos = () => {
   };
   const handleEditClose = () => {
     SetEditShow(false);
+  };
+
+  const handlePublishInventory = (row, rrss) => {
+    console.log(rrss, row);
+    publishInventory({...row, to: rrss});
   };
 
   const handleAddNewShow = () => {
@@ -228,6 +235,26 @@ const MostrarVehículos = () => {
             }}
           >
             <EditIcon />
+          </IconButton>
+          <IconButton
+            aria-label="publishig"
+            size="sm"
+            color="primary"
+            onClick={() => {
+              handlePublishInventory(row, 'IG');
+            }}
+          >
+            <InstagramIcon />
+          </IconButton>
+          <IconButton
+            aria-label="publishfb"
+            size="sm"
+            color="primary"
+            onClick={() => {
+              handlePublishInventory(row, 'FB');
+            }}
+          >
+            <FacebookIcon />
           </IconButton>
           <IconButton
             aria-label="delete"
@@ -487,6 +514,32 @@ const MostrarVehículos = () => {
       });
   };
 
+  const publishInventory = (ctx) => {
+    const url = Config.gatDomainName().concat('/publicaciones/publish');
+    const body = {
+      inventario: ctx.row,
+      to: ctx.to
+    };
+
+    axios
+      .post(url, body)
+      .then((response) => {
+        const result = response.data;
+        const {status, message, data} = result;
+        if (status !== 'SUCCESS') {
+          mlCL('message:', message);
+        } else {
+          mlCL('data:', data);
+          // handleEditClose();
+          // GetAllData(profileId);
+          handleMessageShow(SetResMessage(message));
+        }
+      })
+      .catch((err) => {
+        mlCL('err:', err);
+      });
+  };
+
   useEffect(() => {
     SetProfileId(profileId);
   }, []);
@@ -550,7 +603,7 @@ const MostrarVehículos = () => {
                   <Modal.Title>Ver Datos Inventario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  {ExtraFieldsConfig && ExtraFieldsConfig.size > 0 && (
+                  {ExtraFieldsConfig && ( // && ExtraFieldsConfig.size > 0
                     <VehiculosFormBody
                       onChangeCB={onChangeCB}
                       RowData={RowData}
@@ -600,7 +653,7 @@ const MostrarVehículos = () => {
                   <Modal.Title>Editar Inventario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  {ExtraFieldsConfig && ExtraFieldsConfig.size > 0 && (
+                  {ExtraFieldsConfig && ( // && ExtraFieldsConfig.size > 0
                     <VehiculosFormBody
                       onChangeCB={onChangeCB}
                       RowData={RowData}
