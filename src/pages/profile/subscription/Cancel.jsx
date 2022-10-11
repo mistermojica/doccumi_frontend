@@ -41,7 +41,10 @@ const Cancel = () => {
     });
 
     setCancelled(true);
-    AppCtx.setNavigate({to: 'account', data: {}});
+    AppCtx.loadStripeInit().then((resLSI) => {
+      console.log({resLSI});
+      AppCtx.setNavigate({to: 'account', data: {}});
+    });
   };
 
   useEffect(() => {

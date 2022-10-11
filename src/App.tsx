@@ -65,6 +65,36 @@ const App = () => {
   const screenSize = useSelector((state: any) => state.ui.screenSize);
   const dispatch = useDispatch();
 
+  const loadStripeInit = () => {
+    const promise = new Promise(function (resolve, reject) {
+      const fetchData = async () => {
+        const {customer, subscriptions} = await fetch(
+          UrlBase.concat('load-stripe-init'),
+          {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              customerId: AuthService.getProfileStripeId(),
+              statusCode: 'active'
+            })
+          }
+        ).then((r) => r.json());
+
+        const stripeData = {...StripeData};
+        stripeData.customer = customer;
+        stripeData.default_payment_method =
+          customer?.invoice_settings?.default_payment_method;
+        stripeData.subscriptionsi = subscriptions.data.sort(compareStatus);
+        setStripeData(stripeData);
+        resolve(true);
+      };
+
+      fetchData();
+    });
+
+    return promise;
+  };
+
   const userSettings = {
     FileUploadData,
     SubmitedUploadFilesData,
@@ -76,33 +106,9 @@ const App = () => {
     setSubmitedUploadFilesData,
     setSubmitedFormData,
     setNavigate,
-    setStripeData
+    setStripeData,
+    loadStripeInit
     // setSearchParams
-  };
-
-  const loadStripeInit = () => {
-    const fetchData = async () => {
-      const {customer, subscriptions} = await fetch(
-        UrlBase.concat('load-stripe-init'),
-        {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            customerId: AuthService.getProfileStripeId(),
-            statusCode: 'active'
-          })
-        }
-      ).then((r) => r.json());
-
-      const stripeData = {...StripeData};
-      stripeData.customer = customer;
-      stripeData.default_payment_method =
-        customer?.invoice_settings?.default_payment_method;
-      stripeData.subscriptionsi = subscriptions.data.sort(compareStatus);
-      setStripeData(stripeData);
-    };
-
-    fetchData();
   };
 
   function compareStatus(a: any, b: any) {

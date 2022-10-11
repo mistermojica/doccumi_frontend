@@ -87,9 +87,11 @@ const ConfirmPrice = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log({subscriptionId});
+
     updateSubscription({
       priceId: price.id,
-      subscriptionId,
+      subscriptionId: subscriptionId,
       customerId: user.profile.usuario_stripe
     });
   };
@@ -134,9 +136,12 @@ const ConfirmPrice = (props) => {
 
       setIsLoading(false);
 
-      AppCtx.setNavigate({
-        to: 'account',
-        data: {price}
+      AppCtx.loadStripeInit().then((resLSI) => {
+        console.log({resLSI});
+        AppCtx.setNavigate({
+          to: 'account',
+          data: {price}
+        });
       });
     };
 
@@ -322,7 +327,7 @@ const ConfirmPrice = (props) => {
             ) : null}
             <div className="form-group row">
               <div className="col-md-12 text-center">
-                {price.id !== currentPriceId ? (
+                {subscriptionId && price.id !== currentPriceId ? (
                   <>
                     <Button
                       id="submit"
@@ -351,6 +356,7 @@ const ConfirmPrice = (props) => {
                     </Button>
                   </>
                 ) : (
+                  <></>
                   // <Button
                   //   type="button"
                   //   theme={
@@ -361,11 +367,11 @@ const ConfirmPrice = (props) => {
                   // >
                   //   Confirmar
                   // </Button>
-                  <>
-                    <CheckIcon />
-                    &nbsp;
-                    <span>Plan actual</span>
-                  </>
+                  // <>
+                  //   <CheckIcon />
+                  //   &nbsp;
+                  //   <span>Plan actual</span>
+                  // </>
                 )}
               </div>
             </div>
