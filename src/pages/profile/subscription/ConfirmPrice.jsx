@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import {Button} from '@components';
 import CheckIcon from '@mui/icons-material/Check';
 import Collapse from 'react-bootstrap/Collapse';
-// @ts-ignore
+import Loading from '@app/components/loadings/Loading';
 import AppContext from '@app/contexts/AppContext';
 import * as Config from '@app/utils/config';
 
@@ -356,7 +356,7 @@ const ConfirmPrice = (props) => {
                     </Button>
                   </>
                 ) : (
-                  <></>
+                  <Loading show />
                   // <Button
                   //   type="button"
                   //   theme={

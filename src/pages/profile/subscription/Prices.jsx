@@ -134,8 +134,8 @@ const Prices = (props) => {
       </h5>
       <br />
       <div className="price-list">
-        {prices.map((price) => {
-          return (
+        {prices &&
+          prices.map((price) => (
             <div key={price.id}>
               <h4 className="col-md-12 text-center">
                 <strong>{price.product.name}</strong>
@@ -211,8 +211,7 @@ const Prices = (props) => {
                 </div>
               </div>
             </div>
-          );
-        })}
+          ))}
       </div>
       <br />
       <div className="container">
