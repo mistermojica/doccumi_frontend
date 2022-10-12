@@ -3,12 +3,13 @@ PENDIENTES DOCCUMI
 ----------------------------------------------------------
 
 ◦	I- Definir modelo de uso de la aplicación sin subscripción activa.
-◦	I- Mostrar disclaimer al usar las publicaciones en RRHH.
+◦	I- Mostrar disclaimer al usar las publicaciones en RRSS.
 ◦	I- Validar que las credenciales puedan hacer login en las RRSS.
-◦	P- Crear videos de promoción
+◦	P- Crear videos de promoción.
 
 ----------------------------------------------------------
 
+◦	H- Integrar el flujo de publicaciones en RRSS desde la gestión de inventario con botones.
 ◦	H- Redactar Términos y Condiciones y Politica de Privacidad
 ◦	H- Crear botón e indicador de membresía con plan actual en el menú principal al lado del selector de idiomas
 ◦	H- Crear formulario de soporte y seguimiento a casos.
