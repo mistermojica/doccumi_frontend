@@ -16,7 +16,7 @@ PENDIENTES DOCCUMI
 ◦	H- Cambiar término Vehículos por Inventario.
 ◦	H- Mostrar precio por mes en cada plan.
 ◦	H- Estabilizar el envio del customerId en todos los métodos pendientes del controlador subscripciones
-◦   H- Corregir página de perfil
+◦ H- Corregir página de perfil
 ◦	H- Importar plantilla desde archivo DOCX
 ◦	H- Implementar sistema de pago en línea
 ◦	H- Diseñar sitio web de promoción

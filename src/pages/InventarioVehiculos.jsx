@@ -15,7 +15,7 @@ import {matchSorter} from 'match-sorter';
 // import {columns, data} from '../data/vehiculos';
 import makeData from '../data/makeData';
 
-import '../css/styles.css';
+import '@app/css/styles.css';
 
 const Styles = styled.div`
   padding: 0;
