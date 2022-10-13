@@ -43,11 +43,16 @@ import PrivateRoute from './routes/PrivateRoute';
 import * as Config from '@app/utils/config';
 import * as AuthService from '@app/services/auth';
 
+import axios from 'axios';
+
 const App = () => {
   const [FileUploadData, setFileUploadData] = useState<any>(new Map());
   const [SubmitedUploadFilesData, setSubmitedUploadFilesData] = useState(false);
   const [SubmitedFormData, setSubmitedFormData] = useState<any>({});
   const [Navigate, setNavigate] = useState<any>({});
+  const [ClientesData, SetClientesData] = useState<any>([]);
+  const [InventariosData, SetInventariosData] = useState<any>([]);
+
   const [StripeData, setStripeData] = useState<any>({
     customer: {},
     subscriptions: [],
@@ -55,7 +60,8 @@ const App = () => {
     current_subscription: {},
     prices: [],
     current_price: {},
-    default_payment_method: {}
+    default_payment_method: {},
+    has_active_subscription: false
   });
   const [UrlBase] = useState(Config.gatDomainName().concat('/subscripciones/'));
 
@@ -66,6 +72,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   const loadStripeInit = () => {
+    console.log('loadStripeInit');
     const promise = new Promise(function (resolve, reject) {
       const fetchData = async () => {
         const {customer, subscriptions} = await fetch(
@@ -85,7 +92,11 @@ const App = () => {
         stripeData.default_payment_method =
           customer?.invoice_settings?.default_payment_method;
         stripeData.subscriptionsi = subscriptions.data.sort(compareStatus);
+
+        stripeData.has_active_subscription = hasSubscription(stripeData);
+
         setStripeData(stripeData);
+
         resolve(true);
       };
 
@@ -95,20 +106,31 @@ const App = () => {
     return promise;
   };
 
+  const hasSubscription = (stripeData: any) => {
+    const result =
+      stripeData.subscriptionsi.length > 0 &&
+      stripeData.subscriptionsi.filter(
+        (doc: any) => doc.status === 'active'
+      )[0] !== undefined;
+    return result;
+  };
+
   const userSettings = {
     FileUploadData,
     SubmitedUploadFilesData,
     SubmitedFormData,
     Navigate,
     StripeData,
-    // searchParams,
+    ClientesData,
+    InventariosData,
     setFileUploadData,
     setSubmitedUploadFilesData,
     setSubmitedFormData,
     setNavigate,
     setStripeData,
+    SetClientesData,
+    SetInventariosData,
     loadStripeInit
-    // setSearchParams
   };
 
   function compareStatus(a: any, b: any) {
@@ -122,8 +144,36 @@ const App = () => {
     return 0;
   }
 
+  const GetAllData = (modelo: string) => {
+    const url = Config.gatDomainName()
+      .concat('/')
+      .concat(modelo)
+      .concat('/listapordueno/')
+      .concat(AuthService.getProfileId() || '');
+    axios
+      .get(url)
+      .then((response: any) => {
+        const result = response.data;
+        const {status, message, data} = result;
+        if (status !== 'SUCCESS') {
+          console.log('message:', message);
+        } else {
+          if (modelo === 'vehiculos') {
+            SetInventariosData(data);
+          } else if (modelo === 'clientes') {
+            SetClientesData(data);
+          }
+        }
+      })
+      .catch((err: any) => {
+        console.log('err:', err);
+      });
+  };
+
   useEffect(() => {
     loadStripeInit();
+    GetAllData('clientes');
+    GetAllData('vehiculos');
   }, []);
 
   useEffect(() => {

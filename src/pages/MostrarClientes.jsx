@@ -9,17 +9,19 @@ import * as moment from 'moment';
 import {ContentHeader} from '@components';
 import {Button, Modal} from 'react-bootstrap';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {styled} from '@mui/material/styles';
 import DataTable, {createTheme} from 'react-data-table-component';
 import {mlCL} from '@app/utils/helpers';
 import IconButton from '@mui/material/IconButton';
 import {
   Visibility as VisibilityIcon,
   Edit as EditIcon,
-  Delete as DeleteIcon
+  Delete as DeleteIcon,
+  Info as InfoIcon
 } from '@mui/icons-material';
-import {faTimes} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import Typography from '@mui/material/Typography';
+import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
 import FilterComponent from '@app/components/data-table/FilterComponent';
 import ClientesFormBody from '@app/components/forms/ClientesFormBody';
 import AppContext from '@app/contexts/AppContext';
@@ -42,6 +44,18 @@ createTheme('solarized', {
     text: '#FFFFFF'
   }
 });
+
+const HtmlTooltip = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}} />
+))(({theme}) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9'
+  }
+}));
 
 const MostrarClientes = () => {
   const AppCtx = useContext(AppContext);
@@ -76,6 +90,11 @@ const MostrarClientes = () => {
 
   const handleAddNewShow = () => {
     navegar('/agregar-cliente');
+  };
+
+  const handleAddNew = (e) => {
+    e.preventDefault();
+    navegar('/profile?activetab=SUBSCRIPTION');
   };
 
   const [MessageShow, SetMessageShow] = useState(false);
@@ -323,7 +342,6 @@ const MostrarClientes = () => {
   };
 
   const handleEdit = () => {
-    // AppCtx.setSubmitedUploadFilesData(true);
     submitData();
   };
 
@@ -424,15 +442,60 @@ const MostrarClientes = () => {
           <div className="card">
             <div className="row">
               <div className="mt-3 mb-3 ml-4">
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    handleAddNewShow();
-                  }}
-                >
-                  <i className="fa fa-plu">&nbsp;</i>
-                  Agregar Nuevo Cliente
-                </Button>
+                {AppCtx.StripeData.has_active_subscription ||
+                Data.length === 0 ? (
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      handleAddNewShow();
+                    }}
+                  >
+                    <i className="fa fa-plu">&nbsp;</i>
+                    Agregar Nuevo Cliente
+                  </Button>
+                ) : (
+                  <div>
+                    <HtmlTooltip
+                      placement="top"
+                      title={
+                        <React.Fragment>
+                          <Typography color="inherit">
+                            <small>
+                              Para agregar más clientes debes activar un plan de
+                              servicio.
+                            </small>
+                          </Typography>
+                        </React.Fragment>
+                      }
+                    >
+                      <div className="container-fluid">
+                        <div className="row">
+                          <div className="sm-6">
+                            <Button variant="secondary" disabled>
+                              <i className="fa fa-plu">&nbsp;</i>
+                              Agregar Nuevo Cliente
+                            </Button>
+                          </div>
+                          <InfoIcon
+                            color="primary"
+                            className="mt-1"
+                            style={{marginLeft: 10}}
+                          />
+                          <div className="sm-6 ml-2 mt-1">
+                            <Link
+                              to=""
+                              variant="contained"
+                              color="primary"
+                              onClick={handleAddNew}
+                            >
+                              <strong>Activar un plan de servicio</strong>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </HtmlTooltip>
+                  </div>
+                )}
               </div>
             </div>
             <div className="row col-12">
