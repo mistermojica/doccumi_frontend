@@ -2,6 +2,10 @@ PENDIENTES DOCCUMI
 
 ----------------------------------------------------------
 
+◦	P- Crear el Perfil de Inventario en PHP
+◦	P- Crear formulario de contacto para capturar Clientes Potenciales en el Perfil de Inventario
+◦	P- Crear lista de Clientes Potenciales
+◦	P- Crear funcilalidad para convertir de Lead a Cliente.
 ◦	I- Validar que las credenciales puedan hacer login en las RRSS.
 ◦	P- Crear videos de promoción.
 
@@ -16,7 +20,7 @@ PENDIENTES DOCCUMI
 ◦	H- Cambiar término Vehículos por Inventario.
 ◦	H- Mostrar precio por mes en cada plan.
 ◦	H- Estabilizar el envio del customerId en todos los métodos pendientes del controlador subscripciones
-◦ H- Corregir página de perfil
+◦   H- Corregir página de perfil
 ◦	H- Importar plantilla desde archivo DOCX
 ◦	H- Implementar sistema de pago en línea
 ◦	H- Diseñar sitio web de promoción

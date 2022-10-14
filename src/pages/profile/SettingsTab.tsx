@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux';
 import _ from 'underscore';
 import {Button} from '@components';
 import {Button as ButtonN, Modal} from 'react-bootstrap';
+import Loading from '@app/components/loadings/Loading';
 import axios from 'axios';
 import {mlCL} from '@app/utils/helpers';
 // @ts-ignore
@@ -16,6 +17,8 @@ import * as Config from '@app/utils/config';
 const SettingsTab = (props: any) => {
   const {isActive} = props;
   const user = useSelector((state: any) => state.auth.currentUser);
+
+  console.log({user});
 
   const [resMessage, SetResMessage] = useState('');
 
@@ -32,6 +35,14 @@ const SettingsTab = (props: any) => {
   };
   const handleMessageClose = () => {
     SetMessageShow(false);
+  };
+
+  const [LoadingShow, SetLoadingShow] = useState(false);
+  const handleLoadingShow = () => {
+    SetLoadingShow(true);
+  };
+  const handleLoadingHide = () => {
+    SetLoadingShow(false);
   };
 
   const onChangeCB = (cbData: any) => {
@@ -81,6 +92,27 @@ const SettingsTab = (props: any) => {
       });
   };
 
+  const handleTestCredentials = (to: string) => {
+    handleLoadingShow();
+    const url = Config.gatDomainName().concat('/publicaciones/loginrrss');
+    axios
+      .post(url, {
+        dueno: user.settings.conDueno,
+        to,
+        show: false
+      })
+      .then((response) => {
+        const {success, message, result} = response.data;
+        mlCL('response.data:', response.data);
+        SetResMessage(message);
+        handleMessageShow();
+        handleLoadingHide();
+      })
+      .catch((err) => {
+        mlCL('err:', err);
+      });
+  };
+
   useEffect(() => {
     console.log('reqBody:', reqBody);
   }, [reqBody]);
@@ -121,6 +153,28 @@ const SettingsTab = (props: any) => {
               defaultValue={user?.settings?.conIGContrasena}
               onChange={onChangeCB}
             />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="nombre" className="col-sm-2 col-form-label">
+            &nbsp;
+          </label>
+          <div className="col-sm-10">
+            <div className="row">
+              <div className="col-sm-2">
+                <ButtonN
+                  variant="secondary"
+                  onClick={() => {
+                    handleTestCredentials('instagram');
+                  }}
+                >
+                  Verificar
+                </ButtonN>
+              </div>
+              <div className="col-sm-2">
+                <Loading show={LoadingShow} />
+              </div>
+            </div>
           </div>
         </div>
         <hr />

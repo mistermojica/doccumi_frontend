@@ -5,6 +5,7 @@ import {NavLink, useNavigate, useLocation, Location} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {IMenuItem} from '@app/modules/main/menu-sidebar/MenuSidebar';
 import {styled} from '@mui/material/styles';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Tooltip, {TooltipProps, tooltipClasses} from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import AppContext from '@app/contexts/AppContext';
@@ -105,15 +106,18 @@ const MenuItem = ({menuItem}: {menuItem: IMenuItem}) => {
                   title={
                     <React.Fragment>
                       <Typography color="inherit">
-                        Para agregar más clientes debes activar un plan de
-                        servicio.
+                        <small>
+                          Para agregar más clientes debes activar un plan de
+                          servicio.
+                        </small>
                       </Typography>
                     </React.Fragment>
                   }
                 >
                   <div className="nav-link">
                     {/* <NavLink className="nav-link" to={`${item.path}`}> */}
-                    <i className="far fa-circle nav-icon" />
+                    {/* <i className="far fa-circle nav-icon" /> */}
+                    <LockOutlinedIcon />
                     <small>{t(item.name)}</small>
                     {/* </NavLink> */}
                   </div>
@@ -126,15 +130,18 @@ const MenuItem = ({menuItem}: {menuItem: IMenuItem}) => {
                   title={
                     <React.Fragment>
                       <Typography color="inherit">
-                        Para agregar más inventarios debes activar un plan de
-                        servicio.
+                        <small>
+                          Para agregar más inventarios debes activar un plan de
+                          servicio.
+                        </small>
                       </Typography>
                     </React.Fragment>
                   }
                 >
                   <div className="nav-link">
                     {/* <NavLink className="nav-link" to={`${item.path}`}> */}
-                    <i className="far fa-circle nav-icon" />
+                    {/* <i className="far fa-circle nav-icon" /> */}
+                    <LockOutlinedIcon />
                     <small>{t(item.name)}</small>
                     {/* </NavLink> */}
                   </div>
