@@ -49,7 +49,7 @@ const HtmlTooltip = styled(({className, ...props}) => (
   <Tooltip {...props} classes={{popper: className}} />
 ))(({theme}) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#f5f5f9',
+    backgroundColor: '#dce9f7',
     color: 'rgba(0, 0, 0, 0.87)',
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(12),
@@ -374,6 +374,7 @@ const MostrarClientes = () => {
           mlCL('data:', data);
           handleEditClose();
           GetAllData(profileId);
+          AppCtx.loadInitData();
           handleMessageShow(SetResMessage(message));
         }
       })
@@ -395,6 +396,7 @@ const MostrarClientes = () => {
           mlCL('data:', data);
           handleViewClose();
           GetAllData(profileId);
+          AppCtx.loadInitData();
           handleMessageShow(SetResMessage(message));
         }
       })
@@ -409,6 +411,7 @@ const MostrarClientes = () => {
 
   useEffect(() => {
     GetAllData(profileId);
+    AppCtx.loadInitData();
   }, [profileId]);
 
   // useEffect(() => {
@@ -460,10 +463,8 @@ const MostrarClientes = () => {
                       title={
                         <React.Fragment>
                           <Typography color="inherit">
-                            <small>
-                              Para agregar más clientes debes activar un plan de
-                              servicio.
-                            </small>
+                            Para agregar más clientes debes activar un plan de
+                            servicio.
                           </Typography>
                         </React.Fragment>
                       }
@@ -478,10 +479,10 @@ const MostrarClientes = () => {
                           </div>
                           <InfoIcon
                             color="primary"
-                            className="mt-1"
+                            className="mt-2"
                             style={{marginLeft: 10}}
                           />
-                          <div className="sm-6 ml-2 mt-1">
+                          <div className="sm-6 ml-2 mt-2">
                             <Link
                               to=""
                               variant="contained"

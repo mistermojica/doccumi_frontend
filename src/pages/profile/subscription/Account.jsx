@@ -456,7 +456,7 @@ const HtmlTooltip = styled(({className, ...props}) => (
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: '#f5f5f9',
     color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 220,
+    maxWidth: 270,
     fontSize: theme.typography.pxToRem(12),
     border: '1px solid #dadde9'
   }
@@ -578,8 +578,10 @@ const PaymentMethod = ({
                 <React.Fragment>
                   <Typography color="inherit">
                     <small>
-                      Tu método de pago predeterminado no puede ser eliminado
-                      debido a que tienes un plan activo.
+                      Tu método de pago predeterminado no puede ser eliminado.
+                      <br />
+                      Para eliminar este método de pago, debes agregar uno nuevo
+                      y marcarlo como predeterminado.
                     </small>
                   </Typography>
                 </React.Fragment>

@@ -25,6 +25,7 @@ import {
 import Typography from '@mui/material/Typography';
 import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
 import FilterComponent from '@app/components/data-table/FilterComponent';
+import Loading from '@app/components/loadings/Loading';
 import VehiculosFormBody from '@app/components/forms/VehiculosFormBody';
 import AppContext from '@app/contexts/AppContext';
 import * as AuthService from '@app/services/auth';
@@ -51,7 +52,7 @@ const HtmlTooltip = styled(({className, ...props}) => (
   <Tooltip {...props} classes={{popper: className}} />
 ))(({theme}) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#f5f5f9',
+    backgroundColor: '#dce9f7',
     color: 'rgba(0, 0, 0, 0.87)',
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(12),
@@ -107,9 +108,24 @@ const MostrarVehículos = () => {
     SetEditShow(false);
   };
 
+  const [DisclaimerShow, SetDisclaimerShow] = useState(false);
+  const handleDisclaimerShow = () => {
+    SetDisclaimerShow(true);
+  };
+  const handleDisclaimerClose = () => {
+    SetDisclaimerShow(false);
+  };
+
   const handlePublishInventory = (row, rrss) => {
-    console.log({rrss, row});
-    publishInventory({inventario: row, to: rrss});
+    SetCurrentRowData(row);
+    SetCurrentRRSSData(rrss);
+    handleDisclaimerShow();
+  };
+
+  const handlePublishInventorySave = () => {
+    if (CurrentRowData && CurrentRRSSData) {
+      publishInventory({inventario: CurrentRowData, to: CurrentRRSSData});
+    }
   };
 
   const handleAddNewShow = () => {
@@ -136,6 +152,9 @@ const MostrarVehículos = () => {
 
   const [Data, SetData] = useState([]);
   const [RowData, SetRowData] = useState([]);
+  const [CurrentRowData, SetCurrentRowData] = useState({});
+  const [CurrentRRSSData, SetCurrentRRSSData] = useState('');
+  const [IsPublishing, SetIsPublishing] = useState(false);
 
   // Define here local state that store the form data //ROMG
   const [vehNoRegistroPlaca, setNoRegistroPlaca] = useState('');
@@ -506,6 +525,7 @@ const MostrarVehículos = () => {
           mlCL('data:', data);
           handleEditClose();
           GetAllData(profileId);
+          AppCtx.loadInitData();
           handleMessageShow(SetResMessage(message));
         }
       })
@@ -527,6 +547,7 @@ const MostrarVehículos = () => {
           mlCL('data:', data);
           handleViewClose();
           GetAllData(profileId);
+          AppCtx.loadInitData();
           handleMessageShow(SetResMessage(message));
         }
       })
@@ -536,26 +557,29 @@ const MostrarVehículos = () => {
   };
 
   const publishInventory = (ctx) => {
+    SetIsPublishing(true);
     const url = Config.gatDomainName().concat('/publicaciones/publish');
     const body = {
       inventario: ctx.inventario,
       to: ctx.to
     };
 
-    mlCL('body:', {body});
-
     axios
       .post(url, body)
       .then((response) => {
-        const result = response.data;
-        const {status, message, data} = result;
-        if (status !== 'SUCCESS') {
+        const {success, message, result} = response.data;
+        if (!success) {
           mlCL('message:', message);
+          SetResMessage(message);
+          handleMessageShow();
         } else {
-          mlCL('data:', data);
+          mlCL('publishInventory(result):', result);
           // handleEditClose();
           // GetAllData(profileId);
-          handleMessageShow(SetResMessage(message));
+          handleDisclaimerClose();
+          SetIsPublishing(false);
+          SetResMessage(message);
+          handleMessageShow();
         }
       })
       .catch((err) => {
@@ -570,6 +594,7 @@ const MostrarVehículos = () => {
   useEffect(() => {
     GetAllData(profileId);
     GetExtraFieldsData(profileId);
+    AppCtx.loadInitData();
   }, [profileId]);
 
   return (
@@ -598,10 +623,8 @@ const MostrarVehículos = () => {
                       title={
                         <React.Fragment>
                           <Typography color="inherit">
-                            <small>
-                              Para agregar más inventarios debes activar un plan
-                              de servicio.
-                            </small>
+                            Para agregar más inventarios debes activar un plan
+                            de servicio.
                           </Typography>
                         </React.Fragment>
                       }
@@ -616,10 +639,10 @@ const MostrarVehículos = () => {
                           </div>
                           <InfoIcon
                             color="primary"
-                            className="mt-1"
+                            className="mt-2"
                             style={{marginLeft: 10}}
                           />
-                          <div className="sm-6 ml-2 mt-1">
+                          <div className="sm-6 ml-2 mt-2">
                             <Link
                               to=""
                               variant="contained"
@@ -774,6 +797,45 @@ const MostrarVehículos = () => {
                 <Modal.Footer>
                   <Button variant="secondary" onClick={handleMessageClose}>
                     Cerrar
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </div>
+            <div className="model-box-view">
+              <Modal
+                show={DisclaimerShow}
+                onHide={handleDisclaimerClose}
+                backdrop="static"
+                keyboard={false}
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>Advertencia</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  {IsPublishing ? (
+                    <div className="col-sm-12">
+                      <Loading show={IsPublishing} />
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="">
+                        Reconozco y acepto que esta función se encuentra en modo
+                        BETA y que el uso excesivo de la misma podría resultar
+                        en la suspención de mi cuenta de Instagram y/o Facebook
+                        por parte de Meta.
+                      </div>
+                    </div>
+                  )}
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleDisclaimerClose}>
+                    Cerrar
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={handlePublishInventorySave}
+                  >
+                    Publicar
                   </Button>
                 </Modal.Footer>
               </Modal>

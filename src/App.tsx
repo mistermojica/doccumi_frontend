@@ -115,6 +115,11 @@ const App = () => {
     return result;
   };
 
+  const loadInitData = () => {
+    GetAllData('clientes');
+    GetAllData('vehiculos');
+  };
+
   const userSettings = {
     FileUploadData,
     SubmitedUploadFilesData,
@@ -130,10 +135,11 @@ const App = () => {
     setStripeData,
     SetClientesData,
     SetInventariosData,
-    loadStripeInit
+    loadStripeInit,
+    loadInitData
   };
 
-  function compareStatus(a: any, b: any) {
+  const compareStatus = (a: any, b: any) => {
     console.log(a.status);
     if (a.status < b.status) {
       return -1;
@@ -142,7 +148,7 @@ const App = () => {
       return 1;
     }
     return 0;
-  }
+  };
 
   const GetAllData = (modelo: string) => {
     const url = Config.gatDomainName()
@@ -172,8 +178,7 @@ const App = () => {
 
   useEffect(() => {
     loadStripeInit();
-    GetAllData('clientes');
-    GetAllData('vehiculos');
+    loadInitData();
   }, []);
 
   useEffect(() => {
