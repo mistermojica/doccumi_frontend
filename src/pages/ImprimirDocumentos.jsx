@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {ContentHeader} from '@components';
 import {Button, Modal} from 'react-bootstrap';
 import Checkbox from '@mui/material/Checkbox';
@@ -10,6 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import axios from 'axios';
 import {mlCL, removeDiacritics} from '@app/utils/helpers';
 // import {useNavigate} from 'react-router-dom';
+import AppContext from '@app/contexts/AppContext';
 import Loading from '@app/components/loadings/Loading';
 import * as AuthService from '@app/services/auth';
 import * as Config from '@app/utils/config';
@@ -17,6 +18,7 @@ import AsyncSelect from 'react-select/async';
 
 const ImprimirDocumentos = () => {
   // const navegar = useNavigate();
+  const AppCtx = useContext(AppContext);
 
   const [impVehiculo, setVehiculo] = useState('');
   const [impCliente, setCliente] = useState('');

@@ -80,10 +80,18 @@ const MenuItem = ({menuItem}: {menuItem: IMenuItem}) => {
         menuItem.children.map((item) => (
           <ul key={item.name} className="nav nav-treeview">
             <li className="nav-item">
-              <NavLink className="nav-link" to={`${item.path}`}>
-                <i className="far fa-circle nav-icon" />
-                <small>{t(item.name)}</small>
-              </NavLink>
+              {item.name === 'menusidebar.label.vehiculos.agregarCliente' ||
+              item.name === 'menusidebar.label.clientes.agregarVehiculo' ? (
+                <NavLink className="nav-link" to={`${item.path}`}>
+                  <i className="far fa-circle nav-icon" />
+                  <small>{t(item.name)}</small>
+                </NavLink>
+              ) : (
+                <NavLink className="nav-link" to={`${item.path}`}>
+                  <i className="far fa-circle nav-icon" />
+                  <small>{t(item.name)}</small>
+                </NavLink>
+              )}
             </li>
           </ul>
         ))}
