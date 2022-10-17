@@ -94,13 +94,32 @@ const SettingsTab = (props: any) => {
 
   const handleTestCredentials = (to: string) => {
     handleLoadingShow();
+
     const url = Config.gatDomainName().concat('/publicaciones/loginrrss');
+
+    let credentials: any = {};
+
+    if (to === 'instagram') {
+      credentials.conIGUsuario = reqBody.conIGUsuario;
+      credentials.conIGContrasena = reqBody.conIGContrasena;
+    }
+
+    if (to === 'marketplace') {
+      credentials.conFBUsuario = reqBody.conFBUsuario;
+      credentials.conFBContrasena = reqBody.conFBContrasena;
+    }
+
+    const reqbody = {
+      ...credentials,
+      dueno: user.settings.conDueno,
+      to,
+      show: true
+    };
+
+    console.log({reqbody});
+
     axios
-      .post(url, {
-        dueno: user.settings.conDueno,
-        to,
-        show: false
-      })
+      .post(url, reqbody)
       .then((response) => {
         const {success, message, result} = response.data;
         mlCL('response.data:', response.data);
@@ -212,6 +231,28 @@ const SettingsTab = (props: any) => {
               defaultValue={user?.settings?.conFBContrasena}
               onChange={onChangeCB}
             />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="nombre" className="col-sm-2 col-form-label">
+            &nbsp;
+          </label>
+          <div className="col-sm-10">
+            <div className="row">
+              <div className="col-sm-2">
+                <ButtonN
+                  variant="secondary"
+                  onClick={() => {
+                    handleTestCredentials('marketplace');
+                  }}
+                >
+                  Verificar
+                </ButtonN>
+              </div>
+              <div className="col-sm-2">
+                <Loading show={LoadingShow} />
+              </div>
+            </div>
           </div>
         </div>
         <hr />

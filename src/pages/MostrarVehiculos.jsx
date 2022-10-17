@@ -155,6 +155,8 @@ const MostrarVehículos = () => {
   const [CurrentRowData, SetCurrentRowData] = useState({});
   const [CurrentRRSSData, SetCurrentRRSSData] = useState('');
   const [IsPublishing, SetIsPublishing] = useState(false);
+  const [IsPublishingIG, SetIsPublishingIG] = useState(false);
+  const [IsPublishingFB, SetIsPublishingFB] = useState(false);
 
   // Define here local state that store the form data //ROMG
   const [vehNoRegistroPlaca, setNoRegistroPlaca] = useState('');
