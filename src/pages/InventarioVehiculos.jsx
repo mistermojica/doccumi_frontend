@@ -1,7 +1,5 @@
 import React from 'react';
 import {ContentHeader} from '@components';
-// import {Button} from 'react-bootstrap';
-// import axios from 'axios';
 import styled from 'styled-components';
 import {
   useTable,
@@ -9,10 +7,7 @@ import {
   useGlobalFilter,
   useAsyncDebounce
 } from 'react-table';
-// A great library for fuzzy filtering/sorting items
 import {matchSorter} from 'match-sorter';
-
-// import {columns, data} from '../data/vehiculos';
 import makeData from '../data/makeData';
 
 import '@app/css/styles.css';

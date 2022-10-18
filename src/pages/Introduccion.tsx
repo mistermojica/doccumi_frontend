@@ -24,7 +24,6 @@ import {
   Looks4Rounded as Looks4RoundedIcon,
   Looks5Rounded as Looks5RoundedIcon
 } from '@mui/icons-material';
-// @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 
 const steps = [

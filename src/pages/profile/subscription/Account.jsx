@@ -2,7 +2,7 @@
 
 import React, {useState, useEffect, useContext} from 'react';
 import {Button} from '@components';
-import moment from 'moment';
+import * as moment_ from 'moment';
 import 'moment/locale/es-do';
 // import Moment from 'react-moment';
 // import 'moment-timezone';
@@ -22,6 +22,7 @@ import * as Config from '@app/utils/config';
 import './Subscription.css';
 
 // Moment.globalLocale = 'es-do';
+const moment = moment_;
 
 const Account = (props) => {
   const AppCtx = useContext(AppContext);
