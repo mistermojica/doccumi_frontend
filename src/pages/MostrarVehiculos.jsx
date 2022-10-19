@@ -5,7 +5,7 @@
 
 import React, {useEffect, useState, useContext, useMemo} from 'react';
 import _ from 'underscore';
-import * as moment from 'moment';
+import * as moment_ from 'moment';
 import {ContentHeader} from '@components';
 import {Button, Modal} from 'react-bootstrap';
 import axios from 'axios';
@@ -117,9 +117,13 @@ const MostrarVehículos = () => {
   };
 
   const handlePublishInventory = (row, rrss) => {
-    SetCurrentRowData(row);
-    SetCurrentRRSSData(rrss);
-    handleDisclaimerShow();
+    if (['marketplace', 'supercarros'].includes(rrss)) {
+      handleMessageShow(SetResMessage('Próximamente disponible... 🙌'));
+    } else {
+      SetCurrentRowData(row);
+      SetCurrentRRSSData(rrss);
+      handleDisclaimerShow();
+    }
   };
 
   const handlePublishInventorySave = () => {
@@ -182,16 +186,20 @@ const MostrarVehículos = () => {
 
   const [profileId, SetProfileId] = useState(AuthService.getProfileId());
 
+  const moment = moment_;
+
   // const [PlantillasData, SetPlantillasData] = useState([]);
 
   const columns = [
     {
       name: 'Placa',
-      selector: (row) => row.vehNoRegistroPlaca
+      selector: (row) => row.vehNoRegistroPlaca,
+      width: '90px'
     },
     {
       name: 'Chasis',
-      selector: (row) => row.vehChasis
+      selector: (row) => row.vehChasis,
+      width: '150px'
     },
     // {
     //   name: 'Estado',
@@ -199,31 +207,48 @@ const MostrarVehículos = () => {
     // },
     {
       name: 'Tipo Emisión',
-      selector: (row) => row.vehTipoEmision
+      selector: (row) => row.vehTipoEmision,
+      width: '100px'
     },
     {
-      name: 'Tipo Inventario',
-      selector: (row) => row.vehTipoVehiculo
+      name: 'Tipo',
+      selector: (row) => row.vehTipoVehiculo,
+      width: '90px'
     },
     {
       name: 'Año Fab.',
-      selector: (row) => row.vehAnoFabricacion
+      selector: (row) => row.vehAnoFabricacion,
+      width: '80px'
     },
     {
       name: 'Color',
-      selector: (row) => row.vehColor
+      selector: (row) => row.vehColor,
+      width: '70px'
     },
     {
       name: 'Precio',
-      selector: (row) => row.vehPrecio
+      selector: (row) =>
+        new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          maximumSignificantDigits: 3
+        }).format(row.vehPrecio),
+      width: '100px'
     },
     {
       name: 'Costo',
-      selector: (row) => row.vehCosto
+      selector: (row) =>
+        new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          maximumSignificantDigits: 3
+        }).format(row.vehCosto),
+      width: '100px'
     },
     {
       name: 'Estado',
-      selector: (row) => row.vehEstado
+      selector: (row) => row.vehEstado,
+      width: '90px'
     },
     // {
     //   name: 'Matrícula',
@@ -234,14 +259,15 @@ const MostrarVehículos = () => {
       selector: (row) => (
         <div
           // className="col-2 d-flex align-items-center"
-          style={{
-            minWidth: 400
-          }}
+          // style={{
+          //   minWidth: 300
+          // }}
           nowrap="true"
         >
           {moment(row.vehFechaCreacion).format('DD-MM-YYYY hh:mm A')}
         </div>
-      )
+      ),
+      width: '170px'
     },
     // {
     //   name: 'Fecha Fabricación',
@@ -297,6 +323,22 @@ const MostrarVehículos = () => {
             }}
           >
             <FacebookIcon />
+          </IconButton>
+          <IconButton
+            aria-label="publishig"
+            size="sm"
+            color="primary"
+            onClick={() => {
+              handlePublishInventory(row, 'supercarros');
+            }}
+          >
+            <img
+              className=""
+              src="/img/supercarros.png"
+              alt=""
+              height="22"
+              width="22"
+            />
           </IconButton>
           <IconButton
             aria-label="delete"

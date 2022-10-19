@@ -8,18 +8,12 @@ import {Card} from 'react-bootstrap';
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import 'chartjs-plugin-datalabels';
 import axios from 'axios';
-// @ts-ignore
 import Loading from '@app/components/loadings/Loading';
 import {mlCL} from '@app/utils/helpers';
 import {useNavigate} from 'react-router-dom';
-// @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 import * as AuthService from '../services/auth';
-// @ts-ignore
 import * as Config from '../utils/config';
-
-// import Box from '@mui/material/Box';
-// import Typography from '@mui/material/Typography';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

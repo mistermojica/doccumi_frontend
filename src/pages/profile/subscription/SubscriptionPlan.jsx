@@ -3,13 +3,9 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {Button} from '@components';
-import 'moment/locale/es-do';
 import AppContext from '@app/contexts/AppContext';
-import * as AuthService from '@app/services/auth';
 import * as Config from '@app/utils/config';
 import './Subscription.css';
-
-// Moment.globalLocale = 'es-do';
 
 const Account = (props) => {
   const AppCtx = useContext(AppContext);
@@ -29,51 +25,10 @@ const Account = (props) => {
     navigate('/profile?activetab=SUBSCRIPTION');
   };
 
-  // function compareStatus(a, b) {
-  //   console.log(a.status);
-  //   if (a.status < b.status) {
-  //     return -1;
-  //   }
-  //   if (a.status > b.status) {
-  //     return 1;
-  //   }
-  //   return 0;
-  // }
-
-  // const getSubscriptions = () => {
-  //   const fetchData = async () => {
-  //     const {subscriptions} = await fetch(
-  //       UrlBase.concat('subscriptions-by-status'),
-  //       {
-  //         method: 'POST',
-  //         headers: {'Content-Type': 'application/json'},
-  //         body: JSON.stringify({
-  //           customerId: AuthService.getProfileStripeId(),
-  //           statusCode: 'active'
-  //         })
-  //       }
-  //     ).then((r) => r.json());
-
-  //     setSubscriptions(subscriptions.data.sort(compareStatus));
-  //   };
-
-  //   fetchData();
-  // };
+  useEffect(() => {}, [subscriptions]);
 
   useEffect(() => {
-    // getSubscriptions();
-  }, []);
-
-  useEffect(() => {
-    // if (subscriptions) {
-    //   const StripeData = {...AppCtx.StripeData};
-    //   StripeData.subscriptions = subscriptions;
-    //   AppCtx.setStripeData(StripeData);
-    // }
-  }, [subscriptions]);
-
-  useEffect(() => {
-    console.log('useEffect() || AppCtx.StripeData:', AppCtx.StripeData);
+    // console.log('useEffect() || AppCtx.StripeData:', AppCtx.StripeData);
   }, [AppCtx]);
 
   if (!AppCtx.StripeData.subscriptionsi) {

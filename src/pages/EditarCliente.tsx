@@ -4,7 +4,6 @@ import axios from 'axios';
 import {ContentHeader} from '@components';
 import {useNavigate} from 'react-router-dom';
 import {mlCL} from '@app/utils/helpers';
-// @ts-ignore
 import * as Config from '../utils/config';
 
 const EditarCliente = () => {

@@ -4,7 +4,6 @@
 
 import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {ContentHeader} from '@components';
-// import {Button, Modal, FormCheck} from 'react-bootstrap';
 import {Button, Modal} from 'react-bootstrap';
 import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';

@@ -5,7 +5,7 @@
 
 import React, {useEffect, useState, useContext, useMemo} from 'react';
 import _ from 'underscore';
-import * as moment from 'moment';
+import * as moment_ from 'moment';
 import {ContentHeader} from '@components';
 import {Button, Modal} from 'react-bootstrap';
 import axios from 'axios';
@@ -18,8 +18,6 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon
 } from '@mui/icons-material';
-import {faTimes} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import FilterComponent from '@app/components/data-table/FilterComponent';
 import GenericoFormBody from '@app/components/forms/GenericoFormBody';
 import AppContext from '@app/contexts/AppContext';
@@ -132,6 +130,8 @@ const MostrarTipos = () => {
   const [resMessage, SetResMessage] = useState('');
 
   const [profileId, SetProfileId] = useState(AuthService.getProfileId());
+
+  const moment = moment_;
 
   const columns = [
     // {

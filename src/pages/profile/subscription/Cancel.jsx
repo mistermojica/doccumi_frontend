@@ -2,7 +2,7 @@
 
 import React, {useState, useEffect, useContext} from 'react';
 import {Button} from '@components';
-import * as moment from 'moment';
+import * as moment_ from 'moment';
 import 'moment-timezone';
 import AppContext from '@app/contexts/AppContext';
 import * as Config from '@app/utils/config';
@@ -26,6 +26,8 @@ const Cancel = () => {
   const handleBack = async () => {
     AppCtx.setNavigate({to: 'account', data: {}});
   };
+
+  const moment = moment_;
 
   const handleCancel = async (e) => {
     e.preventDefault();

@@ -5,7 +5,7 @@
 
 import React, {useEffect, useState, useContext, useMemo} from 'react';
 import _ from 'underscore';
-import * as moment from 'moment';
+import * as moment_ from 'moment';
 import {ContentHeader} from '@components';
 import {Button, Modal} from 'react-bootstrap';
 import axios from 'axios';
@@ -126,6 +126,8 @@ const MostrarClientes = () => {
   const [resMessage, SetResMessage] = useState('');
 
   const [profileId, SetProfileId] = useState(AuthService.getProfileId());
+
+  const moment = moment_;
 
   // const [PlantillasData, SetPlantillasData] = useState([]);
 
@@ -413,29 +415,6 @@ const MostrarClientes = () => {
     GetAllData(profileId);
     AppCtx.loadInitData();
   }, [profileId]);
-
-  // useEffect(() => {
-  //   console.log('AppCtx.FileUploadData K1:', AppCtx.FileUploadData);
-  //   if (AppCtx.FileUploadData.length > 0) {
-  //     console.log(
-  //       'AppCtx.FileUploadData K4:',
-  //       JSON.stringify(AppCtx.FileUploadData)
-  //     );
-
-  //     console.log('RowData K5:', RowData);
-  //     AppCtx.FileUploadData.forEach((url) => {
-  //       // cliFotoCedula.push(url);
-  //     });
-  //     console.log('cliFotoCedula K6:', cliFotoCedula);
-
-  //     setFotoCedula(AppCtx.FileUploadData);
-  //   }
-  // }, [AppCtx]);
-
-  // useEffect(() => {
-  //   submitData();
-  //   console.log('RowData K2:', RowData);
-  // }, [cliFotoCedula]);
 
   return (
     <div>
