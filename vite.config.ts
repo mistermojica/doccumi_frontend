@@ -26,7 +26,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    eslint(),
+    // eslint(),
     svgrPlugin({
       svgrOptions: {
         icon: true
