@@ -1,1 +1,0 @@
-import{a}from"./@ckeditor.245690c7.js";var o=/[A-Z]/g,n=/^ms-/,r={};function p(e){return"-"+e.toLowerCase()}function u(e){if(r.hasOwnProperty(e))return r[e];var t=e.replace(o,p);return r[e]=n.test(t)?"-"+t:t}const c=Object.freeze(Object.defineProperty({__proto__:null,default:u},Symbol.toStringTag,{value:"Module"})),l=a(c);export{l as r};
