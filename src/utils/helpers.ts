@@ -64,6 +64,24 @@ export function mlCL(paramMsg: any, paramData: any) {
   console.log('====================================\r\n');
 }
 
+export const omoment = (datetime: string) => {
+  const d = new Date(datetime);
+  const date = d.toLocaleString('es-ES', {hour12: true});
+  return date;
+};
+
+export const omomentnohour = (datetime: string) => {
+  const d = new Date(datetime);
+  const date = d.toLocaleDateString('es-ES');
+  return date;
+};
+
+export const omomentnextday = (datetime: string) => {
+  const d = new Date(new Date(datetime).getTime() + 86400000);
+  const date = d.toLocaleDateString('es-ES');
+  return date;
+};
+
 export function removeDiacritics(str: string) {
   const defaultDiacriticsRemovalMap = [
     {

@@ -5,14 +5,13 @@
 
 import React, {useEffect, useState, useContext, useMemo} from 'react';
 import _ from 'underscore';
-import * as moment_ from 'moment';
 import {ContentHeader} from '@components';
 import {Button, Modal} from 'react-bootstrap';
 import axios from 'axios';
 import {Link, useNavigate} from 'react-router-dom';
 import {styled} from '@mui/material/styles';
 import DataTable, {createTheme} from 'react-data-table-component';
-import {mlCL} from '@app/utils/helpers';
+import {mlCL, omoment} from '@app/utils/helpers';
 import IconButton from '@mui/material/IconButton';
 import {
   Visibility as VisibilityIcon,
@@ -186,8 +185,6 @@ const MostrarVehículos = () => {
 
   const [profileId, SetProfileId] = useState(AuthService.getProfileId());
 
-  const moment = moment_;
-
   // const [PlantillasData, SetPlantillasData] = useState([]);
 
   const columns = [
@@ -264,7 +261,7 @@ const MostrarVehículos = () => {
           // }}
           nowrap="true"
         >
-          {moment(row.vehFechaCreacion).format('DD-MM-YYYY hh:mm A')}
+          {omoment(row.vehFechaCreacion)}
         </div>
       ),
       width: '170px'

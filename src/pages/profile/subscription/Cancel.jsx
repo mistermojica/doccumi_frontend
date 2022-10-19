@@ -2,8 +2,7 @@
 
 import React, {useState, useEffect, useContext} from 'react';
 import {Button} from '@components';
-import * as moment_ from 'moment';
-import 'moment-timezone';
+import {mlCL, omomentnextday} from '@app/utils/helpers';
 import AppContext from '@app/contexts/AppContext';
 import * as Config from '@app/utils/config';
 import './Subscription.css';
@@ -26,8 +25,6 @@ const Cancel = () => {
   const handleBack = async () => {
     AppCtx.setNavigate({to: 'account', data: {}});
   };
-
-  const moment = moment_;
 
   const handleCancel = async (e) => {
     e.preventDefault();
@@ -102,11 +99,9 @@ const Cancel = () => {
               Se cancelará tu plan, pero seguirá disponible hasta el cierre del
               período de facturación en:{' '}
               <strong>
-                {moment(
+                {omomentnextday(
                   new Date(subscription?.current_period_end * 1000).toString()
-                )
-                  .add(1, 'd')
-                  .format('LL')}
+                )}
               </strong>
               .
               <br />

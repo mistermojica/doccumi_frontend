@@ -2,10 +2,6 @@
 
 import React, {useState, useEffect, useContext} from 'react';
 import {Button} from '@components';
-import * as moment_ from 'moment';
-import 'moment/locale/es-do';
-// import Moment from 'react-moment';
-// import 'moment-timezone';
 import {
   MoreHoriz as MoreHorizIcon,
   Info as InfoIcon,
@@ -14,15 +10,13 @@ import {
 import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
+import {mlCL, omomentnohour} from '@app/utils/helpers';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import AppContext from '@app/contexts/AppContext';
 import * as Config from '@app/utils/config';
 import './Subscription.css';
-
-// Moment.globalLocale = 'es-do';
-const moment = moment_;
 
 const Account = (props) => {
   const AppCtx = useContext(AppContext);
@@ -353,12 +347,12 @@ const Account = (props) => {
                 Fecha de renovación:{' '}
                 <strong>
                   {AppCtx.StripeData.subscriptionsi[0] &&
-                    moment(
+                    omomentnohour(
                       new Date(
                         AppCtx.StripeData.subscriptionsi[0]
                           ?.current_period_end * 1000
                       ).toString()
-                    ).format('LL')}
+                    )}
                 </strong>
                 .
                 <br />
@@ -483,9 +477,9 @@ const AccountSubscription = ({subscription}) => {
             target="_blank"
             rel="noreferrer"
           >
-            {moment(new Date(subscription?.start_date * 1000).toString())
-              .locale('es-do')
-              .format('LL')}
+            {omomentnohour(
+              new Date(subscription?.start_date * 1000).toString()
+            )}
           </a>
         </div>
         <div className="col-md-3">

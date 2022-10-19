@@ -5,13 +5,12 @@
 
 import React, {useEffect, useState, useMemo} from 'react';
 import _ from 'underscore';
-import * as moment_ from 'moment';
 import {ContentHeader} from '@components';
 import {Button, Modal} from 'react-bootstrap';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import DataTable, {createTheme} from 'react-data-table-component';
-import {mlCL} from '@app/utils/helpers';
+import {mlCL, omoment} from '@app/utils/helpers';
 import IconButton from '@mui/material/IconButton';
 import {
   Visibility as VisibilityIcon,
@@ -99,8 +98,6 @@ const MostrarPlantillas = () => {
   const [TiposData, SetTiposData] = useState([]);
   const [profileId, SetProfileId] = useState(AuthService.getProfileId());
 
-  const moment = moment_;
-
   const columns = [
     {
       name: 'Nombre',
@@ -124,7 +121,7 @@ const MostrarPlantillas = () => {
           }}
           nowrap="true"
         >
-          {moment(row.plaFechaCreacion).format('DD-MM-YYYY hh:mm A')}
+          {omoment(row.plaFechaCreacion)}
         </div>
       )
     },
