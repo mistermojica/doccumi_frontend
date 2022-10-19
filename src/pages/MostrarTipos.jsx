@@ -5,13 +5,12 @@
 
 import React, {useEffect, useState, useContext, useMemo} from 'react';
 import _ from 'underscore';
-import * as moment_ from 'moment';
 import {ContentHeader} from '@components';
 import {Button, Modal} from 'react-bootstrap';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import DataTable, {createTheme} from 'react-data-table-component';
-import {mlCL} from '@app/utils/helpers';
+import {mlCL, omoment} from '@app/utils/helpers';
 import IconButton from '@mui/material/IconButton';
 import {
   Visibility as VisibilityIcon,
@@ -131,8 +130,6 @@ const MostrarTipos = () => {
 
   const [profileId, SetProfileId] = useState(AuthService.getProfileId());
 
-  const moment = moment_;
-
   const columns = [
     // {
     //   name: 'Código',
@@ -164,7 +161,7 @@ const MostrarTipos = () => {
           }}
           nowrap="true"
         >
-          {moment(row.tipFechaCreacion).format('DD-MM-YYYY hh:mm A')}
+          {omoment(row.tipFechaCreacion)}
         </div>
       )
     },
