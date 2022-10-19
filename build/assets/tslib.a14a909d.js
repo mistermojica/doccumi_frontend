@@ -1,1 +1,0 @@
-function w(u,a,c,i){function p(t){return t instanceof c?t:new c(function(f){f(t)})}return new(c||(c=Promise))(function(t,f){function d(n){try{o(i.next(n))}catch(e){f(e)}}function h(n){try{o(i.throw(n))}catch(e){f(e)}}function o(n){n.done?t(n.value):p(n.value).then(d,h)}o((i=i.apply(u,a||[])).next())})}export{w as _};
