@@ -25,7 +25,14 @@ const ConfirmPrice = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [clientSecret, setClientSecret] = useState('');
-  const [subscriptionId, setSubscriptionId] = useState('');
+  const [subscriptionId, setSubscriptionId] = useState(
+    AppCtx?.StripeData?.current_subscription?.id || ''
+  );
+
+  console.log(
+    'AppCtx?.StripeData?.current_subscription:',
+    AppCtx?.StripeData?.current_subscription
+  );
 
   const NombreEntidad = 'Subscripciones';
   const NombreEntidadMin = NombreEntidad.toLowerCase();
@@ -36,8 +43,8 @@ const ConfirmPrice = (props) => {
   // const navigate = useNavigate();
 
   useEffect(() => {
-    if (price) {
-      console.log({clientSecret, price});
+    if (price && !subscriptionId) {
+      console.log({clientSecret, price, subscriptionId});
       createSubscription();
     }
 

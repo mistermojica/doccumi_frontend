@@ -92,8 +92,13 @@ const App = () => {
         stripeData.default_payment_method =
           customer?.invoice_settings?.default_payment_method;
         stripeData.subscriptionsi = subscriptions.data.sort(compareStatus);
-
         stripeData.has_active_subscription = hasSubscription(stripeData);
+        if (
+          stripeData.subscriptionsi.length > 0 &&
+          stripeData.has_active_subscription
+        ) {
+          stripeData.current_subscription = stripeData.subscriptionsi[0];
+        }
 
         setStripeData(stripeData);
 
