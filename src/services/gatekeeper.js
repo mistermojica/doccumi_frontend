@@ -57,7 +57,6 @@ class Gatekeeper {
   }
 
   loginByAuth(email, password) {
-    // debugger;
     return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
       let result = null;
 
@@ -71,16 +70,6 @@ class Gatekeeper {
           },
           body: JSON.stringify({email, password})
         });
-        // const response = yield axios({
-        //     method: 'post',
-        //     url: `${this.URL}/usuarios/login`,
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         AccountID: this.payload.accountID,
-        //         romg: "omarmojica",
-        //     },
-        //     data: JSON.stringify({ email, password }),
-        // });
         const data = yield response.json();
         if (data && data.success === false) {
           throw new Error(data.message);
@@ -104,6 +93,8 @@ class Gatekeeper {
 
   registerByAuth(ctx) {
     return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+      let result = null;
+
       try {
         // const response = yield fetch(`${this.URL}/v1/auth/register`, {
         const response = yield fetch(`${this.URL}/usuarios/create`, {
@@ -115,11 +106,25 @@ class Gatekeeper {
           body: JSON.stringify(ctx)
         });
         const data = yield response.json();
-        if (data && data.status && data.message) {
+        if (data && data.success === false) {
           throw new Error(data.message);
+        } else {
+          localStorage.setItem(
+            this.LOCALSTORAGE_IDENTIFIER,
+            data.result.profile.token
+          );
+          localStorage.setItem(this.LOCALSTORAGE_ID, data.result.profile._id);
+          localStorage.setItem(
+            this.LOCALSTORAGE_EMAIL,
+            data.result.profile.email
+          );
+          localStorage.setItem(
+            this.LOCALSTORAGE_STRIPE_ID,
+            data.result.profile.usuario_stripe
+          );
+          result = data.result.profile.token;
         }
-        localStorage.setItem(this.LOCALSTORAGE_IDENTIFIER, data.token);
-        return data.token;
+        return result;
       } catch (error) {
         mlCL('error:', error);
         throw error;

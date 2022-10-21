@@ -153,8 +153,8 @@ const Register = () => {
         name: values.nombre,
         phone: values.telefono
       })
-        .then((resSCC: any) => {
-          console.log('resiter:', {resSCC});
+        .then((stripeCustomer: any) => {
+          console.log('resiter:', {stripeCustomer});
           register(
             values.nombre,
             values.telefono,
@@ -162,7 +162,7 @@ const Register = () => {
             values.nombre_empresa,
             values.email,
             values.password,
-            resSCC?.id
+            stripeCustomer?.id
           );
         })
         .catch((errSCC: any) => {

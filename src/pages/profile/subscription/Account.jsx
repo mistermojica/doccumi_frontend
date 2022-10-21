@@ -366,7 +366,7 @@ const Account = (props) => {
                 </strong>
                 .
               </div>
-              <div className="col-md-3 text-center">
+              <div className="col-md-3 mt-4 text-center">
                 <Button
                   type="button"
                   theme="primary"
@@ -458,12 +458,6 @@ const HtmlTooltip = styled(({className, ...props}) => (
 }));
 
 const AccountSubscription = ({subscription}) => {
-  // const AppCtx = useContext(AppContext);
-
-  // const handleCancel = () => {
-  //   AppCtx.setNavigate({to: 'cancel', data: {subscription: subscription.id}});
-  // };
-
   return (
     <section>
       <hr />
@@ -471,7 +465,7 @@ const AccountSubscription = ({subscription}) => {
         href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
       ></a> */}
       <div className="row">
-        <div className="col-md-3">
+        <div className="col-3" style={{whiteSpace: 'nowrap'}}>
           <a
             href={subscription?.latest_invoice?.hosted_invoice_url}
             target="_blank"
@@ -482,25 +476,19 @@ const AccountSubscription = ({subscription}) => {
             )}
           </a>
         </div>
-        <div className="col-md-3">
+        <div className="col-3">
           {subscription?.items?.data[0]?.plan?.currency.toUpperCase()}$
           {subscription?.items?.data[0]?.plan?.amount / 100}
         </div>
-        <div className="col-md-3">
+        <div className="col-3">
           {subscription.status === 'active'
             ? 'Pagada'
             : subscription.status === 'canceled'
             ? 'Cancelada'
             : 'Inactiva'}
         </div>
-        <div className="col-md-3">{subscription?.plan?.product?.name}</div>
+        <div className="col-3">{subscription?.plan?.product?.name}</div>
       </div>
-      {/* <p>Card last4: {subscription.default_payment_method?.card?.last4}</p> */}
-      {/* <Link to={{pathname: '/change-plan', state: {subscription: subscription.id }}}>Change plan</Link><br /> */}
-      {/* <Link to={{pathname: '/cancel', state: {subscription: subscription.id }}}>Cancel</Link> */}
-      {/* <button type="button" onClick={handleCancel}>
-        Cancel
-      </button> */}
     </section>
   );
 };
@@ -540,31 +528,34 @@ const PaymentMethod = ({
         href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
       ></a> */}
       <div className="row">
-        <div className="col-md-1">
+        <div className="col-1 mr-2" style={{whiteSpace: 'nowrap'}}>
           {paymentMethod?.card?.brand.toUpperCase()}
         </div>
-        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
+        <div className="col-2" style={{whiteSpace: 'nowrap'}}>
           ....
           {paymentMethod?.card?.last4}
         </div>
-        <div className="col-md-2">
+        <div className="col-2">
           {defaultPM === true ? (
-            <span className="small bg-secondary rounded pl-1 pr-1 pb-1 pt-1">
-              Predeterminado
+            <span
+              className="small bg-secondary rounded pl-1 pr-1 pb-1 pt-1"
+              style={{whiteSpace: 'nowrap'}}
+            >
+              {' Defecto '}
             </span>
           ) : (
             ''
           )}
         </div>
-        <div className="col-md-1" style={{whiteSpace: 'nowrap'}}>
+        <div className="col-2" style={{whiteSpace: 'nowrap'}}>
           {' Expira '}
         </div>
-        <div className="col-md-1.5">
+        <div className="col-2" style={{whiteSpace: 'nowrap'}}>
           {paymentMethod?.card?.exp_month +
             ' / ' +
             paymentMethod?.card?.exp_year}
         </div>
-        <div className="col-md-1">
+        <div className="col-2" style={{whiteSpace: 'nowrap'}}>
           {/* <span style={{cursor: 'pointer'}}> */}
           {defaultPM === true ? (
             <HtmlTooltip
