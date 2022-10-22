@@ -133,85 +133,89 @@ const Prices = (props) => {
         <strong>Selecciona un plan:</strong>
       </h5>
       <br />
-      <div className="price-list">
-        {prices &&
-          prices.map((price) => (
-            <div key={price.id}>
-              <h4 className="col-md-12 text-center">
-                <strong>{price.product.name}</strong>
-              </h4>
-              <div
-                dangerouslySetInnerHTML={createMarkup(
-                  price.product.description,
-                  '- ',
-                  '<br/>⦿ '
-                )}
-              />
-              <br />
-              <div>
-                <center>
-                  <strong>
-                    ${price?.unit_amount / 100} / {price?.product?.name}
-                  </strong>
-                  <br />
-                  {/* <small>{JSON.stringify(price)}</small> */}
-                  <small>
-                    $
-                    {(
-                      price?.unit_amount /
-                      100 /
-                      (price?.recurring?.interval === 'month'
-                        ? price?.recurring?.interval_count
-                        : 12)
-                    ).toFixed(0)}{' '}
-                    por mes.
-                  </small>
-                </center>
-              </div>
-              <br />
-              <div className="form-group row">
-                <div className="col-md-12 text-center">
-                  {price.id !== currentPrice?.id ? (
-                    <Button
-                      type="button"
-                      theme="primary"
-                      // disabled={price.id === currentPrice?.id}
-                      onClick={() =>
-                        setNavigateTo(
-                          defaultPaymentMethodId ? 'confirm' : 'addcard',
-                          price
-                        )
-                      }
-                    >
-                      Seleccionar
-                    </Button>
-                  ) : currentPrice?.active === true ? (
-                    <>
-                      <CheckIcon />
-                      &nbsp;
-                      <span>Plan actual</span>
-                    </>
-                  ) : (
-                    <Button
-                      type="button"
-                      theme={
-                        price.id === currentPrice?.id ? 'secondary' : 'primary'
-                      }
-                      disabled={price.id === currentPrice?.id}
-                      onClick={() =>
-                        setNavigateTo(
-                          currentPrice?.id ? 'confirm' : 'addcard',
-                          price
-                        )
-                      }
-                    >
-                      Seleccionar
-                    </Button>
+      <div className="container">
+        <div className="price-list row">
+          {prices &&
+            prices.map((price) => (
+              <div className="col mb-3" key={price.id}>
+                <h4 className="col-md-12 text-center">
+                  <strong>{price.product.name}</strong>
+                </h4>
+                <div
+                  dangerouslySetInnerHTML={createMarkup(
+                    price.product.description,
+                    '- ',
+                    '<br/>⦿ '
                   )}
+                />
+                <br />
+                <div>
+                  <center>
+                    <strong>
+                      ${price?.unit_amount / 100} / {price?.product?.name}
+                    </strong>
+                    <br />
+                    {/* <small>{JSON.stringify(price)}</small> */}
+                    <small>
+                      $
+                      {(
+                        price?.unit_amount /
+                        100 /
+                        (price?.recurring?.interval === 'month'
+                          ? price?.recurring?.interval_count
+                          : 12)
+                      ).toFixed(0)}{' '}
+                      por mes.
+                    </small>
+                  </center>
+                </div>
+                <br />
+                <div className="form-group row">
+                  <div className="col-md-12 text-center">
+                    {price.id !== currentPrice?.id ? (
+                      <Button
+                        type="button"
+                        theme="primary"
+                        // disabled={price.id === currentPrice?.id}
+                        onClick={() =>
+                          setNavigateTo(
+                            defaultPaymentMethodId ? 'confirm' : 'addcard',
+                            price
+                          )
+                        }
+                      >
+                        Seleccionar
+                      </Button>
+                    ) : currentPrice?.active === true ? (
+                      <>
+                        <CheckIcon />
+                        &nbsp;
+                        <span>Plan actual</span>
+                      </>
+                    ) : (
+                      <Button
+                        type="button"
+                        theme={
+                          price.id === currentPrice?.id
+                            ? 'secondary'
+                            : 'primary'
+                        }
+                        disabled={price.id === currentPrice?.id}
+                        onClick={() =>
+                          setNavigateTo(
+                            currentPrice?.id ? 'confirm' : 'addcard',
+                            price
+                          )
+                        }
+                      >
+                        Seleccionar
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </div>
       </div>
       <br />
       <div className="container">

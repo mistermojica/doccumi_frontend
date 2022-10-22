@@ -413,12 +413,12 @@ const useDynamicFontSize = () => {
 
 const useDynamicWidthContainer = () => {
   const [widthCN, setFontSize] = useState(
-    window.innerWidth < 450 ? '75%' : '405px'
+    window.innerWidth < 450 ? '100%' : '405px'
   );
 
   useEffect(() => {
     const onResize = () => {
-      setFontSize(window.innerWidth < 450 ? '75%' : '405px');
+      setFontSize(window.innerWidth < 450 ? '100%' : '405px');
     };
 
     window.addEventListener('resize', onResize);
@@ -433,12 +433,12 @@ const useDynamicWidthContainer = () => {
 
 const useDynamicWidthCN = () => {
   const [widthCN, setFontSize] = useState(
-    window.innerWidth < 450 ? '50%' : '405px'
+    window.innerWidth < 450 ? '100%' : '405px'
   );
 
   useEffect(() => {
     const onResize = () => {
-      setFontSize(window.innerWidth < 450 ? '50%' : '405px');
+      setFontSize(window.innerWidth < 450 ? '100%' : '405px');
     };
 
     window.addEventListener('resize', onResize);
