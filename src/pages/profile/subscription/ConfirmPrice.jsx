@@ -29,6 +29,10 @@ const ConfirmPrice = (props) => {
     AppCtx?.StripeData?.current_subscription?.id || ''
   );
 
+  const [subscriptionCreated, setSubscriptionCreated] = useState(
+    AppCtx?.StripeData?.current_subscription?.id !== '' ? false : true
+  );
+
   console.log(
     'AppCtx?.StripeData?.current_subscription:',
     AppCtx?.StripeData?.current_subscription
@@ -43,7 +47,9 @@ const ConfirmPrice = (props) => {
   // const navigate = useNavigate();
 
   useEffect(() => {
-    if (price && !subscriptionId) {
+    console.log({subscriptionId});
+
+    if (price && subscriptionId === '') {
       console.log({clientSecret, price, subscriptionId});
       createSubscription();
     }
@@ -75,6 +81,10 @@ const ConfirmPrice = (props) => {
     console.log({defaultPaymentMethod});
   }, [invoicePreview]);
 
+  useEffect(() => {
+    console.log('CAMBIÓ EL subscriptionId:', {subscriptionId});
+  }, [subscriptionId]);
+
   const getInvoicePreview = async () => {
     const {invoice} = await fetch(UrlBase.concat('invoice-preview'), {
       method: 'POST',
@@ -96,11 +106,23 @@ const ConfirmPrice = (props) => {
 
     console.log({subscriptionId});
 
-    updateSubscription({
-      priceId: price.id,
-      subscriptionId: subscriptionId,
-      customerId: user.profile.usuario_stripe
-    });
+    // IMPLEMENTRA LOGICA AQUI PARA SABER CUANDO MANDAR A REALIZAR LA ACTUALIZACION DEL METIDO DE PAGO
+    // ES PROBABLE QUE TENGA QUE CREAR EL METODO EN BACKEND.
+    // DEBO REALIZAR PRUEBAS CON UN PRODUCTO DE BAJO COSTO PARA UNA CUENTA COMPLETAMENTE NUEVA EN STRIPE
+    
+    if (subscriptionCreated) {
+      confirmSubscription({
+        priceId: price.id,
+        subscriptionId: subscriptionId,
+        customerId: user.profile.usuario_stripe
+      });
+    } else {
+      updateSubscription({
+        priceId: price.id,
+        subscriptionId: subscriptionId,
+        customerId: user.profile.usuario_stripe
+      });
+    }
   };
 
   const handleBack = async () => {
@@ -132,6 +154,35 @@ const ConfirmPrice = (props) => {
     const fetchData = async () => {
       const {paymentMethod} = await fetch(
         UrlBase.concat('update-subscription'),
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(ctx)
+        }
+      ).then((r) => r.json());
+
+      // getPaymentMethods();
+
+      setIsLoading(false);
+
+      AppCtx.loadStripeInit().then((resLSI) => {
+        console.log({resLSI});
+        AppCtx.setNavigate({
+          to: 'account',
+          data: {price}
+        });
+      });
+    };
+
+    fetchData();
+  };
+
+  const confirmSubscription = (ctx) => {
+    setIsLoading(true);
+
+    const fetchData = async () => {
+      const {paymentMethod} = await fetch(
+        UrlBase.concat('confirm-subscription'),
         {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
