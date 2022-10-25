@@ -46,7 +46,7 @@ const Account = (props) => {
             type="link"
             theme="primary"
             onClick={handleAddNew}
-            style={{width: '150px', height: '35px', paddingTop: 1}}
+            style={{width: '150px', height: '35px', paddingTop: 4}}
           >
             Planes de Servicio
           </Button>
