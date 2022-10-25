@@ -1,9 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, {useState, useEffect, useContext} from 'react';
-import {useNavigate} from 'react-router-dom';
 import {Button} from '@components';
-import CheckIcon from '@mui/icons-material/Check';
 import Collapse from 'react-bootstrap/Collapse';
 import Loading from '@app/components/loadings/Loading';
 import AppContext from '@app/contexts/AppContext';
@@ -104,10 +102,6 @@ const ConfirmPrice = (props) => {
 
     console.log({subscriptionId});
 
-    // IMPLEMENTRA LOGICA AQUI PARA SABER CUANDO MANDAR A REALIZAR LA ACTUALIZACION DEL METIDO DE PAGO
-    // ES PROBABLE QUE TENGA QUE CREAR EL METODO EN BACKEND.
-    // DEBO REALIZAR PRUEBAS CON UN PRODUCTO DE BAJO COSTO PARA UNA CUENTA COMPLETAMENTE NUEVA EN STRIPE
-
     updateSubscription({
       priceId: price.id,
       subscriptionId: subscriptionId,
@@ -153,8 +147,6 @@ const ConfirmPrice = (props) => {
         }
       ).then((r) => r.json());
 
-      // getPaymentMethods();
-
       setIsLoading(false);
 
       AppCtx.loadStripeInit().then((resLSI) => {
@@ -168,42 +160,6 @@ const ConfirmPrice = (props) => {
 
     fetchData();
   };
-
-  const confirmSubscription = (ctx) => {
-    setIsLoading(true);
-
-    const fetchData = async () => {
-      const {paymentMethod} = await fetch(
-        UrlBase.concat('confirm-subscription'),
-        {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(ctx)
-        }
-      ).then((r) => r.json());
-
-      // getPaymentMethods();
-
-      setIsLoading(false);
-
-      AppCtx.loadStripeInit().then((resLSI) => {
-        console.log({resLSI});
-        AppCtx.setNavigate({
-          to: 'account',
-          data: {price}
-        });
-      });
-    };
-
-    fetchData();
-  };
-
-  // const setNavigateTo = (price) => {
-  //   AppCtx.setNavigate({
-  //     to: 'subscribe',
-  //     data: {price}
-  //   });
-  // };
 
   const handleShowHideDetails = (e) => {
     e.preventDefault();

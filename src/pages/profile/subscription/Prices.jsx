@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, {useState, useEffect, useContext} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {AddOutlined as MoreIcon} from '@mui/icons-material';
 import {Button} from '@components';
 import CheckIcon from '@mui/icons-material/Check';
 import axios from 'axios';
@@ -27,6 +27,15 @@ const Prices = (props) => {
   const [UrlBase] = useState(
     Config.gatDomainName().concat('/'.concat(NombreEntidadMin).concat('/'))
   );
+
+  const handleGoAddCard = (e) => {
+    e.preventDefault();
+
+    AppCtx.setNavigate({
+      to: 'addcard',
+      data: {}
+    });
+  };
 
   // const navigate = useNavigate();
 
@@ -230,6 +239,24 @@ const Prices = (props) => {
             >
               Volver
             </Button>
+            <br />
+            <br />
+            <Button
+              type="button"
+              theme="primary"
+              onClick={handleGoAddCard}
+              style={{width: '200px', height: '50px'}}
+            >
+              Agregar método de pago
+            </Button>
+            <br />
+            {/* <div>
+              <a href="#" onClick={handleGoAddCard}>
+                <p style={{marginTop: 20, color: 'black'}}>
+                  <MoreIcon /> Agregar método de pago
+                </p>
+              </a>
+            </div> */}
           </div>
         </div>
       </div>

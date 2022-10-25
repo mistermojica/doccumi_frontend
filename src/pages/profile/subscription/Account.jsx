@@ -528,10 +528,10 @@ const PaymentMethod = ({
         href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
       ></a> */}
       <div className="row">
-        <div className="col-1 mr-2" style={{whiteSpace: 'nowrap'}}>
+        <div className="col-1 mr-5" style={{whiteSpace: 'nowrap'}}>
           {paymentMethod?.card?.brand.toUpperCase()}
         </div>
-        <div className="col-2" style={{whiteSpace: 'nowrap'}}>
+        <div className="col-2 ml-4" style={{whiteSpace: 'nowrap'}}>
           ....
           {paymentMethod?.card?.last4}
         </div>
@@ -548,7 +548,7 @@ const PaymentMethod = ({
           )}
         </div>
         <div className="col-2" style={{whiteSpace: 'nowrap'}}>
-          {' Expira '}
+          {'Exp:'}
         </div>
         <div className="col-2" style={{whiteSpace: 'nowrap'}}>
           {paymentMethod?.card?.exp_month +
