@@ -29,9 +29,7 @@ const ConfirmPrice = (props) => {
     AppCtx?.StripeData?.current_subscription?.id || ''
   );
 
-  const [subscriptionCreated, setSubscriptionCreated] = useState(
-    AppCtx?.StripeData?.current_subscription?.id !== '' ? false : true
-  );
+  const [subscriptionCreated, setSubscriptionCreated] = useState(false);
 
   console.log(
     'AppCtx?.StripeData?.current_subscription:',
@@ -109,20 +107,13 @@ const ConfirmPrice = (props) => {
     // IMPLEMENTRA LOGICA AQUI PARA SABER CUANDO MANDAR A REALIZAR LA ACTUALIZACION DEL METIDO DE PAGO
     // ES PROBABLE QUE TENGA QUE CREAR EL METODO EN BACKEND.
     // DEBO REALIZAR PRUEBAS CON UN PRODUCTO DE BAJO COSTO PARA UNA CUENTA COMPLETAMENTE NUEVA EN STRIPE
-    
-    if (subscriptionCreated) {
-      confirmSubscription({
-        priceId: price.id,
-        subscriptionId: subscriptionId,
-        customerId: user.profile.usuario_stripe
-      });
-    } else {
-      updateSubscription({
-        priceId: price.id,
-        subscriptionId: subscriptionId,
-        customerId: user.profile.usuario_stripe
-      });
-    }
+
+    updateSubscription({
+      priceId: price.id,
+      subscriptionId: subscriptionId,
+      customerId: user.profile.usuario_stripe,
+      subscriptionCreated
+    });
   };
 
   const handleBack = async () => {
@@ -146,6 +137,7 @@ const ConfirmPrice = (props) => {
 
     setSubscriptionId(subscriptionId);
     setClientSecret(clientSecret);
+    setSubscriptionCreated(true);
   };
 
   const updateSubscription = (ctx) => {
