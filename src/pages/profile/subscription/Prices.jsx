@@ -161,12 +161,12 @@ const Prices = (props) => {
                 <div>
                   <center>
                     <strong>
-                      ${price?.unit_amount / 100} / {price?.product?.name}
+                      US${price?.unit_amount / 100} / {price?.product?.name}
                     </strong>
                     <br />
                     {/* <small>{JSON.stringify(price)}</small> */}
                     <small>
-                      $
+                      US$
                       {(
                         price?.unit_amount /
                         100 /

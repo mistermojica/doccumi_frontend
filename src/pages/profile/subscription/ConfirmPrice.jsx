@@ -220,10 +220,11 @@ const ConfirmPrice = (props) => {
               </div>
               <div className="col-md-2 text-right">
                 <strong>
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD'
-                  }).format(price.unit_amount / 100)}
+                  {AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                    new Intl.NumberFormat('en-US', {
+                      style: 'currency',
+                      currency: 'USD'
+                    }).format(price.unit_amount / 100)}
                 </strong>
               </div>
             </div>
@@ -243,13 +244,14 @@ const ConfirmPrice = (props) => {
                         <strong>
                           <strong>
                             {invoicePreview?.lines !== undefined
-                              ? new Intl.NumberFormat('en-US', {
+                              ? AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                                new Intl.NumberFormat('en-US', {
                                   style: 'currency',
                                   currency: 'USD'
                                 }).format(
                                   invoicePreview?.lines?.data[0]?.amount / 100
                                 )
-                              : '$0.00'}
+                              : 'USD$0.00'}
                           </strong>
                         </strong>
                       </div>
@@ -261,14 +263,15 @@ const ConfirmPrice = (props) => {
                       <div className="col-md-2 text-right">
                         <strong>
                           {invoicePreview?.lines !== undefined
-                            ? new Intl.NumberFormat('en-US', {
+                            ? AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                              new Intl.NumberFormat('en-US', {
                                 style: 'currency',
                                 currency: 'USD'
                               }).format(
                                 invoicePreview?.lines?.data[1]?.plan?.amount /
                                   100
                               )
-                            : '$0.00'}
+                            : 'USD$0.00'}
                         </strong>
                       </div>
                     </div>
@@ -281,11 +284,12 @@ const ConfirmPrice = (props) => {
                       <div className="col-md-2 text-right">
                         <strong>
                           {invoicePreview?.lines !== undefined
-                            ? new Intl.NumberFormat('en-US', {
+                            ? AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                              new Intl.NumberFormat('en-US', {
                                 style: 'currency',
                                 currency: 'USD'
                               }).format(invoicePreview.amount_remaining / 100)
-                            : '$0.00'}
+                            : 'USD$0.00'}
                         </strong>
                       </div>
                     </div>
@@ -300,11 +304,13 @@ const ConfirmPrice = (props) => {
                   <div className="col-md-2 text-right">
                     <strong>
                       {invoicePreview?.lines !== undefined
-                        ? new Intl.NumberFormat('en-US', {
+                        ? AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                          new Intl.NumberFormat('en-US', {
                             style: 'currency',
                             currency: 'USD'
                           }).format(invoicePreview.amount_remaining / 100)
-                        : new Intl.NumberFormat('en-US', {
+                        : AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                          new Intl.NumberFormat('en-US', {
                             style: 'currency',
                             currency: 'USD'
                           }).format(price.unit_amount / 100)}
