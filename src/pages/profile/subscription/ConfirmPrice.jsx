@@ -30,7 +30,7 @@ const ConfirmPrice = (props) => {
 
   const [currencyLetters, setCurrencyLetters] = useState(
     AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() ||
-      'DOPP'
+      'USD'
   );
 
   const [subscriptionCreated, setSubscriptionCreated] = useState(false);
