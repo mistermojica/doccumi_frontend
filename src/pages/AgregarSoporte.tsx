@@ -19,6 +19,7 @@ import * as Config from '@app/utils/config';
 const AgregarSoporte = () => {
   const navegar = useNavigate();
 
+  const NombreEntidadSingular = 'Soporte';
   const NombreEntidad = 'Soportes';
   const NombreEntidadMin = NombreEntidad.toLowerCase();
 
@@ -160,7 +161,7 @@ const AgregarSoporte = () => {
 
   return (
     <div>
-      <ContentHeader title={'Agregar '.concat(NombreEntidad)} />
+      <ContentHeader title={'Agregar '.concat(NombreEntidadSingular)} />
       <section className="content">
         <div className="container-fluid">
           <div className="card">

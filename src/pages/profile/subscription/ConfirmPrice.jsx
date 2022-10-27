@@ -2,6 +2,7 @@
 
 import React, {useState, useEffect, useContext} from 'react';
 import {Button} from '@components';
+import {toast} from 'react-toastify';
 import Collapse from 'react-bootstrap/Collapse';
 import Loading from '@app/components/loadings/Loading';
 import AppContext from '@app/contexts/AppContext';
@@ -27,7 +28,13 @@ const ConfirmPrice = (props) => {
     AppCtx?.StripeData?.current_subscription?.id || ''
   );
 
+  const [currencyLetters, setCurrencyLetters] = useState(
+    AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() ||
+      'DOPP'
+  );
+
   const [subscriptionCreated, setSubscriptionCreated] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   console.log(
     'AppCtx?.StripeData?.current_subscription:',
@@ -138,7 +145,7 @@ const ConfirmPrice = (props) => {
     setIsLoading(true);
 
     const fetchData = async () => {
-      const {paymentMethod} = await fetch(
+      const {succeed, message, code} = await fetch(
         UrlBase.concat('update-subscription'),
         {
           method: 'POST',
@@ -148,6 +155,12 @@ const ConfirmPrice = (props) => {
       ).then((r) => r.json());
 
       setIsLoading(false);
+      console.log({message, code, succeed});
+      if (succeed) {
+        toast.success(message);
+      } else {
+        toast.error(message || 'Failed');
+      }
 
       AppCtx.loadStripeInit().then((resLSI) => {
         console.log({resLSI});
@@ -220,7 +233,7 @@ const ConfirmPrice = (props) => {
               </div>
               <div className="col-md-2 text-right">
                 <strong>
-                  {AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                  {currencyLetters +
                     new Intl.NumberFormat('en-US', {
                       style: 'currency',
                       currency: 'USD'
@@ -244,7 +257,7 @@ const ConfirmPrice = (props) => {
                         <strong>
                           <strong>
                             {invoicePreview?.lines !== undefined
-                              ? AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                              ? currencyLetters +
                                 new Intl.NumberFormat('en-US', {
                                   style: 'currency',
                                   currency: 'USD'
@@ -263,7 +276,7 @@ const ConfirmPrice = (props) => {
                       <div className="col-md-2 text-right">
                         <strong>
                           {invoicePreview?.lines !== undefined
-                            ? AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                            ? currencyLetters +
                               new Intl.NumberFormat('en-US', {
                                 style: 'currency',
                                 currency: 'USD'
@@ -284,7 +297,7 @@ const ConfirmPrice = (props) => {
                       <div className="col-md-2 text-right">
                         <strong>
                           {invoicePreview?.lines !== undefined
-                            ? AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                            ? currencyLetters +
                               new Intl.NumberFormat('en-US', {
                                 style: 'currency',
                                 currency: 'USD'
@@ -304,12 +317,12 @@ const ConfirmPrice = (props) => {
                   <div className="col-md-2 text-right">
                     <strong>
                       {invoicePreview?.lines !== undefined
-                        ? AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                        ? currencyLetters +
                           new Intl.NumberFormat('en-US', {
                             style: 'currency',
                             currency: 'USD'
                           }).format(invoicePreview.amount_remaining / 100)
-                        : AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() +
+                        : currencyLetters +
                           new Intl.NumberFormat('en-US', {
                             style: 'currency',
                             currency: 'USD'

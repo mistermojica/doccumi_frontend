@@ -547,7 +547,7 @@ const PaymentMethod = ({
             ''
           )}
         </div>
-        <div className="col-2" style={{whiteSpace: 'nowrap'}}>
+        <div className="col-1 mr-1" style={{whiteSpace: 'nowrap'}}>
           {'Exp:'}
         </div>
         <div className="col-2" style={{whiteSpace: 'nowrap'}}>
@@ -555,7 +555,7 @@ const PaymentMethod = ({
             ' / ' +
             paymentMethod?.card?.exp_year}
         </div>
-        <div className="col-2" style={{whiteSpace: 'nowrap'}}>
+        <div className="col-1" style={{whiteSpace: 'nowrap'}}>
           {/* <span style={{cursor: 'pointer'}}> */}
           {defaultPM === true ? (
             <HtmlTooltip

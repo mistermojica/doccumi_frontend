@@ -51,7 +51,7 @@ const Account = (props) => {
             Planes de Servicio
           </Button>
         ) : (
-          <div className="pt-2">
+          <div className="pt-1">
             Plan Actual:{' '}
             <Link
               to=""

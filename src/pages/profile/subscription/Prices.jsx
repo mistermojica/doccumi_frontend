@@ -22,6 +22,11 @@ const Prices = (props) => {
     AppCtx?.Navigate?.data?.defaultPaymentMethod
   );
 
+  const [currencyLetters, setCurrencyLetters] = useState(
+    AppCtx?.StripeData?.current_subscription?.items?.data[0]?.plan?.currency?.toUpperCase() ||
+      'DOPP'
+  );
+
   const NombreEntidad = 'Subscripciones';
   const NombreEntidadMin = NombreEntidad.toLowerCase();
   const [UrlBase] = useState(
@@ -161,12 +166,13 @@ const Prices = (props) => {
                 <div>
                   <center>
                     <strong>
-                      US${price?.unit_amount / 100} / {price?.product?.name}
+                      {currencyLetters}${price?.unit_amount / 100} /{' '}
+                      {price?.product?.name}
                     </strong>
                     <br />
                     {/* <small>{JSON.stringify(price)}</small> */}
                     <small>
-                      US$
+                      {currencyLetters}$
                       {(
                         price?.unit_amount /
                         100 /

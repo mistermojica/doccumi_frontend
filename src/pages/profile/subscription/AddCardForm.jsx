@@ -498,8 +498,7 @@ const online_payment_error_codes = {
     'Su plataforma Connect está intentando compartir una cuenta bancaria no verificada con una cuenta conectada.',
   bitcoin_upgrade_required:
     'Este método para crear pagos de Bitcoin ya no es compatible. Actualice su integración para usar Fuentes en su lugar',
-  card_declined:
-    'La tarjeta ha sido rechazada. Cuando se rechaza una tarjeta, el error devuelto también incluye el atributo declin_code con el motivo por el cual se rechazó la tarjeta. Consulte nuestra documentación de códigos de rechazo para obtener más información',
+  card_declined: 'La tarjeta ha sido rechazada.',
   charge_already_captured:
     'El cargo que intenta capturar ya ha sido capturado. Actualice la solicitud con una ID de cargo no capturada.',
   charge_already_refunded:
