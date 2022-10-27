@@ -772,7 +772,6 @@ const MostrarVehículos = () => {
                 </Modal.Footer>
               </Modal>
             </div>
-            {/* Modal for Edit employee record */}
             <div className="model-box-view">
               <Modal
                 show={EditShow}

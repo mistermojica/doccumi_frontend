@@ -4,6 +4,17 @@ import React, {useState, useEffect, useContext} from 'react';
 import {Button} from '@components';
 import {toast} from 'react-toastify';
 import Collapse from 'react-bootstrap/Collapse';
+import {
+  MoreHoriz as MoreHorizIcon,
+  Info as InfoIcon,
+  AddOutlined as MoreIcon
+} from '@mui/icons-material';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import {styled} from '@mui/material/styles';
+import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
 import Loading from '@app/components/loadings/Loading';
 import AppContext from '@app/contexts/AppContext';
 import * as Config from '@app/utils/config';
@@ -35,6 +46,9 @@ const ConfirmPrice = (props) => {
 
   const [subscriptionCreated, setSubscriptionCreated] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [cards, setCards] = useState([]);
+  const [customer, setCustomer] = useState({});
+  const [defaultPM, setDefaultPM] = useState({});
 
   console.log(
     'AppCtx?.StripeData?.current_subscription:',
@@ -48,6 +62,91 @@ const ConfirmPrice = (props) => {
   );
 
   // const navigate = useNavigate();
+
+  const getPaymentMethods = () => {
+    const fetchData = async () => {
+      const {cards} = await fetch(UrlBase.concat('list-payment-methods'), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({customerId: user.profile.usuario_stripe})
+      }).then((r) => r.json());
+
+      setCards(cards);
+    };
+
+    fetchData();
+  };
+
+  const deletePaymentMethod = (pmId) => {
+    const fetchData = async () => {
+      const {paymentMethod} = await fetch(
+        UrlBase.concat('delete-payment-method'),
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({paymentMethodId: pmId})
+        }
+      ).then((r) => r.json());
+
+      getPaymentMethods();
+    };
+
+    fetchData();
+  };
+
+  const setDefaultPaymentMethod = (pmId) => {
+    const fetchData = async () => {
+      const {customerUpdated} = await fetch(
+        UrlBase.concat('set-default-payment-method'),
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({customerId: customer.id, paymentMethodId: pmId})
+        }
+      ).then((r) => r.json());
+
+      setCustomer(customerUpdated);
+      getPaymentMethods();
+      cards.forEach((card) => {
+        if (
+          customerUpdated?.invoice_settings?.default_payment_method === card.id
+        ) {
+          console.log('setDefaultPaymentMethod:', {card});
+          setDefaultPM(card);
+        }
+      });
+    };
+
+    fetchData();
+  };
+
+  const handleGoAddCard = (e) => {
+    e.preventDefault();
+
+    AppCtx.setNavigate({
+      to: 'addcard',
+      data: {}
+    });
+  };
+
+  const getCustomer = () => {
+    const custlocal = {...AppCtx?.StripeData?.customer};
+    setCustomer(custlocal);
+
+    // console.log({custlocal});
+
+    // const fetchData = async () => {
+    //   const {customer} = await fetch(UrlBase.concat('load-customer'), {
+    //     method: 'POST',
+    //     headers: {'Content-Type': 'application/json'},
+    //     body: JSON.stringify({customerId: user.profile.usuario_stripe})
+    //   }).then((r) => r.json());
+
+    //   setCustomer(customer);
+    // };
+
+    // fetchData();
+  };
 
   useEffect(() => {
     console.log({subscriptionId});
@@ -77,6 +176,9 @@ const ConfirmPrice = (props) => {
     if (subscription && price) {
       getInvoicePreview();
     }
+
+    getCustomer();
+    getPaymentMethods();
   }, []);
 
   useEffect(() => {
@@ -350,6 +452,37 @@ const ConfirmPrice = (props) => {
                 <hr />
               </>
             ) : null}
+            <div className="row">
+              <div className="col-md-12">
+                <strong>
+                  {cards.length > 1 ? 'MÉTODOS DE PAGO' : 'MÉTODO DE PAGO'}
+                </strong>
+                <div id="cards">
+                  {cards.map((s) => {
+                    const isDefaultPM =
+                      customer?.invoice_settings?.default_payment_method ===
+                      s.id;
+                    return (
+                      <PaymentMethod
+                        key={s.id}
+                        paymentMethod={s}
+                        defaultPM={isDefaultPM}
+                        deletePaymentMethodCB={deletePaymentMethod}
+                        setDefaultPaymentMethodCB={setDefaultPaymentMethod}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="col-md-12">
+                <a href="#" onClick={handleGoAddCard}>
+                  <p style={{marginTop: 20, color: 'black'}}>
+                    <MoreIcon /> Agregar método de pago
+                  </p>
+                </a>
+              </div>
+            </div>
+            <hr />
             <div className="form-group row">
               <div className="col-md-12 text-center">
                 {subscriptionId && price.id !== currentPriceId ? (
@@ -406,5 +539,148 @@ const ConfirmPrice = (props) => {
     </div>
   );
 };
+
+const PaymentMethod = ({
+  paymentMethod,
+  defaultPM,
+  deletePaymentMethodCB,
+  setDefaultPaymentMethodCB
+}) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    console.log('handleClose');
+    setAnchorEl(null);
+  };
+
+  const handleDeletePaymentMethod = (id) => {
+    console.log('handleDeletePaymentMethod');
+    deletePaymentMethodCB(id);
+    handleClose();
+  };
+
+  const handleSetDefaultPaymentMethod = (id) => {
+    console.log('handleSetDefaultPaymentMethod');
+    setDefaultPaymentMethodCB(id);
+    handleClose();
+  };
+
+  return (
+    <>
+      <hr />
+      {/* <a
+        href={`https://dashboard.stripe.com/test/subscriptions/${subscription.id}`}
+      ></a> */}
+      <div className="row">
+        <div className="col-1 mr-5" style={{whiteSpace: 'nowrap'}}>
+          {paymentMethod?.card?.brand.toUpperCase()}
+        </div>
+        <div className="col-2 ml-4" style={{whiteSpace: 'nowrap'}}>
+          ....
+          {paymentMethod?.card?.last4}
+        </div>
+        <div className="col-2">
+          {defaultPM === true ? (
+            <span
+              className="small bg-secondary rounded pl-1 pr-1 pb-1 pt-1"
+              style={{whiteSpace: 'nowrap'}}
+            >
+              {' Defecto '}
+            </span>
+          ) : (
+            ''
+          )}
+        </div>
+        <div className="col-1 mr-1" style={{whiteSpace: 'nowrap'}}>
+          {'Exp:'}
+        </div>
+        <div className="col-2" style={{whiteSpace: 'nowrap'}}>
+          {paymentMethod?.card?.exp_month +
+            ' / ' +
+            paymentMethod?.card?.exp_year}
+        </div>
+        <div className="col-1" style={{whiteSpace: 'nowrap'}}>
+          {/* <span style={{cursor: 'pointer'}}> */}
+          {defaultPM === true ? (
+            <HtmlTooltip
+              placement="top"
+              title={
+                <React.Fragment>
+                  <Typography color="inherit">
+                    <small>
+                      Tu método de pago predeterminado no puede ser eliminado.
+                      <br />
+                      Para eliminar este método de pago, debes agregar uno nuevo
+                      y marcarlo como predeterminado.
+                    </small>
+                  </Typography>
+                </React.Fragment>
+              }
+            >
+              <InfoIcon style={{marginLeft: 10}} />
+            </HtmlTooltip>
+          ) : (
+            <>
+              <IconButton
+                aria-label="fingerprint"
+                color="default"
+                onClick={handleClick}
+              >
+                <MoreHorizIcon
+                  id="basic-button"
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                />
+              </IconButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button'
+                }}
+              >
+                <MenuItem
+                  key={'def_' + paymentMethod?.id}
+                  onClick={() => {
+                    handleSetDefaultPaymentMethod(paymentMethod?.id);
+                  }}
+                >
+                  Hacer predeterminada
+                </MenuItem>
+                <MenuItem
+                  key={'del_' + paymentMethod?.id}
+                  onClick={() => {
+                    handleDeletePaymentMethod(paymentMethod?.id);
+                  }}
+                >
+                  Eliminar
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+          {/* </span> */}
+        </div>
+      </div>
+    </>
+  );
+};
+
+const HtmlTooltip = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}} />
+))(({theme}) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 270,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9'
+  }
+}));
 
 export default ConfirmPrice;
