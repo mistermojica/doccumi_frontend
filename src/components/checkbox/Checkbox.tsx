@@ -6,13 +6,17 @@ export interface CheckboxProps {
   type?: 'icheck' | 'default' | 'custom';
   onChange?: Function;
   children: any;
+  // id: string;
+  name: string;
 }
 
 const Checkbox = ({
   checked = false,
   onChange,
   type = 'default',
-  children
+  children,
+  // id = '',
+  name = ''
 }: CheckboxProps) => {
   const [ID] = useState(uuidv4());
   const [value, setValue] = useState(checked);
@@ -63,6 +67,7 @@ const Checkbox = ({
         type="checkbox"
         className={getInputClassName()}
         id={ID}
+        name={name}
         checked={value}
         onChange={handleOnChange}
       />

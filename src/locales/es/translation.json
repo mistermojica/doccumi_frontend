@@ -4,7 +4,7 @@
       "signIn": "Accede para iniciar tu sesión",
       "rememberMe": "Recordarme",
       "forgotPass": "Olvidé mi contraseña",
-      "registerNew": "Registra una nueva membresía"
+      "registerNew": "Registrarme"
     },
     "button": {
       "signIn": {
@@ -21,7 +21,7 @@
   "register": {
     "alreadyHave": "Ya tengo una membresía",
     "registerNew": "Registrar una nueva membresía",
-    "label": "Registro"
+    "label": "Registrarme"
   },
   "recover": {
     "forgotYourPassword": "¿Olvidaste tu contraseña? Aquí puedes recuperar fácilmente una nueva contraseña.",

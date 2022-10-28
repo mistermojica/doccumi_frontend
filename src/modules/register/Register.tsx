@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+/* eslint-disable no-unused-vars */
 
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
@@ -124,13 +125,15 @@ const Register = () => {
       nombre_empresa: '',
       email: '',
       password: '',
-      passwordRetype: ''
+      passwordRetype: '',
+      terminosycondiciones: false
     },
     validationSchema: Yup.object({
       email: Yup.string()
         .email('Correo electrónico inválido')
         .required('Campo Requerido'),
       nombre: Yup.string().required('Campo requerido'),
+      terminosycondiciones: Yup.bool().oneOf([true], 'Campo requerido'),
       password: Yup.string()
         .min(5, 'Debe tener 5 caracteres o más')
         .max(30, 'Debe tener 30 caracteres o menos')
@@ -340,7 +343,6 @@ const Register = () => {
                 )}
               </InputGroup>
             </div>
-
             <div className="mb-3">
               <InputGroup className="mb-3">
                 <Form.Control
@@ -367,13 +369,66 @@ const Register = () => {
               </InputGroup>
             </div>
             <div className="row">
-              <div className="col-7">
-                <Checkbox type="icheck" checked={false}>
+              <div className="col-12">
+                <Form.Check
+                  type="checkbox"
+                  id="terminosycondiciones"
+                  name="terminosycondiciones"
+                >
+                  <Form.Check.Input
+                    type="checkbox"
+                    onChange={handleChange}
+                    isValid={
+                      touched.terminosycondiciones &&
+                      !errors.terminosycondiciones
+                    }
+                    isInvalid={
+                      touched.terminosycondiciones &&
+                      !!errors.terminosycondiciones
+                    }
+                    style={{
+                      width: '2vw',
+                      height: '2vh'
+                    }}
+                  />
+                  <Form.Check.Label style={{paddingLeft: '10px'}}>
+                    <span>Estoy de acuerdo con los </span>
+                    <a
+                      target="blank"
+                      href="https://doccumi.com/terminos-y-condiciones"
+                    >
+                      términos y condiciones.
+                    </a>
+                  </Form.Check.Label>
+                  {touched.terminosycondiciones &&
+                  errors.terminosycondiciones ? (
+                    <Form.Control.Feedback
+                      type="invalid"
+                      style={{paddingLeft: '10px'}}
+                    >
+                      {errors.terminosycondiciones}
+                    </Form.Control.Feedback>
+                  ) : (
+                    <></>
+                  )}
+                </Form.Check>
+                {/* <Checkbox
+                  // id="terminosycondiciones"
+                  name="terminosycondiciones2"
+                  type="icheck"
+                  checked={false}
+                >
                   <span>Estoy de acuerdo con los </span>
-                  <Link to="/">términos y condiciones</Link>
-                </Checkbox>
+                  <a
+                    target="blank"
+                    href="https://doccumi.com/terminos-y-condiciones"
+                  >
+                    términos y condiciones
+                  </a>
+                </Checkbox> */}
               </div>
-              <div className="col-5">
+              <div className="col-12">
+                <br />
                 <Button
                   type="submit"
                   block
@@ -386,6 +441,12 @@ const Register = () => {
               </div>
             </div>
           </form>
+          {/* <hr /> */}
+          {/* <small>
+            {'touched:' + JSON.stringify(touched)} <hr />
+            {'errors:' + JSON.stringify(errors)}
+            <hr />
+          </small> */}
           {/* <div className="social-auth-links text-center">
             <Button
               block
@@ -411,6 +472,7 @@ const Register = () => {
               {t('login.button.signUp.social', {what: 'Google'})}
             </Button>
           </div> */}
+          <br />
           <Link to="/login" className="text-center">
             {t('register.alreadyHave')}
           </Link>

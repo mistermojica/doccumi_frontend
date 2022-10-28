@@ -56,8 +56,8 @@ const SubscriptionPlan = (props) => {
             Planes de Servicio
           </Button>
         ) : (
-          <div className="pt-1 mr-10">
-            Plan Actualx:{' '}
+          <div className="pt-1 mr-3">
+            Plan Actual:{' '}
             <Link
               to=""
               variant="contained"
