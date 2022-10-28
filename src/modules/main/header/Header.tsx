@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
@@ -59,7 +61,7 @@ const Header = () => {
         <SubscriptionPlan />
         {/* <MessagesDropdown /> */}
         {/* <NotificationsDropdown /> */}
-        <LanguagesDropdown />
+        {/* <LanguagesDropdown /> */}
         <UserDropdown />
         <li className="nav-item">
           <Button className="nav-link" onClick={handleToggleControlSidebar}>

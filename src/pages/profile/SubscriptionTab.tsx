@@ -35,7 +35,12 @@ import AddCard from './subscription/AddCard';
 // @ts-ignore
 import AppContext from '@app/contexts/AppContext';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const VITE_STRIPE_PUBLIC_KEY =
+  window.location.hostname === 'localhost'
+    ? import.meta.env.DEV_VITE_STRIPE_PUBLIC_KEY
+    : import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+
+const stripePromise = loadStripe(VITE_STRIPE_PUBLIC_KEY);
 
 const SubscriptionTab = (props: any) => {
   const AppCtx: any = useContext(AppContext);

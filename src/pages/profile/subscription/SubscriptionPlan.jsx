@@ -7,7 +7,7 @@ import AppContext from '@app/contexts/AppContext';
 import * as Config from '@app/utils/config';
 import './Subscription.css';
 
-const Account = (props) => {
+const SubscriptionPlan = (props) => {
   const AppCtx = useContext(AppContext);
 
   const navigate = useNavigate();
@@ -46,13 +46,18 @@ const Account = (props) => {
             type="link"
             theme="primary"
             onClick={handleAddNew}
-            style={{width: '150px', height: '35px', paddingTop: 4}}
+            style={{
+              width: '155px',
+              height: '35px',
+              paddingTop: 4,
+              marginRight: 25
+            }}
           >
             Planes de Servicio
           </Button>
         ) : (
-          <div className="pt-1">
-            Plan Actual:{' '}
+          <div className="pt-1 mr-10">
+            Plan Actualx:{' '}
             <Link
               to=""
               variant="contained"
@@ -70,4 +75,4 @@ const Account = (props) => {
   );
 };
 
-export default Account;
+export default SubscriptionPlan;

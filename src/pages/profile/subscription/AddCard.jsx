@@ -7,15 +7,20 @@ import AppContext from '@app/contexts/AppContext';
 import AddCardForm from './AddCardForm';
 import * as Config from '@app/utils/config';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const VITE_STRIPE_PUBLIC_KEY =
+  window.location.hostname === 'localhost'
+    ? import.meta.env.VITE_STRIPE_PUBLIC_KEY_DEV
+    : import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+
+const stripePromise = loadStripe(VITE_STRIPE_PUBLIC_KEY);
 
 const AddCard = (props) => {
   const AppCtx = useContext(AppContext);
   const {user} = props;
 
   // Get the lookup key for the price from the previous page redirect.
-  const [clientSecret, setClientSecret] = useState('');
-  const [price] = useState(AppCtx.Navigate.data.price);
+  // const [clientSecret, setClientSecret] = useState('');
+  // const [price] = useState(AppCtx.Navigate.data.price);
 
   const NombreEntidad = 'Subscripciones';
   const NombreEntidadMin = NombreEntidad.toLowerCase();

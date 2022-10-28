@@ -14,7 +14,12 @@ import SubscribeForm from './SubscribeForm';
 import * as Config from '@app/utils/config';
 // import '../subscription/Stripe.css';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const VITE_STRIPE_PUBLIC_KEY =
+  window.location.hostname === 'localhost'
+    ? import.meta.env.DEV_VITE_STRIPE_PUBLIC_KEY
+    : import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+
+const stripePromise = loadStripe(VITE_STRIPE_PUBLIC_KEY);
 
 const Subscribe = (props) => {
   const AppCtx = useContext(AppContext);

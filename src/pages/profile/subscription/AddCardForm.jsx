@@ -20,9 +20,9 @@ const SubscribeForm = (props) => {
   const elements = useElements();
   const {user} = props;
 
-  const [price] = useState(AppCtx?.Navigate?.data?.price);
+  // const [price] = useState(AppCtx?.Navigate?.data?.price);
   const [nFrom] = useState(AppCtx?.Navigate?.data?.nFrom);
-  const [nTo] = useState(AppCtx?.Navigate?.data?.nTo);
+  // const [nTo] = useState(AppCtx?.Navigate?.data?.nTo);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,7 +37,7 @@ const SubscribeForm = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [paymentMethodError, setPaymentMethodError] = useState(null);
 
-  const [paymentMethod, setPaymentMethod] = useState(null);
+  // const [paymentMethod, setPaymentMethod] = useState(null);
 
   const refName = useRef(null);
   const refPostal = useRef(null);
@@ -54,8 +54,8 @@ const SubscribeForm = (props) => {
 
     // what we had
     const cardNumber = elements.getElement(CardNumberElement);
-    const cardExpiry = elements.getElement(CardExpiryElement);
-    const cardCVC = elements.getElement(CardCvcElement);
+    // const cardExpiry = elements.getElement(CardExpiryElement);
+    // const cardCVC = elements.getElement(CardCvcElement);
 
     // PARA CREAR NUEVO METODO DE PAGO
     const {paymentMethod, error: pmError} = await stripe.createPaymentMethod({
@@ -97,7 +97,7 @@ const SubscribeForm = (props) => {
           setErrorMessage(error.message);
         });
 
-      console.log({resultado});
+      // console.log({resultado});
     }
 
     setIsLoading(false);
