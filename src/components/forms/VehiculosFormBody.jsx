@@ -60,9 +60,7 @@ const VehiculosFormBody = (props) => {
     const marcaId = marca.selectedOptions[0].getAttribute('data-marca-id');
     setBrandId(marcaId);
 
-    // onChangeCB({name: 'vehModelo', value: RowData.vehModelo});
-
-    modelo.value = RowData.vehModelo;
+    // modelo.value = RowData.vehModelo;
 
     setAnos(AnosLoop.sort((a, b) => a - b));
   }, []);
@@ -71,14 +69,21 @@ const VehiculosFormBody = (props) => {
     const modelos = document.querySelector('#vehModelo');
     if (modelos) {
       setModeloId(RowData.vehModelo);
-      for (let index = 0; index < modelos.options.length; index++) {
-        const modelo = modelos.options[index];
-        if (modelo.value == RowData.vehModelo) {
-          modelos.value = RowData.vehModelo;
-        }
+      if (modelos.options.some((modelo) => RowData.vehModelo === modelo)){
+        modelos.value = RowData.vehModelo;
       }
+      // for (let index = 0; index < modelos.options.length; index++) {
+      //   const modelo = modelos.options[index];
+      //   if (modelo.value == RowData.vehModelo) {
+      //     modelos.value = RowData.vehModelo;
+      //   }
+      // }
     }
   }, [BrandId]);
+
+  function verificaExistencia(array, value) {
+    return array.some((element) => value === element);
+  }
 
   return (
     <>
