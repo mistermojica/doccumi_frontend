@@ -17,6 +17,7 @@ const VehiculosFormBody = (props) => {
   } = props;
 
   const [BrandId, setBrandId] = useState('');
+  const [ModeloId, setModeloId] = useState('');
   const [Anos, setAnos] = useState([]);
 
   // console.log(
@@ -28,7 +29,7 @@ const VehiculosFormBody = (props) => {
     const {name, value} = target;
     if (name === 'vehMarca') {
       setBrandId(target.selectedOptions[0].getAttribute('data-marca-id'));
-      onChangeCB({name: 'vehModelo', value: '0'});
+      onChangeCB({name: 'vehModelo', value: RowData.vehModelo || '0'});
     }
     onChangeCB({name, value});
   };
@@ -54,8 +55,30 @@ const VehiculosFormBody = (props) => {
       AnosLoop.push(ano);
     }
 
+    const marca = document.querySelector('#vehMarca');
+    const modelo = document.querySelector('#vehModelo');
+    const marcaId = marca.selectedOptions[0].getAttribute('data-marca-id');
+    setBrandId(marcaId);
+
+    // onChangeCB({name: 'vehModelo', value: RowData.vehModelo});
+
+    modelo.value = RowData.vehModelo;
+
     setAnos(AnosLoop.sort((a, b) => a - b));
   }, []);
+
+  useEffect(() => {
+    const modelos = document.querySelector('#vehModelo');
+    if (modelos) {
+      setModeloId(RowData.vehModelo);
+      for (let index = 0; index < modelos.options.length; index++) {
+        const modelo = modelos.options[index];
+        if (modelo.value == RowData.vehModelo) {
+          modelos.value = RowData.vehModelo;
+        }
+      }
+    }
+  }, [BrandId]);
 
   return (
     <>
@@ -193,7 +216,17 @@ const VehiculosFormBody = (props) => {
                   defaultValue={RowData.vehAnoFabricacion}
                   onChange={(e) => onChangeLocal(e.target)}
                 >
-                  <option value={0} defaultChecked>
+                  <option
+                    value={0}
+                    selected={
+                      RowData.vehAnoFabricacion === undefined ||
+                      RowData?.vehAnoFabricacion === ''
+                    }
+                    defaultChecked={
+                      RowData.vehAnoFabricacion === undefined ||
+                      RowData?.vehAnoFabricacion === ''
+                    }
+                  >
                     Seleccione
                   </option>
                   {Anos &&
@@ -225,7 +258,15 @@ const VehiculosFormBody = (props) => {
                   defaultValue={RowData.vehMarca}
                   onChange={(e) => onChangeLocal(e.target)}
                 >
-                  <option value={0} selected defaultChecked>
+                  <option
+                    value={0}
+                    selected={
+                      RowData.vehMarca === undefined || RowData?.vehMarca === ''
+                    }
+                    defaultChecked={
+                      RowData.vehMarca === undefined || RowData?.vehMarca === ''
+                    }
+                  >
                     Seleccione
                   </option>
                   {ConfiguracionesData.Marcas &&
@@ -251,10 +292,14 @@ const VehiculosFormBody = (props) => {
                   title="Seleccione un modelo"
                   placeholder="Corolla..."
                   required
-                  defaultValue={RowData.vehModelo}
+                  defaultValue={ModeloId}
                   onChange={(e) => onChangeLocal(e.target)}
                 >
-                  <option value={0} default defaultChecked>
+                  <option
+                    value={0}
+                    selected={ModeloId === undefined || ModeloId === ''}
+                    defaultChecked={ModeloId === undefined || ModeloId === ''}
+                  >
                     Seleccione
                   </option>
                   {ConfiguracionesData.Modelos[BrandId] &&

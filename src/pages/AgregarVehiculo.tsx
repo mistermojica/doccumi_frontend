@@ -152,7 +152,9 @@ const AgregarVehiculo = () => {
       // if (['phone_home', 'phone_mobile', 'phone_office'].includes(id)) {
       //   invalidPhoneFound = !ValidatePhone(value);
       // }
+
       if (value === '') {
+        console.log({id, value, emptyFieldFound});
         emptyFieldFound = true;
       }
     });

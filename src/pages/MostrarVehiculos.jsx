@@ -198,6 +198,16 @@ const MostrarVehículos = () => {
       selector: (row) => row.vehChasis,
       width: '150px'
     },
+    {
+      name: 'Marca',
+      selector: (row) => row.vehMarca,
+      width: '100px'
+    },
+    {
+      name: 'Modelo',
+      selector: (row) => row.vehModelo,
+      width: '100px'
+    },
     // {
     //   name: 'Estado',
     //   selector: (row) => row.vehStatusVehiculo
