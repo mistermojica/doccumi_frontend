@@ -52,6 +52,7 @@ const App = () => {
   const [Navigate, setNavigate] = useState<any>({});
   const [ClientesData, SetClientesData] = useState<any>([]);
   const [InventariosData, SetInventariosData] = useState<any>([]);
+  const [ConfiguracionesData, SetConfiguracionesData] = useState<any>({});
 
   const [StripeData, setStripeData] = useState<any>({
     customer: {},
@@ -123,6 +124,7 @@ const App = () => {
   const loadInitData = () => {
     GetAllData('clientes');
     GetAllData('vehiculos');
+    GetAllData('configuraciones');
   };
 
   const userSettings = {
@@ -133,6 +135,7 @@ const App = () => {
     StripeData,
     ClientesData,
     InventariosData,
+    ConfiguracionesData,
     setFileUploadData,
     setSubmitedUploadFilesData,
     setSubmitedFormData,
@@ -140,6 +143,7 @@ const App = () => {
     setStripeData,
     SetClientesData,
     SetInventariosData,
+    SetConfiguracionesData,
     loadStripeInit,
     loadInitData
   };
@@ -159,10 +163,17 @@ const App = () => {
     const url = Config.gatDomainName()
       .concat('/')
       .concat(modelo)
-      .concat('/listapordueno/')
-      .concat(AuthService.getProfileId() || '');
-    axios
-      .get(url)
+      .concat(
+        modelo === 'configuraciones'
+          ? '/configformularios'
+          : '/listapordueno/'.concat(AuthService.getProfileId() || '')
+      );
+
+    axios({
+      method: modelo === 'configuraciones' ? 'post' : 'get',
+      url,
+      data: {}
+    })
       .then((response: any) => {
         const result = response.data;
         const {status, message, data} = result;
@@ -173,6 +184,8 @@ const App = () => {
             SetInventariosData(data);
           } else if (modelo === 'clientes') {
             SetClientesData(data);
+          } else if (modelo === 'configuraciones') {
+            SetConfiguracionesData(data);
           }
         }
       })

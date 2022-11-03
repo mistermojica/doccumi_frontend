@@ -60,7 +60,7 @@ const UserDropdown = () => {
             <p>
               {user.profile.nombre}
               <small>
-                <span>Member since </span>
+                <span>{t('header.label.memberSince')} </span>
                 <span>
                   {DateTime.fromISO(user.profile.fecha_creacion).toFormat(
                     'dd LLL yyyy'

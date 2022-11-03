@@ -187,7 +187,7 @@ const AgregarVehiculo = () => {
             });
           });
 
-          console.log('GetExtraFieldsData() || mapPHF:', mapPHF);
+          // console.log('GetExtraFieldsData() || mapPHF:', mapPHF);
 
           setExtraFieldsConfig(mapPHF);
         }
@@ -287,6 +287,7 @@ const AgregarVehiculo = () => {
                 cxcReadOnly="false"
                 cxcAction="adding"
                 ExtraFieldsConfig={ExtraFieldsConfig}
+                ConfiguracionesData={AppCtx.ConfiguracionesData}
               >
                 &nbsp;
               </VehiculosFormBody>

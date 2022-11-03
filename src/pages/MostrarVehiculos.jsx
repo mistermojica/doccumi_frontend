@@ -742,6 +742,7 @@ const MostrarVehículos = () => {
                       cxcReadOnly="true"
                       cxcAction="viewing"
                       ExtraFieldsConfig={ExtraFieldsConfig}
+                      ConfiguracionesData={AppCtx.ConfiguracionesData}
                     >
                       &nbsp;
                     </VehiculosFormBody>
@@ -791,6 +792,7 @@ const MostrarVehículos = () => {
                       cxcReadOnly="false"
                       cxcAction="editing"
                       ExtraFieldsConfig={ExtraFieldsConfig}
+                      ConfiguracionesData={AppCtx.ConfiguracionesData}
                     >
                       &nbsp;
                     </VehiculosFormBody>

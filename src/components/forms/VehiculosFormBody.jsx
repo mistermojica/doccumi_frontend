@@ -7,16 +7,29 @@ import _ from 'underscore';
 import MultipleImageUploadFunction from '@app/components/files/MultipleImageUploadFunction';
 
 const VehiculosFormBody = (props) => {
-  const {RowData, onChangeCB, cxcReadOnly, cxcAction, ExtraFieldsConfig} =
-    props;
+  const {
+    RowData,
+    onChangeCB,
+    cxcReadOnly,
+    cxcAction,
+    ExtraFieldsConfig,
+    ConfiguracionesData
+  } = props;
 
-  console.log(
-    'VehiculosFormBody() || ExtraFieldsConfig:',
-    JSON.stringify(Array.from(ExtraFieldsConfig.entries()))
-  );
+  const [BrandId, setBrandId] = useState('');
+  const [Anos, setAnos] = useState([]);
+
+  // console.log(
+  //   'VehiculosFormBody() || ExtraFieldsConfig:',
+  //   JSON.stringify(Array.from(ExtraFieldsConfig.entries()))
+  // );
 
   const onChangeLocal = (target) => {
     const {name, value} = target;
+    if (name === 'vehMarca') {
+      setBrandId(target.selectedOptions[0].getAttribute('data-marca-id'));
+      onChangeCB({name: 'vehModelo', value: '0'});
+    }
     onChangeCB({name, value});
   };
 
@@ -32,6 +45,16 @@ const VehiculosFormBody = (props) => {
   useEffect(() => {
     const fields = [...document.querySelectorAll('.form-control')];
     setReadOnly(fields);
+
+    const anosStart = ConfiguracionesData.Anos[0];
+    const anosEnd = ConfiguracionesData.Anos[1];
+
+    const AnosLoop = [];
+    for (let ano = anosStart; ano <= anosEnd; ano++) {
+      AnosLoop.push(ano);
+    }
+
+    setAnos(AnosLoop.sort((a, b) => a - b));
   }, []);
 
   return (
@@ -142,13 +165,18 @@ const VehiculosFormBody = (props) => {
                   defaultValue={RowData.vehTipoVehiculo}
                   onChange={(e) => onChangeLocal(e.target)}
                 >
-                  <option value={0} defaultChecked>
+                  <option value={0} selected defaultChecked>
                     Seleccione
                   </option>
-                  <option selected value="Coupe">
-                    Coupe
-                  </option>
-                  <option value="Sedán">Sedán</option>
+                  {ConfiguracionesData.Categorias &&
+                    ConfiguracionesData.Categorias.map((categoria) => (
+                      <option
+                        key={'categoria' + categoria.id}
+                        value={categoria.valor}
+                      >
+                        {categoria.nombre}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="col-sm-6">
@@ -168,12 +196,12 @@ const VehiculosFormBody = (props) => {
                   <option value={0} defaultChecked>
                     Seleccione
                   </option>
-                  <option value={2019}>2019</option>
-                  <option value={2020}>2020</option>
-                  <option selected value={2021}>
-                    2021
-                  </option>
-                  <option value={2022}>2022</option>
+                  {Anos &&
+                    Anos.map((ano) => (
+                      <option key={'ano' + ano} value={ano}>
+                        {ano}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
@@ -197,14 +225,19 @@ const VehiculosFormBody = (props) => {
                   defaultValue={RowData.vehMarca}
                   onChange={(e) => onChangeLocal(e.target)}
                 >
-                  <option value={0} defaultChecked>
+                  <option value={0} selected defaultChecked>
                     Seleccione
                   </option>
-                  <option value="Honda">Honda</option>
-                  <option selected value="Hyundai">
-                    Hyundai
-                  </option>
-                  <option value="Toyota">Toyota</option>
+                  {ConfiguracionesData.Marcas &&
+                    ConfiguracionesData.Marcas.map((marca) => (
+                      <option
+                        key={'marca' + marca.id}
+                        data-marca-id={marca.id}
+                        value={marca.valor}
+                      >
+                        {marca.nombre}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="col-sm-6">
@@ -221,14 +254,15 @@ const VehiculosFormBody = (props) => {
                   defaultValue={RowData.vehModelo}
                   onChange={(e) => onChangeLocal(e.target)}
                 >
-                  <option value={0} defaultChecked>
+                  <option value={0} default defaultChecked>
                     Seleccione
                   </option>
-                  <option value="Accord">Accord</option>
-                  <option value="Corolla">Corolla</option>
-                  <option selected value="Grandeur">
-                    Grandeur
-                  </option>
+                  {ConfiguracionesData.Modelos[BrandId] &&
+                    ConfiguracionesData.Modelos[BrandId]?.map((modelo) => (
+                      <option key={'modelo' + modelo.id} value={modelo.valor}>
+                        {modelo.nombre}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
@@ -255,11 +289,12 @@ const VehiculosFormBody = (props) => {
                   <option value={0} defaultChecked>
                     Seleccione
                   </option>
-                  <option value="Blanco">Blanco</option>
-                  <option selected value="Negro">
-                    Negro
-                  </option>
-                  <option value="Rojo ">Rojo</option>
+                  {ConfiguracionesData.Colores &&
+                    ConfiguracionesData.Colores.map((color) => (
+                      <option key={'color' + color.id} value={color.valor}>
+                        {color.nombre}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="col-sm-3">

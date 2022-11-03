@@ -51,7 +51,8 @@
     "label": {
       "home": "Inicio",
       "contact": "Contacto",
-      "support": "Soporte"
+      "support": "Soporte",
+      "memberSince": "Miembro desde"
     },
     "language": {
       "turkish": "Turkish",
