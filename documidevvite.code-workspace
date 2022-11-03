@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../documi/backend"
+		},
+		{
+			"path": "../doccumiweb"
 		}
 	],
 	"settings": {
