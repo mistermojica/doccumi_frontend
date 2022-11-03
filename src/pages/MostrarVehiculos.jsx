@@ -238,7 +238,8 @@ const MostrarVehículos = () => {
         new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'USD',
-          maximumSignificantDigits: 3
+          maximumFractionDigits: 0,
+          minimumFractionDigits: 0
         }).format(row.vehPrecio),
       width: '100px'
     },
@@ -248,7 +249,8 @@ const MostrarVehículos = () => {
         new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'USD',
-          maximumSignificantDigits: 3
+          maximumFractionDigits: 0,
+          minimumFractionDigits: 0
         }).format(row.vehCosto),
       width: '100px'
     },

@@ -16,9 +16,17 @@ const VehiculosFormBody = (props) => {
     ConfiguracionesData
   } = props;
 
+  const anosStart = ConfiguracionesData.Anos[0];
+  const anosEnd = ConfiguracionesData.Anos[1];
+
+  const AnosLoop = [];
+  for (let ano = anosStart; ano <= anosEnd; ano++) {
+    AnosLoop.push(ano);
+  }
+
   const [BrandId, setBrandId] = useState('');
   const [ModeloId, setModeloId] = useState('');
-  const [Anos, setAnos] = useState([]);
+  const [Anos, setAnos] = useState(AnosLoop.sort((a, b) => a - b));
 
   // console.log(
   //   'VehiculosFormBody() || ExtraFieldsConfig:',
@@ -47,37 +55,19 @@ const VehiculosFormBody = (props) => {
     const fields = [...document.querySelectorAll('.form-control')];
     setReadOnly(fields);
 
-    const anosStart = ConfiguracionesData.Anos[0];
-    const anosEnd = ConfiguracionesData.Anos[1];
-
-    const AnosLoop = [];
-    for (let ano = anosStart; ano <= anosEnd; ano++) {
-      AnosLoop.push(ano);
-    }
-
     const marca = document.querySelector('#vehMarca');
-    const modelo = document.querySelector('#vehModelo');
     const marcaId = marca.selectedOptions[0].getAttribute('data-marca-id');
     setBrandId(marcaId);
-
-    // modelo.value = RowData.vehModelo;
-
-    setAnos(AnosLoop.sort((a, b) => a - b));
   }, []);
 
   useEffect(() => {
     const modelos = document.querySelector('#vehModelo');
     if (modelos) {
       setModeloId(RowData.vehModelo);
-      if (modelos.options.some((modelo) => RowData.vehModelo === modelo)) {
+      const opciones = [...modelos.options];
+      if (opciones.some((modelo) => RowData.vehModelo === modelo.value)) {
         modelos.value = RowData.vehModelo;
       }
-      // for (let index = 0; index < modelos.options.length; index++) {
-      //   const modelo = modelos.options[index];
-      //   if (modelo.value == RowData.vehModelo) {
-      //     modelos.value = RowData.vehModelo;
-      //   }
-      // }
     }
   }, [BrandId]);
 
@@ -211,6 +201,7 @@ const VehiculosFormBody = (props) => {
                 <label htmlFor="vehAnoFabricacion">
                   <strong>Año de Fabricación</strong>
                 </label>
+                {RowData.vehAnoFabricacion}
                 <select
                   className="selectpicker form-control"
                   id="vehAnoFabricacion"
