@@ -69,7 +69,7 @@ const VehiculosFormBody = (props) => {
     const modelos = document.querySelector('#vehModelo');
     if (modelos) {
       setModeloId(RowData.vehModelo);
-      if (modelos.options.some((modelo) => RowData.vehModelo === modelo)){
+      if (modelos.options.some((modelo) => RowData.vehModelo === modelo)) {
         modelos.value = RowData.vehModelo;
       }
       // for (let index = 0; index < modelos.options.length; index++) {
