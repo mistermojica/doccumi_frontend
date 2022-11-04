@@ -515,6 +515,7 @@ const MostrarClientes = () => {
                     RowData={RowData}
                     cxcReadOnly="true"
                     cxcAction="viewing"
+                    ConfiguracionesData={AppCtx.ConfiguracionesData}
                   >
                     &nbsp;
                   </ClientesFormBody>
@@ -562,6 +563,7 @@ const MostrarClientes = () => {
                     RowData={RowData}
                     cxcReadOnly="false"
                     cxcAction="editing"
+                    ConfiguracionesData={AppCtx.ConfiguracionesData}
                   >
                     &nbsp;
                   </ClientesFormBody>

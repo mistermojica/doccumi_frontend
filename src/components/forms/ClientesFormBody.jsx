@@ -8,7 +8,8 @@ import namor from 'namor';
 import MultipleImageUploadFunction from '@components/files/MultipleImageUploadFunction';
 
 const ClientesFormBody = (props) => {
-  const {RowData, onChangeCB, cxcReadOnly, cxcAction} = props;
+  const {RowData, onChangeCB, cxcReadOnly, cxcAction, ConfiguracionesData} =
+    props;
 
   const onChangeLocal = (target) => {
     const {name, value} = target;
@@ -141,14 +142,27 @@ const ClientesFormBody = (props) => {
                   <option value={0} defaultChecked>
                     Seleccione
                   </option>
-                  <option value="Santo Domingo">Santo Domingo</option>
+                  {ConfiguracionesData.Ciudades &&
+                    ConfiguracionesData.Ciudades.map((ciudad) => (
+                      <option key={'ciudad' + ciudad.id} value={ciudad.valor}>
+                        {ciudad.nombre}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="col-sm-6">
                 <label htmlFor="cliSector">
                   <strong>Sector</strong>
                 </label>
-                <select
+                <input
+                  type="text"
+                  className="form-control"
+                  id="cliSector"
+                  name="cliSector"
+                  defaultValue={RowData.cliSector}
+                  onChange={(e) => onChangeLocal(e.target)}
+                />
+                {/* <select
                   className="selectpicker form-control"
                   id="cliSector"
                   name="cliSector"
@@ -165,7 +179,7 @@ const ClientesFormBody = (props) => {
                     Seleccione
                   </option>
                   <option value="Ens. Naco">Ens. Naco</option>
-                </select>
+                </select> */}
               </div>
             </div>
           </div>
@@ -213,7 +227,15 @@ const ClientesFormBody = (props) => {
                   <option value={0} defaultChecked>
                     Seleccione
                   </option>
-                  <option value="dominicana">Dominicana</option>
+                  {ConfiguracionesData.Nacionalidades &&
+                    ConfiguracionesData.Nacionalidades.map((nacionalidad) => (
+                      <option
+                        key={'nacionalidad' + nacionalidad.id}
+                        value={nacionalidad.valor}
+                      >
+                        {nacionalidad.nombre}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>

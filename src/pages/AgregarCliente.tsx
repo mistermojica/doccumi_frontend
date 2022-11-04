@@ -215,6 +215,7 @@ const AgregarCliente = () => {
                 RowData={{}}
                 cxcReadOnly="false"
                 cxcAction="adding"
+                ConfiguracionesData={AppCtx.ConfiguracionesData}
               >
                 &nbsp;
               </ClientesFormBody>
