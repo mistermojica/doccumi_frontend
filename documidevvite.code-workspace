@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../doccumiweb"
+		},
+		{
+			"path": "../documi/documibackend"
 		}
 	],
 	"settings": {
