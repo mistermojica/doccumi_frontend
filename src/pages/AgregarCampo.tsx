@@ -42,7 +42,8 @@ const AgregarCampo = () => {
     value: '',
     options: [
       {value: 'Clientes', name: 'Clientes'},
-      {value: 'Vehiculos', name: 'Inventario'}
+      {value: 'Vehiculos', name: 'Inventario'},
+      {value: 'Entidades', name: 'Entidades'}
     ]
   });
   BodyLabels.set('camCampo', {label: 'Campo en BD', type: 'hidden'});

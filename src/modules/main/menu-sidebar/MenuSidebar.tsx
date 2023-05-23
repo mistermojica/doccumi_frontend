@@ -71,6 +71,48 @@ export const MENU: IMenuItem[] = [
     ]
   },
   {
+    name: 'menusidebar.label.entidades.gestionEntidades',
+    children: [
+      {
+        name: 'menusidebar.label.entidades.agregarEntidad',
+        path: '/agregar-entidad'
+      },
+      {
+        name: 'menusidebar.label.entidades.mostrarEntidades',
+        path: '/mostrar-entidades'
+      }
+      // ,
+      // {
+      //   name: 'menusidebar.label.entidades.mostrarGaleria',
+      //   path: '/mostrar-galeria'
+      // },
+      // {
+      //   name: 'menusidebar.label.entidades.inventarioEntidades',
+      //   path: '/inventario-entidades'
+      // },
+      // {
+      //   name: 'menusidebar.label.entidades.enVenta',
+      //   path: '/en-venta'
+      // },
+      // {
+      //   name: 'menusidebar.label.entidades.pendientes',
+      //   path: '/pendientes'
+      // },
+      // {
+      //   name: 'menusidebar.label.entidades.vendidos',
+      //   path: '/vendidos'
+      // },
+      // {
+      //   name: 'menusidebar.label.entidades.enTaller',
+      //   path: '/en-taller'
+      // },
+      // {
+      //   name: 'menusidebar.label.entidades.configuracion',
+      //   path: '/gvconfiguracion'
+      // }
+    ]
+  },
+  {
     name: 'menusidebar.label.clientes.gestionClientes',
     children: [
       {

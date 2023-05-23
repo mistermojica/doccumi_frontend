@@ -122,16 +122,16 @@ const MenuItem = ({menuItem}: {menuItem: IMenuItem}) => {
                     {/* </NavLink> */}
                   </div>
                 </HtmlTooltip>
-              ) : item.name === 'menusidebar.label.vehiculos.agregarVehiculo' &&
+              ) : item.name === 'menusidebar.label.entidades.agregarEntidad' &&
                 !AppCtx.StripeData.has_active_subscription &&
-                AppCtx.InventariosData.length > 0 ? (
+                AppCtx.EntidadesData.length > 0 ? (
                 <HtmlTooltip
                   placement="top"
                   title={
                     <React.Fragment>
                       <Typography color="inherit">
                         <small>
-                          Para agregar más inventarios debes activar un plan de
+                          Para agregar más entidades debes activar un plan de
                           servicio.
                         </small>
                       </Typography>

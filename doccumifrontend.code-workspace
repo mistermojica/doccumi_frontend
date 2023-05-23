@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../documi/documibackend"
+		},
+		{
+			"path": "../doccumiweb"
+		}
+	],
+	"settings": {}
+}

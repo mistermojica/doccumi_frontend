@@ -15,6 +15,7 @@ import {
   faEnvelope,
   faLock,
   faBuilding,
+  faBriefcase,
   faUser,
   faPhone,
   faMobilePhone
@@ -41,6 +42,7 @@ const Register = () => {
     telefono: string,
     whatsapp: string,
     nombre_empresa: string,
+    tipo_empresa: string,
     email: string,
     password: string,
     usuario_stripe: string
@@ -52,6 +54,7 @@ const Register = () => {
         telefono,
         whatsapp,
         nombre_empresa,
+        tipo_empresa,
         email,
         password,
         usuario_stripe
@@ -123,6 +126,7 @@ const Register = () => {
       telefono: '',
       whatsapp: '',
       nombre_empresa: '',
+      tipo_empresa: '',
       email: '',
       password: '',
       passwordRetype: '',
@@ -133,6 +137,7 @@ const Register = () => {
         .email('Correo electrónico inválido')
         .required('Campo Requerido'),
       nombre: Yup.string().required('Campo requerido'),
+      tipo_empresa: Yup.string().required('Campo requerido'),
       terminosycondiciones: Yup.bool().oneOf([true], 'Campo requerido'),
       password: Yup.string()
         .min(5, 'Debe tener 5 caracteres o más')
@@ -163,6 +168,7 @@ const Register = () => {
             values.telefono,
             values.whatsapp,
             values.nombre_empresa,
+            values.tipo_empresa,
             values.email,
             values.password,
             stripeCustomer?.id
@@ -213,6 +219,65 @@ const Register = () => {
                   <InputGroup.Append>
                     <InputGroup.Text>
                       <FontAwesomeIcon icon={faBuilding} />
+                    </InputGroup.Text>
+                  </InputGroup.Append>
+                )}
+              </InputGroup>
+            </div>
+            <div className="mb-3">
+              <InputGroup className="mb-3">
+                <Form.Control
+                  as="select"
+                  id="tipo_empresa"
+                  name="tipo_empresa"
+                  onChange={handleChange}
+                  value={values.tipo_empresa}
+                  isValid={touched.tipo_empresa && !errors.tipo_empresa}
+                  isInvalid={touched.tipo_empresa && !!errors.tipo_empresa}
+                >
+                  <option value="">Selecciona el tipo de empresa</option>
+                  <option value="abogados">Abogados</option>
+                  <option value="centroseducativos">Centros educativos</option>
+                  <option value="consultoria">Consultoría</option>
+                  <option value="diseno">Diseño</option>
+                  <option value="disenoweb">Diseño web</option>
+                  <option value="medioscomunicacion">
+                    Medios de comunicación
+                  </option>
+                  <option value="publicidad">Publicidad y marketing</option>
+                  <option value="rrpp">Relaciones públicas</option>
+                  <option value="seguros">Seguros</option>
+                  <option value="traduccion">
+                    Traducción e interpretación
+                  </option>
+                  <option value="turismo">Turismo y viajes</option>
+                  <option value="viajes">Viajes</option>
+                  <option value="clinicas">Clínicas y hospitales</option>
+                  <option value="contabilidad">
+                    Contadores y contabilidad
+                  </option>
+                  <option value="agricultura">Agricultura y ganadería</option>
+                  <option value="belleza">Belleza y estética</option>
+                  <option value="construccion">Construcción</option>
+                  <option value="energiarenovable">Energía renovable</option>
+                  <option value="eventos">Eventos</option>
+                  <option value="logistica">Logística</option>
+                  <option value="manufactura">Manufactura</option>
+                  <option value="seguridad">Seguridad y vigilancia</option>
+                  <option value="tecnologia">Tecnología</option>
+                  <option value="transporte">Transporte</option>
+                  <option value="restaurantes">Restaurantes y bares</option>
+                  <option value="tiendas">Tiendas</option>
+                  <option value="otra">Otra</option>
+                </Form.Control>
+                {touched.tipo_empresa && errors.tipo_empresa ? (
+                  <Form.Control.Feedback type="invalid">
+                    {errors.tipo_empresa}
+                  </Form.Control.Feedback>
+                ) : (
+                  <InputGroup.Append>
+                    <InputGroup.Text>
+                      <FontAwesomeIcon icon={faBriefcase} />
                     </InputGroup.Text>
                   </InputGroup.Append>
                 )}

@@ -114,7 +114,8 @@ const MostrarCampos = () => {
     value: '',
     options: [
       {value: 'Clientes', name: 'Clientes'},
-      {value: 'Vehiculos', name: 'Inventario'}
+      {value: 'Vehiculos', name: 'Inventario'},
+      {value: 'Entidades', name: 'Entidades'}
     ]
   });
   BodyLabels.set('camCampo', {label: 'Campo en BD', type: 'hidden'});
@@ -153,7 +154,7 @@ const MostrarCampos = () => {
     {
       name: 'Modelo',
       selector: (row) =>
-        row.camModelo === 'Vehiculos' ? 'Inventario' : row.camModelo
+        row.camModelo === 'Vehiculos' ? 'Entidades' : row.camModelo
     },
     {
       name: 'Campo Base de Datos',

@@ -139,7 +139,7 @@ const Dashboard = () => {
 
   const GetAllData = (ctxProId: string) => {
     const url = Config.gatDomainName()
-      .concat('/vehiculos/dashboard/')
+      .concat('/entidades/dashboard/')
       .concat(ctxProId);
     axios
       .get(url)

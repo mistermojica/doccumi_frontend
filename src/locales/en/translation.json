@@ -33,6 +33,7 @@
     "label": {
       "moreInfo": "More info",
       "verVehiculos": "Ver Inventario",
+      "verEntidades": "Ver Entidades",
       "follow": "Follow",
       "aboutMe": "About Me",
       "education": "Education",
@@ -95,6 +96,20 @@
         "enTaller": "En Taller",
         "inventarioVehiculos": "Inventario",
         "pieChart": "Inventario"
+      },
+      "entidades": {
+        "gestionEntidades": "Gestión Entidades",
+        "agregarEntidad": "Agregar Entidad +",
+        "mostrarEntidades": "Mostrar Entidades",
+        "gestionarEntidades": "Gestionar Entidad",
+        "configuracion": "Configuración",
+        "mostrarGaleria": "Mostrar Galería",
+        "enVenta": "En Venta",
+        "pendientes": "Pendientes",
+        "vendidos": "Vendidos",
+        "enTaller": "En Taller",
+        "inventarioEntidades": "Entidad",
+        "pieChart": "Entidad"
       },
       "clientes": {
         "gestionClientes": "Gestión Clientes",

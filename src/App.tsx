@@ -19,10 +19,12 @@ import PieChart from '@app/pages/PieChart';
 import Dashboard from '@pages/Dashboard';
 import Profile from '@pages/profile/Profile';
 import AgregarVehiculo from '@pages/AgregarVehiculo';
+import AgregarEntidad from '@pages/AgregarEntidad';
 import AgregarCliente from '@pages/AgregarCliente';
 import EditarCliente from '@pages/EditarCliente';
 import MostrarClientes from '@pages/MostrarClientes';
 import MostrarVehiculos from '@pages/MostrarVehiculos';
+import MostrarEntidades from '@pages/MostrarEntidades';
 import ImprimirDocumentos from '@app/pages/ImprimirDocumentos';
 import AgregarPlantilla from '@app/pages/AgregarPlantilla';
 import MostrarPlantillas from '@app/pages/MostrarPlantillas';
@@ -52,6 +54,7 @@ const App = () => {
   const [Navigate, setNavigate] = useState<any>({});
   const [ClientesData, SetClientesData] = useState<any>([]);
   const [InventariosData, SetInventariosData] = useState<any>([]);
+  const [EntidadesData, SetEntidadesData] = useState<any>([]);
   const [ConfiguracionesData, SetConfiguracionesData] = useState<any>({});
 
   const [StripeData, setStripeData] = useState<any>({
@@ -123,6 +126,7 @@ const App = () => {
 
   const loadInitData = () => {
     GetAllData('clientes');
+    GetAllData('entidades');
     GetAllData('vehiculos');
     GetAllData('configuraciones');
   };
@@ -135,6 +139,7 @@ const App = () => {
     StripeData,
     ClientesData,
     InventariosData,
+    EntidadesData,
     ConfiguracionesData,
     setFileUploadData,
     setSubmitedUploadFilesData,
@@ -143,6 +148,7 @@ const App = () => {
     setStripeData,
     SetClientesData,
     SetInventariosData,
+    SetEntidadesData,
     SetConfiguracionesData,
     loadStripeInit,
     loadInitData
@@ -182,6 +188,8 @@ const App = () => {
         } else {
           if (modelo === 'vehiculos') {
             SetInventariosData(data);
+          } else if (modelo === 'entidades') {
+            SetEntidadesData(data);
           } else if (modelo === 'clientes') {
             SetClientesData(data);
           } else if (modelo === 'configuraciones') {
@@ -235,10 +243,12 @@ const App = () => {
               <Route path="/profile" element={<Profile />} />
               <Route path="/" element={<Dashboard />} />
               <Route path="/agregar-vehiculo" element={<AgregarVehiculo />} />
+              <Route path="/agregar-entidad" element={<AgregarEntidad />} />
               <Route path="/agregar-cliente" element={<AgregarCliente />} />
               <Route path="/editar-cliente" element={<EditarCliente />} />
               <Route path="/mostrar-clientes" element={<MostrarClientes />} />
               <Route path="/mostrar-vehiculos" element={<MostrarVehiculos />} />
+              <Route path="/mostrar-entidades" element={<MostrarEntidades />} />
               <Route path="/agregar-plantilla" element={<AgregarPlantilla />} />
               <Route path="/agregar-campos" element={<AgregarCampo />} />
               <Route path="/gestionar-campos" element={<MostrarCampos />} />
