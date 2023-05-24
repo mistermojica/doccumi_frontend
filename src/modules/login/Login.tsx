@@ -155,12 +155,12 @@ const Login = () => {
               </InputGroup>
             </div>
             <div className="row">
-              <div className="col-8">
+              <div className="col-7">
                 <Checkbox type="icheck" checked={false}>
                   {t('login.label.rememberMe')}
                 </Checkbox>
               </div>
-              <div className="col-4">
+              <div className="col-5">
                 <Button
                   block
                   type="submit"

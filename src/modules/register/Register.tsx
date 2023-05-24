@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {toast} from 'react-toastify';
@@ -9,6 +9,7 @@ import {useFormik} from 'formik';
 import {useTranslation} from 'react-i18next';
 import * as Yup from 'yup';
 import axios from 'axios';
+import {mlCL, omoment} from '@app/utils/helpers';
 import {loginUser} from '@store/reducers/auth';
 import {Button, Checkbox} from '@components';
 import {
@@ -30,6 +31,8 @@ import * as AuthService from '@app/services/auth';
 const Register = () => {
   const [isAuthLoading, setAuthLoading] = useState(false);
   const [UrlBase] = useState(Config.gatDomainName().concat('/subscripciones/'));
+  const [DataProfesiones, SetDataProfesiones] = useState([]);
+
   // const [isGoogleAuthLoading, setGoogleAuthLoading] = useState(false);
   // const [isFacebookAuthLoading, setFacebookAuthLoading] = useState(false);
   const [t] = useTranslation();
@@ -90,6 +93,30 @@ const Register = () => {
 
     return promise;
   };
+
+  const GetProfesiones = () => {
+    const url = Config.gatDomainName().concat('/profesiones/listpop/');
+
+    axios
+      .get(url)
+      .then((response) => {
+        const result = response.data;
+        const {status, message, data} = result;
+        if (status !== 'SUCCESS') {
+          mlCL('message:', message);
+        } else {
+          mlCL('data:', data);
+          SetDataProfesiones(data);
+        }
+      })
+      .catch((err) => {
+        mlCL('err:', err);
+      });
+  };
+
+  useEffect(() => {
+    GetProfesiones();
+  }, []);
 
   // const registerByGoogle = async () => {
   //   try {
@@ -236,39 +263,15 @@ const Register = () => {
                   isInvalid={touched.tipo_empresa && !!errors.tipo_empresa}
                 >
                   <option value="">Selecciona el tipo de empresa</option>
-                  <option value="abogados">Abogados</option>
-                  <option value="centroseducativos">Centros educativos</option>
-                  <option value="consultoria">Consultoría</option>
-                  <option value="diseno">Diseño</option>
-                  <option value="disenoweb">Diseño web</option>
-                  <option value="medioscomunicacion">
-                    Medios de comunicación
-                  </option>
-                  <option value="publicidad">Publicidad y marketing</option>
-                  <option value="rrpp">Relaciones públicas</option>
-                  <option value="seguros">Seguros</option>
-                  <option value="traduccion">
-                    Traducción e interpretación
-                  </option>
-                  <option value="turismo">Turismo y viajes</option>
-                  <option value="viajes">Viajes</option>
-                  <option value="clinicas">Clínicas y hospitales</option>
-                  <option value="contabilidad">
-                    Contadores y contabilidad
-                  </option>
-                  <option value="agricultura">Agricultura y ganadería</option>
-                  <option value="belleza">Belleza y estética</option>
-                  <option value="construccion">Construcción</option>
-                  <option value="energiarenovable">Energía renovable</option>
-                  <option value="eventos">Eventos</option>
-                  <option value="logistica">Logística</option>
-                  <option value="manufactura">Manufactura</option>
-                  <option value="seguridad">Seguridad y vigilancia</option>
-                  <option value="tecnologia">Tecnología</option>
-                  <option value="transporte">Transporte</option>
-                  <option value="restaurantes">Restaurantes y bares</option>
-                  <option value="tiendas">Tiendas</option>
-                  <option value="otra">Otra</option>
+                  {DataProfesiones &&
+                    DataProfesiones.map((profesion) => (
+                      <option
+                        key={'profesion' + profesion?._id}
+                        value={profesion?.proCodigo}
+                      >
+                        {profesion?.proNombre}
+                      </option>
+                    ))}
                 </Form.Control>
                 {touched.tipo_empresa && errors.tipo_empresa ? (
                   <Form.Control.Feedback type="invalid">
