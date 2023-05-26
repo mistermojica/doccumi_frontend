@@ -126,6 +126,17 @@ const MostrarClientes = () => {
 
   const [profileId, SetProfileId] = useState(AuthService.getProfileId());
 
+  const labelClientes = AuthService.getProfileInfo('nombre_cliente_plural');
+
+  const labelCliente = AuthService.getProfileInfo('nombre_cliente');
+
+  {
+    /* nombre_entidad
+nombre_entidad_plural
+nombre_cliente
+nombre_cliente_plural */
+  }
+
   // const [PlantillasData, SetPlantillasData] = useState([]);
 
   const columns = [
@@ -415,7 +426,7 @@ const MostrarClientes = () => {
 
   return (
     <div>
-      <ContentHeader title="Mostrar Clientes" />
+      <ContentHeader title={'Mostrar ' + labelClientes} />
       <section className="content">
         <div className="container-fluid">
           <div className="card">
@@ -430,7 +441,7 @@ const MostrarClientes = () => {
                     }}
                   >
                     <i className="fa fa-plu">&nbsp;</i>
-                    Agregar Nuevo Cliente
+                    Agregar Nuevo {labelCliente}
                   </Button>
                 ) : (
                   <div>
@@ -439,8 +450,8 @@ const MostrarClientes = () => {
                       title={
                         <React.Fragment>
                           <Typography color="inherit">
-                            Para agregar más clientes debes activar un plan de
-                            servicio.
+                            Para agregar más {labelClientes} debes activar un
+                            plan de servicio.
                           </Typography>
                         </React.Fragment>
                       }
@@ -450,7 +461,7 @@ const MostrarClientes = () => {
                           <div className="sm-6">
                             <Button variant="secondary" disabled>
                               <i className="fa fa-plu">&nbsp;</i>
-                              Agregar Nuevo Cliente
+                              Agregar Nuevo {labelCliente}
                             </Button>
                           </div>
                           <InfoIcon
@@ -507,7 +518,7 @@ const MostrarClientes = () => {
                 size="lg"
               >
                 <Modal.Header closeButton>
-                  <Modal.Title>Ver Datos Cliente</Modal.Title>
+                  <Modal.Title>Ver Datos {labelCliente}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <ClientesFormBody
@@ -530,7 +541,7 @@ const MostrarClientes = () => {
                             className="btn btn-danger"
                             onClick={handleDelete}
                           >
-                            Borrar Cliente
+                            Borrar {labelCliente}
                           </Button>
                         )}
                       </div>
@@ -555,7 +566,7 @@ const MostrarClientes = () => {
                 size="lg"
               >
                 <Modal.Header closeButton>
-                  <Modal.Title>Editar Cliente</Modal.Title>
+                  <Modal.Title>Editar {labelCliente}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <ClientesFormBody

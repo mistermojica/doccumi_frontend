@@ -46,6 +46,10 @@ const Register = () => {
     whatsapp: string,
     nombre_empresa: string,
     tipo_empresa: string,
+    nombre_cliente: string,
+    nombre_cliente_plural: string,
+    nombre_entidad: string,
+    nombre_entidad_plural: string,
     email: string,
     password: string,
     usuario_stripe: string
@@ -58,13 +62,17 @@ const Register = () => {
         whatsapp,
         nombre_empresa,
         tipo_empresa,
+        nombre_cliente,
+        nombre_cliente_plural,
+        nombre_entidad,
+        nombre_entidad_plural,
         email,
         password,
         usuario_stripe
       });
       setAuthLoading(false);
       dispatch(loginUser(token));
-      toast.success('Registration is success');
+      toast.success(t('register.messages.Succeed'));
       navigate('/');
     } catch (error: any) {
       toast.error(error.message || 'Failed');
@@ -114,6 +122,10 @@ const Register = () => {
       });
   };
 
+  const getProffesion = (codigo: string, arreglo: any[]): any | null => {
+    return arreglo.find((objeto: any) => objeto.proCodigo === codigo) || null;
+  };
+
   useEffect(() => {
     GetProfesiones();
   }, []);
@@ -147,65 +159,94 @@ const Register = () => {
   //   }
   // };
 
-  const {handleChange, values, handleSubmit, touched, errors} = useFormik({
-    initialValues: {
-      nombre: '',
-      telefono: '',
-      whatsapp: '',
-      nombre_empresa: '',
-      tipo_empresa: '',
-      email: '',
-      password: '',
-      passwordRetype: '',
-      terminosycondiciones: false
-    },
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .email('Correo electrónico inválido')
-        .required('Campo Requerido'),
-      nombre: Yup.string().required('Campo requerido'),
-      tipo_empresa: Yup.string().required('Campo requerido'),
-      terminosycondiciones: Yup.bool().oneOf([true], 'Campo requerido'),
-      password: Yup.string()
-        .min(5, 'Debe tener 5 caracteres o más')
-        .max(30, 'Debe tener 30 caracteres o menos')
-        .required('Campo requerido'),
-      passwordRetype: Yup.string()
-        .min(5, 'Debe tener 5 caracteres o más')
-        .max(30, 'Debe tener 30 caracteres o menos')
-        .required('Campo requerido')
-        .when('password', {
-          is: (val: string) => !!(val && val.length > 0),
-          then: Yup.string().oneOf(
-            [Yup.ref('password')],
-            'Ambas contraseñas deben ser iguales'
-          )
+  // getProffesion
+
+  const {handleChange, values, handleSubmit, touched, errors, setFieldValue} =
+    useFormik({
+      initialValues: {
+        nombre: '',
+        telefono: '',
+        whatsapp: '',
+        nombre_empresa: '',
+        tipo_empresa: '',
+        nombre_cliente: '',
+        nombre_cliente_plural: '',
+        nombre_entidad: '',
+        nombre_entidad_plural: '',
+        email: '',
+        password: '',
+        passwordRetype: '',
+        terminosycondiciones: false
+      },
+      validationSchema: Yup.object({
+        email: Yup.string()
+          .email('Correo electrónico inválido')
+          .required('Campo Requerido'),
+        nombre: Yup.string().required('Campo requerido'),
+        tipo_empresa: Yup.string().required('Campo requerido'),
+        terminosycondiciones: Yup.bool().oneOf([true], 'Campo requerido'),
+        password: Yup.string()
+          .min(5, 'Debe tener 5 caracteres o más')
+          .max(30, 'Debe tener 30 caracteres o menos')
+          .required('Campo requerido'),
+        passwordRetype: Yup.string()
+          .min(5, 'Debe tener 5 caracteres o más')
+          .max(30, 'Debe tener 30 caracteres o menos')
+          .required('Campo requerido')
+          .when('password', {
+            is: (val: string) => !!(val && val.length > 0),
+            then: Yup.string().oneOf(
+              [Yup.ref('password')],
+              'Ambas contraseñas deben ser iguales'
+            )
+          })
+      }),
+      onSubmit: (values) => {
+        stripeCreateCustomer({
+          email: values.email,
+          name: values.nombre,
+          phone: values.telefono
         })
-    }),
-    onSubmit: (values) => {
-      stripeCreateCustomer({
-        email: values.email,
-        name: values.nombre,
-        phone: values.telefono
-      })
-        .then((stripeCustomer: any) => {
-          console.log('resiter:', {stripeCustomer});
-          register(
-            values.nombre,
-            values.telefono,
-            values.whatsapp,
-            values.nombre_empresa,
-            values.tipo_empresa,
-            values.email,
-            values.password,
-            stripeCustomer?.id
-          );
-        })
-        .catch((errSCC: any) => {
-          console.log('resiter:', {errSCC});
-        });
-    }
-  });
+          .then((stripeCustomer: any) => {
+            console.log('resiter:', {stripeCustomer});
+            register(
+              values.nombre,
+              values.telefono,
+              values.whatsapp,
+              values.nombre_empresa,
+              values.tipo_empresa,
+              values.nombre_cliente,
+              values.nombre_cliente_plural,
+              values.nombre_entidad,
+              values.nombre_entidad_plural,
+              values.email,
+              values.password,
+              stripeCustomer?.id
+            );
+          })
+          .catch((errSCC: any) => {
+            console.log('resiter:', {errSCC});
+          });
+      }
+    });
+
+  useEffect(() => {
+    const actualizarCampos = (codigo: string) => {
+      const profesion = getProffesion(codigo, DataProfesiones);
+      if (profesion) {
+        setFieldValue('nombre_cliente', profesion.proCliente);
+        setFieldValue('nombre_cliente_plural', profesion.proClientePlural);
+        setFieldValue('nombre_entidad', profesion.proEntidad);
+        setFieldValue('nombre_entidad_plural', profesion.proEntidadPlural);
+      }
+    };
+
+    actualizarCampos(values.tipo_empresa);
+  }, [values.tipo_empresa]);
+
+  useEffect(() => {
+    console.log({values});
+  }, [values]);
 
   setWindowClass('hold-transition register-page');
 
@@ -264,14 +305,20 @@ const Register = () => {
                 >
                   <option value="">Selecciona el tipo de empresa</option>
                   {DataProfesiones &&
-                    DataProfesiones.map((profesion) => (
-                      <option
-                        key={'profesion' + profesion?._id}
-                        value={profesion?.proCodigo}
-                      >
-                        {profesion?.proNombre}
-                      </option>
-                    ))}
+                    DataProfesiones.map(
+                      (profesion: {
+                        _id: string;
+                        proCodigo: string;
+                        proNombre: string;
+                      }) => (
+                        <option
+                          key={'profesion' + profesion?._id}
+                          value={profesion?.proCodigo}
+                        >
+                          {profesion?.proNombre}
+                        </option>
+                      )
+                    )}
                 </Form.Control>
                 {touched.tipo_empresa && errors.tipo_empresa ? (
                   <Form.Control.Feedback type="invalid">

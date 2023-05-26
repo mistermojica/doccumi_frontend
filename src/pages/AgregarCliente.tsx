@@ -40,6 +40,8 @@ const AgregarCliente = () => {
   const [MsgContenido, setMsgContenido] = useState('');
   const [MsgEstado, setMsgEstado] = useState(false);
 
+  const labelCliente = AuthService.getProfileInfo('nombre_cliente');
+
   const ShowAlert = (props: any) => {
     const {msgtitle, msgcontent, msgstatus} = props;
 
@@ -182,7 +184,7 @@ const AgregarCliente = () => {
 
   return (
     <div>
-      <ContentHeader title="Agregar Cliente" />
+      <ContentHeader title={'Agregar ' + labelCliente} />
       <section className="content">
         <div className="container-fluid">
           <div className="card">

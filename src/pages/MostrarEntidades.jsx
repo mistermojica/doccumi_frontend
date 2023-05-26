@@ -185,6 +185,10 @@ const MostrarVehículos = () => {
 
   const [profileId, SetProfileId] = useState(AuthService.getProfileId());
 
+  const labelEntidades = AuthService.getProfileInfo('nombre_entidad_plural');
+
+  const labelEntidad = AuthService.getProfileInfo('nombre_entidad');
+
   // const [PlantillasData, SetPlantillasData] = useState([]);
 
   const columns = [
@@ -652,7 +656,7 @@ const MostrarVehículos = () => {
 
   return (
     <div>
-      <ContentHeader title="Mostrar Entidad" />
+      <ContentHeader title={'Mostrar ' + labelEntidades} />
       <section className="content">
         <div className="container-fluid">
           <div className="card">
@@ -667,7 +671,7 @@ const MostrarVehículos = () => {
                     }}
                   >
                     <i className="fa fa-plu">&nbsp;</i>
-                    Agregar Nueva Entidad
+                    Agregar Nueva {labelEntidad}
                   </Button>
                 ) : (
                   <div>
@@ -676,8 +680,8 @@ const MostrarVehículos = () => {
                       title={
                         <React.Fragment>
                           <Typography color="inherit">
-                            Para agregar más entidades debes activar un plan de
-                            servicio.
+                            Para agregar más {labelEntidades} debes activar un
+                            plan de servicio.
                           </Typography>
                         </React.Fragment>
                       }
@@ -687,7 +691,7 @@ const MostrarVehículos = () => {
                           <div className="sm-6">
                             <Button variant="secondary" disabled>
                               <i className="fa fa-plu">&nbsp;</i>
-                              Agregar Nueva Entidad
+                              Agregar Nueva {labelEntidad}
                             </Button>
                           </div>
                           <InfoIcon
@@ -744,7 +748,7 @@ const MostrarVehículos = () => {
                 size="lg"
               >
                 <Modal.Header closeButton>
-                  <Modal.Title>Ver Datos Entidad</Modal.Title>
+                  <Modal.Title>Ver Datos {labelEntidad}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   {ExtraFieldsConfig && ( // && ExtraFieldsConfig.size > 0
@@ -770,7 +774,7 @@ const MostrarVehículos = () => {
                             className="btn btn-danger"
                             onClick={handleDelete}
                           >
-                            Borrar Entidad
+                            Borrar {labelEntidad}
                           </Button>
                         )}
                       </div>
@@ -794,7 +798,7 @@ const MostrarVehículos = () => {
                 size="lg"
               >
                 <Modal.Header closeButton>
-                  <Modal.Title>Editar Entidad</Modal.Title>
+                  <Modal.Title>Editar {labelEntidad}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   {ExtraFieldsConfig && ( // && ExtraFieldsConfig.size > 0

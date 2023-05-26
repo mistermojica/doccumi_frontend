@@ -24,6 +24,7 @@ class Gatekeeper {
     this.LOCALSTORAGE_ID = 'gatekeeper_id';
     this.LOCALSTORAGE_STRIPE_ID = 'gatekeeper_stripe_id';
     this.LOCALSTORAGE_EMAIL = 'gatekeeper_email';
+    this.LOCALSTORAGE_USERDATA = 'gatekeeper_userdata';
 
     this.URL = Config.gatDomainName().concat('');
     this.payload = {
@@ -81,6 +82,10 @@ class Gatekeeper {
             this.LOCALSTORAGE_STRIPE_ID,
             data.result.usuario_stripe
           );
+          localStorage.setItem(
+            this.LOCALSTORAGE_USERDATA,
+            JSON.stringify(data.result)
+          );
           result = data.result.token;
         }
         return result;
@@ -121,6 +126,10 @@ class Gatekeeper {
           localStorage.setItem(
             this.LOCALSTORAGE_STRIPE_ID,
             data.result.profile.usuario_stripe
+          );
+          localStorage.setItem(
+            this.LOCALSTORAGE_USERDATA,
+            JSON.stringify(data.result)
           );
           result = data.result.profile.token;
         }
@@ -234,6 +243,16 @@ class Gatekeeper {
   getProfileEmail() {
     const email = localStorage.getItem(this.LOCALSTORAGE_EMAIL);
     return email;
+  }
+
+  getProfileData() {
+    const data = JSON.parse(localStorage.getItem(this.LOCALSTORAGE_USERDATA));
+    return data;
+  }
+
+  getProfileInfo(field) {
+    const data = JSON.parse(localStorage.getItem(this.LOCALSTORAGE_USERDATA));
+    return data[field];
   }
 }
 

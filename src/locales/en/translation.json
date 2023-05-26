@@ -16,12 +16,19 @@
         "social": "Sign up using {{what}}"
       },
       "signOut": "Sign Out"
+    },
+    "messages": {
+      "Succeed": "Login is succeed!",
+      "Failed": "Login failed!"
     }
   },
   "register": {
     "alreadyHave": "I already have a membership",
     "registerNew": "Register a new membership",
-    "label": "Register"
+    "label": "Register",
+    "messages": {
+      "Succeed": "Registration is success!"
+    }
   },
   "recover": {
     "forgotYourPassword": "You forgot your password? Here you can easily retrieve a new password.",

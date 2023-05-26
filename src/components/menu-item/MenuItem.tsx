@@ -22,7 +22,13 @@ const HtmlTooltip = styled(({className, ...props}: TooltipProps) => (
   }
 }));
 
-const MenuItem = ({menuItem}: {menuItem: IMenuItem}) => {
+const MenuItem = ({
+  menuItem,
+  profileData
+}: {
+  menuItem: IMenuItem;
+  profileData: any;
+}) => {
   const AppCtx = useContext(AppContext);
   const [t] = useTranslation();
   const [isMenuExtended, setIsMenuExtended] = useState(false);
@@ -88,7 +94,13 @@ const MenuItem = ({menuItem}: {menuItem: IMenuItem}) => {
         style={{cursor: 'pointer'}}
       >
         <i className="nav-icon fas fa-tachometer-alt" />
-        <small>{t(menuItem.name)}</small>
+        {menuItem.name === 'menusidebar.label.entidades.gestionEntidades' ? (
+          <small>Gestión {profileData.nombre_entidad_plural}</small>
+        ) : menuItem.name === 'menusidebar.label.clientes.gestionClientes' ? (
+          <small>Gestión {profileData.nombre_cliente_plural}</small>
+        ) : (
+          <small>{t(menuItem.name)}</small>
+        )}
         {isExpandable ? <i className="right fas fa-angle-left" /> : null}
       </a>
 
@@ -118,7 +130,8 @@ const MenuItem = ({menuItem}: {menuItem: IMenuItem}) => {
                     {/* <NavLink className="nav-link" to={`${item.path}`}> */}
                     {/* <i className="far fa-circle nav-icon" /> */}
                     <LockOutlinedIcon />
-                    <small>{t(item.name)}</small>
+                    {/* <small>{t(item.name)}</small> */}
+                    <small>Agregar {profileData.nombre_entidad} +</small>
                     {/* </NavLink> */}
                   </div>
                 </HtmlTooltip>
@@ -142,14 +155,29 @@ const MenuItem = ({menuItem}: {menuItem: IMenuItem}) => {
                     {/* <NavLink className="nav-link" to={`${item.path}`}> */}
                     {/* <i className="far fa-circle nav-icon" /> */}
                     <LockOutlinedIcon />
-                    <small>{t(item.name)}</small>
+                    {/* <small>{t(item.name)}</small> */}
+                    <small>Agregar {profileData.nombre_entidad} +</small>
                     {/* </NavLink> */}
                   </div>
                 </HtmlTooltip>
               ) : (
                 <NavLink className="nav-link" to={`${item.path}`}>
                   <i className="far fa-circle nav-icon" />
-                  <small>{t(item.name)}</small>
+                  {item.name ===
+                  'menusidebar.label.entidades.agregarEntidad' ? (
+                    <small>Agregar {profileData.nombre_entidad} +</small>
+                  ) : item.name ===
+                    'menusidebar.label.clientes.agregarCliente' ? (
+                    <small>Agregar {profileData.nombre_cliente} +</small>
+                  ) : item.name ===
+                    'menusidebar.label.entidades.mostrarEntidades' ? (
+                    <small>Mostrar {profileData.nombre_entidad_plural}</small>
+                  ) : item.name ===
+                    'menusidebar.label.clientes.mostrarClientes' ? (
+                    <small>Mostrar {profileData.nombre_cliente_plural}</small>
+                  ) : (
+                    <small>{t(item.name)}</small>
+                  )}
                 </NavLink>
               )}
             </li>

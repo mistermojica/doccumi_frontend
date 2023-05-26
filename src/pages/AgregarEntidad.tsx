@@ -50,6 +50,8 @@ const AgregarEntidad = () => {
   const [MsgContenido, setMsgContenido] = useState('');
   const [MsgEstado, setMsgEstado] = useState(false);
 
+  const labelEntidad = AuthService.getProfileInfo('nombre_entidad');
+
   const ShowAlert = (props: any) => {
     const {msgtitle, msgcontent, msgstatus} = props;
 
@@ -255,7 +257,7 @@ const AgregarEntidad = () => {
 
   return (
     <div>
-      <ContentHeader title="Agregar Entidad" />
+      <ContentHeader title={'Agregar ' + labelEntidad} />
       <section className="content">
         <div className="container-fluid">
           <div className="card">

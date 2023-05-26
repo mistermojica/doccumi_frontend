@@ -28,7 +28,9 @@ const CalculadoraPrestamo = () => {
     setMsgEstado(false);
   };
 
-  const handleAddNew = () => {};
+  const handlePrint = () => {
+    window.print();
+  };
 
   const handleSetVisible = () => {
     setVisible(true);
@@ -80,10 +82,10 @@ const CalculadoraPrestamo = () => {
               <Button
                 type="submit"
                 className="btn tn-success mt-4"
-                disabled={isDisabled}
-                onClick={handleAddNew}
+                // disabled={isDisabled}
+                onClick={handlePrint}
               >
-                Guardar
+                Imprimir
               </Button>
             </div>
             <AlertDialog

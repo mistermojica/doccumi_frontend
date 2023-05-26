@@ -34,6 +34,16 @@ export const getProfileEmail = () => {
   return email;
 };
 
+export const getProfileData = () => {
+  const data = gatekeeper.getProfileData();
+  return data;
+};
+
+export const getProfileInfo = (field: string) => {
+  const value = gatekeeper.getProfileInfo(field);
+  return value;
+};
+
 export const loginByAuth = async (email: string, password: string) => {
   const token = await gatekeeper.loginByAuth(email, password);
   localStorage.setItem('token', token);

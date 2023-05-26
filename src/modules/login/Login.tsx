@@ -29,13 +29,13 @@ const Login = () => {
     try {
       setAuthLoading(true);
       const token = await AuthService.loginByAuth(email, password);
-      toast.success('Login is succeed!');
+      toast.success(t('login.messages.Succeed'));
       setAuthLoading(false);
       dispatch(loginUser(token));
       navigate('/');
     } catch (error: any) {
       setAuthLoading(false);
-      toast.error(error.message || 'Failed');
+      toast.error(error.message || t('login.messages.Failed'));
     }
   };
 

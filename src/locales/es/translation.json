@@ -16,12 +16,19 @@
         "social": "Regístrate usando {{what}}"
       },
       "signOut": "Cerrar Sesión"
+    },
+    "messages": {
+      "Succeed": "Login exitoso!",
+      "Failed": "Login falló!"
     }
   },
   "register": {
     "alreadyHave": "Ya tengo una membresía",
     "registerNew": "Registrar una nueva membresía",
-    "label": "Registrarme"
+    "label": "Registrarme",
+    "messages": {
+      "Succeed": "Registro exitoso!"
+    }
   },
   "recover": {
     "forgotYourPassword": "¿Olvidaste tu contraseña? Aquí puedes recuperar fácilmente una nueva contraseña.",

@@ -2,6 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {MenuItem} from '@components';
+import * as AuthService from '@app/services/auth';
 
 export interface IMenuItem {
   name: string;
@@ -28,48 +29,48 @@ export const MENU: IMenuItem[] = [
       // }
     ]
   },
-  {
-    name: 'menusidebar.label.vehiculos.gestionVehiculos',
-    children: [
-      {
-        name: 'menusidebar.label.vehiculos.agregarVehiculo',
-        path: '/agregar-vehiculo'
-      },
-      {
-        name: 'menusidebar.label.vehiculos.mostrarVehiculos',
-        path: '/mostrar-vehiculos'
-      }
-      // ,
-      // {
-      //   name: 'menusidebar.label.vehiculos.mostrarGaleria',
-      //   path: '/mostrar-galeria'
-      // },
-      // {
-      //   name: 'menusidebar.label.vehiculos.inventarioVehiculos',
-      //   path: '/inventario-vehiculos'
-      // },
-      // {
-      //   name: 'menusidebar.label.vehiculos.enVenta',
-      //   path: '/en-venta'
-      // },
-      // {
-      //   name: 'menusidebar.label.vehiculos.pendientes',
-      //   path: '/pendientes'
-      // },
-      // {
-      //   name: 'menusidebar.label.vehiculos.vendidos',
-      //   path: '/vendidos'
-      // },
-      // {
-      //   name: 'menusidebar.label.vehiculos.enTaller',
-      //   path: '/en-taller'
-      // },
-      // {
-      //   name: 'menusidebar.label.vehiculos.configuracion',
-      //   path: '/gvconfiguracion'
-      // }
-    ]
-  },
+  // {
+  //   name: 'menusidebar.label.vehiculos.gestionVehiculos',
+  //   children: [
+  //     {
+  //       name: 'menusidebar.label.vehiculos.agregarVehiculo',
+  //       path: '/agregar-vehiculo'
+  //     },
+  //     {
+  //       name: 'menusidebar.label.vehiculos.mostrarVehiculos',
+  //       path: '/mostrar-vehiculos'
+  //     }
+  // ,
+  // {
+  //   name: 'menusidebar.label.vehiculos.mostrarGaleria',
+  //   path: '/mostrar-galeria'
+  // },
+  // {
+  //   name: 'menusidebar.label.vehiculos.inventarioVehiculos',
+  //   path: '/inventario-vehiculos'
+  // },
+  // {
+  //   name: 'menusidebar.label.vehiculos.enVenta',
+  //   path: '/en-venta'
+  // },
+  // {
+  //   name: 'menusidebar.label.vehiculos.pendientes',
+  //   path: '/pendientes'
+  // },
+  // {
+  //   name: 'menusidebar.label.vehiculos.vendidos',
+  //   path: '/vendidos'
+  // },
+  // {
+  //   name: 'menusidebar.label.vehiculos.enTaller',
+  //   path: '/en-taller'
+  // },
+  // {
+  //   name: 'menusidebar.label.vehiculos.configuracion',
+  //   path: '/gvconfiguracion'
+  // }
+  // ]
+  // },
   {
     name: 'menusidebar.label.entidades.gestionEntidades',
     children: [
@@ -225,6 +226,7 @@ const MenuSidebar = () => {
   const sidebarSkin = useSelector((state: any) => state.ui.sidebarSkin);
   const menuItemFlat = useSelector((state: any) => state.ui.menuItemFlat);
   const menuChildIndent = useSelector((state: any) => state.ui.menuChildIndent);
+  const ProfileData = AuthService.getProfileData();
 
   return (
     <aside className={`main-sidebar elevation-4 ${sidebarSkin}`}>
@@ -262,7 +264,11 @@ const MenuSidebar = () => {
             role="menu"
           >
             {MENU.map((menuItem: IMenuItem) => (
-              <MenuItem key={menuItem.name} menuItem={menuItem} />
+              <MenuItem
+                key={menuItem.name}
+                menuItem={menuItem}
+                profileData={ProfileData}
+              />
             ))}
           </ul>
         </nav>
