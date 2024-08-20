@@ -131,7 +131,6 @@
     "evergreen-ui": "6.5.0",
     "express": "^4.18.1",
     "formik": "2.2.9",
-    "gatekeeper-client-sdk": "^0.4.3-dev.2",
     "husky": "7.0.4",
     "i": "^0.3.7",
     "i18next": "21.6.11",
